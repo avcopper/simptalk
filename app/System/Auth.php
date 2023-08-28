@@ -6,9 +6,10 @@ use Entity\User;
 use DateInterval;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Models\UserBlock;
 use Entity\UserSession;
+use Exceptions\DbException;
 use Exceptions\UserException;
+use \Models\User as ModelUser;
 use Models\UserSession as ModelUserSession;
 
 class Auth
@@ -16,10 +17,7 @@ class Auth
     const NOT_AUTHORIZED = 'Not authorized';
     const USER_NOT_FOUND = 'User not found';
     const TOO_MANY_FAILED_ATTEMPTS = 'Too many failed attempts';
-    const EMERGENCY_PIN_ENTERED = 'Emergency PIN entered';
-    const PIN_ENTERED = 'PIN entered';
     const PASSWORD_ENTERED = 'Password entered';
-    const API_NO_RESPONSE = 'No response from api';
     const WRONG_TOKEN = 'Wrong token';
     const WRONG_DEVICE = 'Wrong device information';
     const WRONG_SERVICE = 'Wrong service information';
@@ -31,123 +29,38 @@ class Auth
     public ?UserSession $userSession;
 
     /**
-     * Проверяет авторизацию пользователя (+++)
+     * Проверяет авторизацию пользователя (!+)
      * @param $jwt - токен
-     * @param $data - пользовательские данные
+     * @param $userData - пользовательские данные
      * @return bool
-     * @throws UserException
      */
-    public static function checkAuthorization($jwt, $data)
+    public static function checkAuthorization($jwt, $userData)
     {
         try {
             $token = JWT::decode($jwt, new Key(ModelUserSession::KEY, 'HS512'));
-            $userData = self::decodeUserData($data);
             $userSession = UserSession::get(['token' => $jwt]);
-            if (!empty($userSession->userId)) $user = User::get(['id' => $userSession->userId]);
+            if (!empty($userSession->userId)) {
+                $user = $_SESSION['user'] ?? User::get(['id' => $userSession->userId]);
+
+                if (!empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
+                    self::checkUserSession($userSession, $token))
+                {
+                    if (empty($_SESSION['user'])) $_SESSION['user'] = $user;
+                    return true;
+                } else {
+                    ModelUser::logout();
+                    return false;
+                }
+            }
         } catch (\Exception $e) {
             return false;
         }
 
-        return
-            !empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
-            self::checkUserSession($userSession, $token);
+        return false;
     }
 
     /**
-     * Декодирует пользовательские данные (+++)
-     * @param $data - пользовательские данные
-     * @return array
-     */
-    public static function decodeUserData($data)
-    {
-        $userData = !empty($data['user']) ? explode(':', base64_decode($data['user'])) : [];
-
-        return [
-            'user' => [
-                'login' => !empty($userData[0]) ? strip_tags($userData[0]) : null,
-                'password' => !empty($userData[1]) ? $userData[1] : null,
-            ],
-            'device' => $data['device'] ? base64_decode($data['device']) : null,
-            'ip' => $data['ip'] ? base64_decode($data['ip']) : null,
-            'serviceId' => $data['serviceId'] ?? null,
-        ];
-    }
-
-    /**
-     * Проверяет данные пользователя из запроса (+++)
-     * @param $data - массив данных
-     * @return bool
-     * @throws UserException
-     */
-    public static function checkData($data)
-    {
-        return self::checkUser($data['user']['login'], $data['user']['password']) && self::checkDeviceData($data);
-    }
-
-    /**
-     * Проверяет наличие логина/пароля в данных (+++)
-     * @param $login - логин
-     * @param $password - пароль
-     * @return bool
-     * @throws UserException
-     */
-    public static function checkUser($login, $password)
-    {
-        if (empty($login) || empty($password)) throw new UserException(self::WRONG_LOGIN_PASSWORD, 401);
-        return true;
-    }
-
-    /**
-     * Проверяет данные устройства пользователя (+++)
-     * @param $data - массив данных
-     * @return bool
-     * @throws UserException
-     */
-    public static function checkDeviceData($data)
-    {
-        return self::checkDevice($data['device']) && self::checkService($data['serviceId']) && self::checkIp($data['ip']);
-    }
-
-    /**
-     * Проверяет наличие fingerprint устройства в данных (+++)
-     * @param $data - массив данных
-     * @return bool
-     * @throws UserException
-     */
-    private static function checkDevice($data)
-    {
-        if (empty($data)) throw new UserException(self::WRONG_DEVICE, 401);
-        return true;
-    }
-
-    /**
-     * Проверяет наличие сервиса в данных (+++)
-     * @param $data - массив данных
-     * @return bool
-     * @throws UserException
-     */
-    private static function checkService($data)
-    {
-        if (empty($data) || !is_numeric($data) || !in_array($data, ModelUserSession::SERVICES))
-            throw new UserException(self::WRONG_SERVICE, 401);
-
-        return true;
-    }
-
-    /**
-     * Проверяет наличие ip-адреса в данных (+++)
-     * @param $data - массив данных
-     * @return bool
-     * @throws UserException
-     */
-    private static function checkIp($data)
-    {
-        if (empty($data)) throw new UserException(self::WRONG_IP, 401);
-        return true;
-    }
-
-    /**
-     * Проверяет актуальность токена (+++)
+     * Проверяет актуальность токена
      * @param Object $token - токен
      * @return bool
      * @throws UserException
@@ -163,7 +76,7 @@ class Auth
     }
 
     /**
-     * @param array $userData - пользовательские данные (+++)
+     * @param array $userData - пользовательские данные
      * @param Object $token - токен
      * @return bool
      * @throws UserException
@@ -179,7 +92,7 @@ class Auth
     }
 
     /**
-     * Проверяет соответствие сессии токену (+++)
+     * Проверяет соответствие сессии токену
      * @param UserSession|null $userSession - пользовательская сессия
      * @param Object $token - токен
      * @return bool
@@ -192,40 +105,29 @@ class Auth
         if ($token->iss !== SITE || $token->aud !== $userSession->login ||
             $token->data->id !== $userSession->userId || $token->data->serviceId !== $userSession->serviceId ||
             $token->data->ip !== $userSession->ip || $token->data->device !== $userSession->device
-        ) throw new UserException('Токен не принадлежит данному пользователю');
+        ) throw new UserException(self::WRONG_TOKEN);
 
         return true;
     }
 
     /**
-     * Вход по ePin (+++)
+     * Проверяет наличие логина/пароля в данных
+     * @param $login - логин
+     * @param $password - пароль
+     * @return bool
      * @throws UserException
      */
-    public function loginEmergencyPin()
+    public static function checkUser($login, $password)
     {
-        $this->userSession->comment = self::EMERGENCY_PIN_ENTERED;
-        $this->userSession->save();
-        $this->user->block(UserBlock::INTERVAL_CENTURY, $this->userSession->comment);
-        throw new UserException(self::EMERGENCY_PIN_ENTERED, 401);
+        // TODO добавить проверку регулярками
+        if (empty($login) || empty($password)) throw new UserException(self::WRONG_LOGIN_PASSWORD, 401);
+        return true;
     }
 
     /**
-     * Вход по pin (+++)
-     */
-    public function loginPin()
-    {
-        $this->generateSessionToken();
-        $this->userSession->comment = self::PIN_ENTERED;
-
-        if ($this->userSession->token && $this->userSession->save()) {
-            ModelUserSession::clearFailedAttempts($this->user->login);
-            Response::apiResult(200, true, 'OK', [], $this->userSession->token);
-        }
-    }
-
-    /**
-     * Вход по паролю
+     * Вход по паролю (!+)
      * @param bool $remember - запоминать ли пользователя
+     * @throws DbException
      */
     public function login(bool $remember = false)
     {
@@ -234,19 +136,17 @@ class Auth
 
         if ($this->userSession->token && $this->userSession->save()) {
             ModelUserSession::clearFailedAttempts($this->user->login);
-            if (defined('API')) Response::apiResult(200, true, 'OK', [], $this->userSession->token);
-            else {
-                $_SESSION['token'] = $this->token;
-                $_SESSION['user'] = $this->user;
-                if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE, 0);
-                header('Location: /');
-                die;
-            }
+
+            $_SESSION['token'] = $this->token;
+            $_SESSION['user'] = $this->user;
+            if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE, 0);
+            header('Location: /');
+            die;
         }
     }
 
     /**
-     * Генерирует сессионный токен
+     * Генерирует сессионный токен (!+)
      */
     private function generateSessionToken()
     {
