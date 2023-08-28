@@ -36,7 +36,7 @@ if (!defined('API')) {
     } catch (ForbiddenException $e) {
         if (Request::isAjax()) Response::result(false, $e->getMessage());
         else (new Errors($e))->action('action403');
-    } catch (DeleteException | EditException | MailException | UploadException | UserException $e) {var_dump($e);
+    } catch (DeleteException | EditException | MailException | UploadException | UserException $e) {
         if (Request::isAjax()) Response::result(false, $e->getMessage());
         else (new Errors($e))->action('action400');
     }
