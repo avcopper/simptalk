@@ -23,15 +23,6 @@ class Route
         $urls = [];
         $link = '';
 
-        if (!empty($parts[0]) && mb_strtolower($parts[0]) === 'api' &&
-            !empty($parts[1]) && mb_strtolower(mb_substr($parts[1], 0, 1)) === 'v' && is_numeric(mb_substr($parts[1], 1)))
-        {
-            define('API', true);
-            define('API_VERSION', $parts[1]);
-            unset($parts[0]);
-            unset($parts[1]);
-        }
-
         foreach ($parts as $part) {
             $elem = ucfirst(str_replace('-', '_', $part));
             $link .= ($link ? '/' : '') . str_replace('-', '_', $part);
