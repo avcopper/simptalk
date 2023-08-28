@@ -23,7 +23,7 @@ class UserSession extends Model
                 'H2mCo6UjM9m8vVbkaaw5hNapjhHILOgN5UVcXGI6b3XoyKZwYX0hTpnImydmDGUJ'.
                 'XwIDAQAB'; // ключ для шифрования токена
 
-    protected static $table = 'auth.user_sessions';
+    protected static $db_table = 'auth.user_sessions';
 
     public $id;         // id сессии
     public $active;     // активность сессии
@@ -38,7 +38,7 @@ class UserSession extends Model
     public $comment;    // комментарий
 
     /**
-     * Получает сессию по токену (+++)
+     * Получает сессию по токену (!+)
      * @param string $token - токен
      * @param bool $active - только активные или нет искать
      * @return false|mixed|null
@@ -50,16 +50,45 @@ class UserSession extends Model
         $db->params = ['token' => $token];
         $db->sql = "
             SELECT us.id, us.active, us.user_id, u.login, us.service_id, s.name service, us.ip, us.device, us.log_in, us.expire, us.token
-            FROM " . self::$prefix . self::$table . " us 
-            LEFT JOIN " . self::$prefix . "auth.users u ON us.user_id = u.id 
-            LEFT JOIN " . self::$prefix . "auth.services s ON us.service_id = s.id 
+            FROM " . self::$db_prefix . self::$db_table . " us 
+            LEFT JOIN " . self::$db_prefix . "auth.users u ON us.user_id = u.id 
+            LEFT JOIN " . self::$db_prefix . "auth.services s ON us.service_id = s.id 
             WHERE us.token = :token {$activity}";
         $data = $db->query();
         return !empty($data) ? array_shift($data) : false;
     }
 
     /**
-     * Генерирует токен для пользователя (+++)
+     * Возвращает количество неудачных попыток залогиниться (!+)
+     * @param $login - логин
+     * @return int|mixed
+     * @throws DbException
+     */
+    public static function getCountFailedAttempts($login)
+    {
+        $db = new Db();
+        $db->params = ['login' => $login];
+        $db->sql = "SELECT count(id) count FROM " . self::$db_prefix . self::$db_table . " WHERE token IS NULL AND active IS NOT NULL AND login = :login";
+        $res = $db->query();
+        return !empty($res) ? array_shift($res)['count'] : 0;
+    }
+
+    /**
+     * Очищает неудачные попытки залогиниться (!+)
+     * @param $login - логин
+     * @return array
+     * @throws DbException
+     */
+    public static function clearFailedAttempts($login)
+    {
+        $db = new Db();
+        $db->params = ['login' => $login];
+        $db->sql = "UPDATE " . self::$db_prefix . self::$db_table . " SET active = NULL WHERE login = :login AND token IS NULL";
+        return $db->query();
+    }
+
+    /**
+     * Генерирует токен для пользователя (!+)
      * @param \Entity\User $user - пользователь
      * @param \Entity\UserSession $userSession - сессия пользователя
      * @param int $timeStamp - метка времени
@@ -86,36 +115,7 @@ class UserSession extends Model
     }
 
     /**
-     * Возвращает количество неудачных попыток залогиниться (+++)
-     * @param $login - логин
-     * @return int|mixed
-     * @throws DbException
-     */
-    public static function getCountFailedAttempts($login)
-    {
-        $db = new Db();
-        $db->params = ['login' => $login];
-        $db->sql = "SELECT count(id) count FROM " . self::$prefix . self::$table . " WHERE token IS NULL AND active IS NOT NULL AND login = :login";
-        $res = $db->query();
-        return !empty($res) ? array_shift($res)['count'] : 0;
-    }
-
-    /**
-     * Очищает неудачные попытки залогиниться (+++)
-     * @param $login - логин
-     * @return array
-     * @throws DbException
-     */
-    public static function clearFailedAttempts($login)
-    {
-        $db = new Db();
-        $db->params = ['login' => $login];
-        $db->sql = "UPDATE " . self::$prefix . self::$table . " SET active = NULL WHERE login = :login AND token IS NULL";
-        return $db->query();
-    }
-
-    /**
-     * Удаляет текущую сессию пользователя (разлогинивает) (+++)
+     * Удаляет текущую сессию пользователя (разлогинивает) (!+)
      * @return bool
      */
     public static function deleteCurrent()
@@ -135,89 +135,5 @@ class UserSession extends Model
         } else Logger::getInstance()->error('Не обнаружена текущая сессия для удаления');
 
         return false;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function filter_id($id)
-    {
-        return (int)$id;
-    }
-
-    public function filter_user_id($value)
-    {
-        return (int)$value;
-    }
-
-    public function filter_ip($text)
-    {
-        return strip_tags(trim($text));
-    }
-
-    public function filter_user_agent($text)
-    {
-        return strip_tags(trim($text));
-    }
-
-    public function filter_session_hash($text)
-    {
-        return strip_tags(trim($text));
-    }
-
-    public function filter_cookie_hash($text)
-    {
-        return strip_tags(trim($text));
     }
 }
