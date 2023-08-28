@@ -3,10 +3,10 @@
 namespace Controllers;
 
 use Models\User;
-use System\Api;
 use System\Request;
 use Exceptions\DbException;
 use Exceptions\UserException;
+use Models\User as ModelUser;
 
 /**
  * Class Auth
@@ -14,6 +14,14 @@ use Exceptions\UserException;
  */
 class Auth extends Controller
 {
+    protected function before()
+    {
+        if (ModelUser::isAuthorized()) {
+            header('Location: /');
+            die;
+        }
+    }
+
     /**
      * @return void
      */
@@ -24,7 +32,7 @@ class Auth extends Controller
 
     /**
      * Авторизация пользователя
-     * @throws UserException
+     * @throws UserException|DbException
      */
     protected function actionLogin()
     {
@@ -34,11 +42,8 @@ class Auth extends Controller
             $password = Request::post('password');
             $remember = (bool)Request::post('remember');
 
-            $api = new Api();
-            $this->user = $api->authorize($login, $password, $remember);
-
-            header('Location: /');
-            die;
+            User::authorize($login, $password, $remember);
+            //(new Api())->authorizeByApi($login, $password, $remember);
         }
     }
 
