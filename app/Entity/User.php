@@ -2,9 +2,8 @@
 
 namespace Entity;
 
-use Api\Controllers\Controller;
-use DateInterval;
 use DateTime;
+use DateInterval;
 use Models\UserBlock;
 
 class User extends Entity
@@ -79,41 +78,40 @@ class User extends Entity
         ];
     }
 
-//    public function save()
-//    {
-//        $user = new \Models\User();
-//        $user->id = $this->id;
-//        $user->active = $this->isActive ? 1 : null;
-//        $user->blocked = $this->isBlocked ? 1 : null;
-//        $user->group_id = $this->groupId;
-//        $user->login = $this->login;
-//        $user->password = $this->password;
-//        $user->pin = $this->pin;
-//        $user->e_pin = $this->ePin;
-//        $user->email = $this->email;
-//        $user->phone = $this->phone;
-//        $user->name = $this->name;
-//        $user->second_name = $this->secondName;
-//        $user->last_name = $this->lastName;
-//        $user->gender_id = $this->genderId;
-//        $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
-//        $user->mailing = $this->hasMailingAgreement ? 1 : null;
-//        $user->mailing_type_id = $this->mailingTypeId;
-//        $user->created = $this->created->format('Y-m-d H:i:s');
-//        $user->updated = date('Y-m-d H:i:s');
-//        return $user->save();
-//    }
+    public function save()
+    {
+        $user = new \Models\User();
+        $user->id = $this->id;
+        $user->active = $this->isActive ? 1 : null;
+        $user->blocked = $this->isBlocked ? 1 : null;
+        $user->group_id = $this->groupId;
+        $user->login = $this->login;
+        $user->password = $this->password;
+        $user->pin = $this->pin;
+        $user->e_pin = $this->ePin;
+        $user->email = $this->email;
+        $user->phone = $this->phone;
+        $user->name = $this->name;
+        $user->second_name = $this->secondName;
+        $user->last_name = $this->lastName;
+        $user->gender_id = $this->genderId;
+        $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
+        $user->mailing = $this->hasMailingAgreement ? 1 : null;
+        $user->mailing_type_id = $this->mailingTypeId;
+        $user->created = $this->created->format('Y-m-d H:i:s');
+        $user->updated = date('Y-m-d H:i:s');
+        return $user->save();
+    }
 
     /**
      * Создает запись о блокировке пользователя
      * @param int $time - время блокировки
      * @param string|null $reason - причина блокировки
-     * @return bool|int
+     * @return bool
      */
     public function block(int $time, ?string $reason = null)
     {
         $date = new DateTime();
-
         $userBlock = new UserBlock();
         $userBlock->user_id = $this->id;
         $userBlock->created = $date->format('Y-m-d H:i:s');
