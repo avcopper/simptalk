@@ -49,7 +49,7 @@ class Api
      * @return User
      * @throws UserException
      */
-    public function authorize($user, $password, $remember = false)
+    public function authorizeByApi($user, $password, $remember = false)
     {
         if (!empty($user) && !empty($password)) {
             $fields = [
