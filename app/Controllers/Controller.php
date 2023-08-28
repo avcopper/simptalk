@@ -1,10 +1,8 @@
 <?php
 namespace Controllers;
 
-use System\Api;
 use Views\View;
 use Entity\User;
-use Exceptions\UserException;
 use Models\User as ModelUser;
 use Exceptions\NotFoundException;
 use Exceptions\ForbiddenException;
