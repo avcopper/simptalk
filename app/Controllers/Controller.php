@@ -16,25 +16,21 @@ use Exceptions\ForbiddenException;
 abstract class Controller
 {
     //protected ?string $token; // текущий токен
-    //protected ?array $device; // данные устройства пользователя
     protected ?User $user;    // текущий пользователь
     protected View $view;     // объект view
 
     /**
      * Controller constructor
-     * @throws UserException
      */
     public function __construct()
     {
-        //$this->token = ModelUser::getUserToken();
-        //$this->device = ModelUser::getUserDevice();
-
         $this->checkAuthorization();
 
         $this->view = new View();
-        //$this->user = !empty($_SESSION['user']) ? $_SESSION['user'] : ModelUser::getCurrent();
+        $this->user = ModelUser::getCurrent();
+        //$this->token = ModelUser::getUserToken();
 
-        //$this->set('user', $this->user);
+        $this->set('user', $this->user);
         //$this->set('token', $this->token);
     }
 
@@ -76,9 +72,6 @@ abstract class Controller
         return true;
     }
 
-    /**
-     * @throws UserException
-     */
     protected function checkAuthorization()
     {
         if (!ModelUser::isAuthorized() && !in_array('Auth', ROUTE)) {
