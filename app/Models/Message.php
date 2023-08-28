@@ -6,7 +6,7 @@ use System\Db;
 
 class Message extends Model
 {
-    protected static $table = 'friends';
+    protected static $db_table = 'friends';
 
     public static function getAll(int $user_id, $friend_id, int $limit = null, bool $active = true, $object = true)
     {

@@ -4,7 +4,7 @@ namespace Models;
 
 class Setting extends Model
 {
-    protected static $table = 'simptalk.settings';
+    protected static $db_table = 'simptalk.settings';
 
     public function filter_id($id)
     {

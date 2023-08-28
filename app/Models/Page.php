@@ -7,7 +7,7 @@ use Exceptions\DbException;
 
 class Page extends Model
 {
-    protected static $table = 'pages';
+    protected static $db_table = 'pages';
 
     /**
      * Получает информацию по текущей странице

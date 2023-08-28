@@ -25,10 +25,6 @@ class Messages extends Controller
     {
         $friend = User::getById($friend_id);
 
-//        $this->set('friend', $friend);
-//        $this->set('messages', Message::getAll($this->user->id, $friend_id, 100));
-//        $this->set('rsa_my', new OldRSA($this->user->private_key));
-//        $this->set('rsa_friend', new OldRSA($friend->private_key));
 
         $this->view->display('message/message');
     }

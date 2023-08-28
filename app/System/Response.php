@@ -25,7 +25,7 @@ class Response
     }
 
     /**
-     * Возвращает ответ пользователю api
+     * Возвращает ответ пользователю !!!api
      * @param bool $result - результат работы
      * @param string $message - сообщение
      * @param $data - данные

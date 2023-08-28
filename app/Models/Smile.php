@@ -4,7 +4,7 @@ namespace Models;
 
 class Smile extends Model
 {
-    protected static $table = 'smiles';
+    protected static $db_table = 'smiles';
 
     public static function getCollection()
     {

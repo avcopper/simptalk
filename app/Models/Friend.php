@@ -6,7 +6,7 @@ use System\Db;
 
 class Friend extends Model
 {
-    protected static $table = 'friends';
+    protected static $db_table = 'friends';
 
     public static function getAll(int $id, bool $active = true, $object = true)
     {

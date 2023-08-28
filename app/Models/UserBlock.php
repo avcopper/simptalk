@@ -18,7 +18,7 @@ class UserBlock extends Model
     const INTERVAL_MONTH = 60 * 60 * 24 * 30;
     const INTERVAL_CENTURY = 60 * 60 * 24 * 365 * 100;
 
-    protected static $table = 'auth.user_blocks';
+    protected static $db_table = 'auth.user_blocks';
 
     public $id;      // id блокировки
     public $user_id; // id пользователя
