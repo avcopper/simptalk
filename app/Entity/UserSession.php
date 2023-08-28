@@ -1,5 +1,4 @@
 <?php
-
 namespace Entity;
 
 class UserSession extends Entity
