@@ -12,6 +12,7 @@ const _VENDOR = __DIR__ . '/../vendor';
 const _LOGS = __DIR__ . '/../logs';
 const _PUBLIC = __DIR__ . '/../public';
 const _VIEWS = __DIR__ . '/../views';
+const _CERTIFICATES = __DIR__ . '/../certificates';
 const _TEMPLATES = __DIR__ . '/../views/templates';
 define("CONFIG", Config::getInstance()->data);
 
