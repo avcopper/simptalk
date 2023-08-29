@@ -16,10 +16,6 @@ class Auth extends Controller
 {
     protected function before()
     {
-        if (ModelUser::isAuthorized()) {
-            header('Location: /');
-            die;
-        }
     }
 
     /**
@@ -36,6 +32,10 @@ class Auth extends Controller
      */
     protected function actionLogin()
     {
+        if (ModelUser::isAuthorized()) {
+            header('Location: /');
+            die;
+        }
 
         if (Request::isPost()) {
             $login = Request::post('login');
