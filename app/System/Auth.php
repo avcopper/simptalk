@@ -137,8 +137,8 @@ class Auth
         if ($this->userSession->token && $this->userSession->save()) {
             ModelUserSession::clearFailedAttempts($this->user->login);
 
-            $_SESSION['token'] = $this->token;
             $_SESSION['user'] = $this->user;
+            $_SESSION['token'] = $this->token;
             if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE, 0);
             header('Location: /');
             die;
