@@ -31,6 +31,8 @@ class User extends Entity
     public $mailingType;
     public $created;
     public $updated;
+    public $publicKey;
+    public $privateKey;
 
     public static function get(array $params)
     {
@@ -47,6 +49,15 @@ class User extends Entity
         $object = new self();
         $object->init($user);
         return $object;
+    }
+
+    public function init(array $data, array $properties = [])
+    {
+        parent::init($data, $properties);
+        $publicKeyFile = _CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'public.pem';
+        $privateKeyFile = _CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'private.pem';
+        $this->publicKey = (is_file($publicKeyFile) && filesize($publicKeyFile) > 0) ? file_get_contents($publicKeyFile) : null;
+        $this->privateKey = (is_file($privateKeyFile) && filesize($privateKeyFile) > 0) ? file_get_contents($privateKeyFile) : null;
     }
 
     public function getFields()
