@@ -47,5 +47,3 @@ if (!defined('API')) {
         Response::apiResult($e->getCode(), false, $e->getMessage());
     }
 }
-
-session_destroy();
