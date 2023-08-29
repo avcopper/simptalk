@@ -1,7 +1,6 @@
 <?php
 namespace Controllers;
 
-use Entity\User;
 use System\Crypt;
 use Entity\Friend;
 use Entity\Message;
