@@ -1,11 +1,10 @@
 <?php
-
 namespace Controllers;
 
-use System\OldRSA;
-use Models\User;
-use Models\Message;
-use System\Request;
+use Entity\User;
+use System\Crypt;
+use Entity\Friend;
+use Entity\Message;
 
 /**
  * Class Messages
@@ -23,14 +22,21 @@ class Messages extends Controller
 
     protected function actionShow(int $friend_id)
     {
-        $friend = User::getById($friend_id);
+        $friend = Friend::get(['id' => $friend_id]);
+        $messages = Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id]);
+        $crypt = new Crypt($this->user->publicKey);
+        $cryptFriend = new Crypt($friend->publicKey);
 
+        $this->set('showDate', true);
+        $this->set('friend', $friend);
+        $this->set('messages', $messages);
+        $this->set('crypt', $crypt);
+        $this->set('cryptFriend', $cryptFriend);
 
         $this->view->display('message/message');
     }
 
     protected function actionSend(int $user_id)
     {
-
     }
 }
