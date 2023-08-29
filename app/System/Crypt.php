@@ -11,10 +11,10 @@ class Crypt
     private $publicKey;
     private $privateKey;
 
-    public function __construct($privateKey = null, $publicKey = null)
+    public function __construct($publicKey = null, $privateKey = null)
     {
-        $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
+        $this->privateKey = $privateKey;
     }
 
     public function generatePair(int $bits = 2048)
