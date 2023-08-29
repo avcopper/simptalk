@@ -22,10 +22,11 @@ class View implements \Iterator, \Countable, \ArrayAccess
 
     /**
      * Возвращает строку - HTML-код шаблона
-     * @param string $template
+     * @param string $template - шаблон
+     * @param array $vars - переданные переменные для рендера в шаблоне
      * @return false|string|null
      */
-    public function render(string $template)
+    public function render(string $template, $vars = [])
     {
         $file = explode('.', $template);
         $file_name = $file[0];
@@ -44,6 +45,13 @@ class View implements \Iterator, \Countable, \ArrayAccess
         foreach ($this as $name => $value) {
             $$name = $value;
         }
+
+        if (!empty($vars) && is_array($vars)) {
+            foreach ($vars as $key => $val) {
+                $$key = $val;
+            }
+        }
+
         include $file_path;
         $content = ob_get_contents();
         ob_end_clean();
