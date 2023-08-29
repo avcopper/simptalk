@@ -198,7 +198,9 @@ class User extends Model
     {
         unset($_SESSION['token']);
         unset($_SESSION['user']);
+        session_destroy();
         setcookie('token', '', time() - UserSession::LIFE_TIME, '/', SITE, 0);
+        setcookie('PHPSESSID', '', time() - UserSession::LIFE_TIME, '/', SITE, 0);
         return UserSession::deleteCurrent();
     }
 
