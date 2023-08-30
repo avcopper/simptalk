@@ -29,8 +29,7 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
                 'name' => $name,
                 'secondName' => $secondName,
                 'lastName' => $lastName,
-            ]
-        )
+            ])
         ?>
     </div>
 
@@ -73,44 +72,42 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
         });
 
         /* отправка ссобщения по нажатию кнопки */
-        // $('.message-send').on('click', function (e) {
-        //     let data = {
-        //             'friend_id': $('input[name=message_to]').val(),
-        //             'last': $('#message-list .message-item').last().data('id'),
-        //             'message': messageText.html(),
-        //         };
-        //     if(data.message.length) sendMessage(data);
-        // });
+        $('.message-send').on('click', function (e) {
+            sendMessage(data);
+        });
 
-        /* отправка ссобщения по нажатию enter */
-        // messageText.on('keydown', function (e) {
-        //     //if (e.ctrlKey && e.which === 13) message.append(document.createElement('br'));
-        //     if (e.ctrlKey && e.keyCode === 13) {
-        //         e.preventDefault();
-        //         let data = {
-        //                 'friend_id': $('input[name=message_to]').val(),
-        //                 'last': $('#message-list .message-item').last().data('id'),
-        //                 'message': messageText.html(),
-        //             };
-        //         if(data.message.length) sendMessage(data);
-        //     }
-        // });
+        /* отправка ссобщения по нажатию ctrl+enter */
+        messageText.on('keydown', function (e) {
+            //if (e.ctrlKey && e.which === 13) message.append(document.createElement('br'));
+            if (e.ctrlKey && e.keyCode === 13) {
+                e.preventDefault();
+                sendMessage(data);
+            }
+        });
 
-        // function sendMessage(data) {
-        //     $.ajax({
-        //         method: "POST",
-        //         dataType: 'text',
-        //         url: '/messages/send/' + data.friend_id + '/',
-        //         data: data,
-        //         beforeSend: function() {
-        //         },
-        //         success: function(data){
-        //             $('.message-text').html('');
-        //             $('.message-list').append(data);
-        //             messageList.scrollTop = messageList.scrollHeight;
-        //         }
-        //     });
-        // }
+        function sendMessage() {
+            let data = {
+                'friend_id': $('input[name=message_to]').val(),
+                'last': $('#message-list .message-item').last().data('id'),
+                'message': messageText.html(),
+            };
+
+            if(data.message.length > 0 && data.friend_id > 0) {
+                $.ajax({
+                    method: "POST",
+                    dataType: 'text',
+                    url: '/messages/send/' + data.friend_id + '/',
+                    data: data,
+                    beforeSend: function() {
+                    },
+                    success: function(data){
+                        $('.message-text').html('');
+                        $('.message-list').append(data);
+                        messageList.scrollTop = messageList.scrollHeight;
+                    }
+                });
+            }
+        }
 
     //     $('.message-smiles img').on('click', function () {
     //         let img = ' <img src="'+ this.src +'">';

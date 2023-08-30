@@ -201,6 +201,16 @@ footer a {
     background-color: #eaf5fd;
     border: 1px solid #c1daee;
 }
+.message-item.unread:before {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 6px;
+    height: 6px;
+    content: "";
+    background-color: #124c8d;
+    border-radius: 50%;
+}
 
 
 
@@ -221,14 +231,16 @@ footer a {
 }
 .message-name {
     margin-bottom: 5px;
-    font: 14px/17px 'OpenSansSemiBold';
+    font: 13px/16px 'OpenSansSemiBoldItalic';
 }
 .message-time {
     padding-left: 5px;
     color: #aaaaaa;
+    font: 12px/15px 'OpenSansRegular';
+
 }
 .message-body {
-
+    font: 13px/20px 'OpenSansRegular';
 }
 .message-body img {
     padding: 0 5px;

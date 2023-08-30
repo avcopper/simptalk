@@ -39,7 +39,9 @@ if (!empty($messages) && is_array($messages)):
         <?php endif;
         $date = $dt; ?>
 
-        <div class="message-item <?= ($user->id === $message->messageFromUserId) ? 'my' : '' ?>" data-id="<?= $message->id ?>">
+        <div class="message-item
+            <?= ($user->id === $message->messageFromUserId && !$message->isRead) ? 'unread' : '' ?>
+            <?= ($user->id === $message->messageFromUserId) ? 'my' : '' ?>" data-id="<?= $message->id ?>">
             <div class="message-photo">
                 <img src="/images/user.jpg" alt="">
             </div>

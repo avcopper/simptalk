@@ -4,8 +4,8 @@ namespace Entity;
 class Message extends Entity
 {
     public $id;
-    public $isActive;
-    public $isRead;
+    public $isActive = true;
+    public $isRead = false;
     public $messageFromUserId;
     public $messageToUserId;
     public $message;
@@ -65,7 +65,7 @@ class Message extends Entity
         $user->from_user_id = $this->messageFromUserId;
         $user->to_user_id = $this->messageToUserId;
         $user->message = $this->message;
-        $user->created = $this->created->format('Y-m-d H:i:s');
+        $user->created = !empty($this->created) ? $this->created->format('Y-m-d H:i:s') : date('Y-m-d H:i:s');
         $user->updated = date('Y-m-d H:i:s');
         return $user->save();
     }
