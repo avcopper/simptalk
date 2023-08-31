@@ -14,7 +14,14 @@ class Message extends Entity
 
     public static function getList(array $params)
     {
-        $messages = \Models\Message::getAll($params['user_id'], $params['friend_id'], $params['limit'] ?? null, $params['active'] ?? true, false);
+        $messages = \Models\Message::getAll(
+            $params['user_id'],
+            $params['friend_id'],
+            $params['limit'] ?? 0,
+            $params['start'] ?? 0,
+            $params['active'] ?? true,
+            false
+        );
         $list = [];
 
         if (!empty($messages) && is_array($messages)) {

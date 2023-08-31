@@ -23,17 +23,13 @@ class Messages extends Controller
     protected function actionShow(int $friend_id)
     {
         $friend = Friend::get(['id' => $friend_id]);
-        $messages = Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id]);
-        $crypt = new Crypt($this->user->publicKey);
-        $cryptFriend = new Crypt($friend->publicKey);
 
         $this->set('showDate', true);
         $this->set('friend', $friend);
-        $this->set('messages', $messages);
-        $this->set('crypt', $crypt);
-        $this->set('cryptFriend', $cryptFriend);
-
-        $this->view->display('message/messages');
+        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id]));
+        $this->set('crypt', new Crypt($this->user->publicKey));
+        $this->set('cryptFriend', new Crypt($friend->publicKey));
+        $this->display('message/messages');
     }
 
     protected function actionSend(int $friend_id)
@@ -43,19 +39,25 @@ class Messages extends Controller
 
         if (Request::isPost()) {
             $params = Request::post();
+            $friend = Friend::get(['id' => $friend_id]);
 
-            if (!empty($params['message']) && !empty($params['friend_id']) && intval($params['friend_id']) === $friend_id) {
-                $crypt = new Crypt($this->user->publicKey, $this->user->privateKey);
-
-                $message = new Message();
-                $message->messageFromUserId = $this->user->id;
-                $message->messageToUserId = $friend_id;
-                $message->message = $crypt->encryptByPrivateKey($params['message']);
-                $result = $message->save();
-
-                echo json_encode($result);
-                die;
+            if (!empty($params['message']) && !empty($params['friend']) && intval($params['friend']) === $friend_id && !empty($friend->id)) {
+                if (\Models\Message::saveMessage($this->user, $friend_id, $params['message'])) {
+                    $this->actionGet($friend_id, $params['last']);
+                }
             }
         }
+    }
+
+    protected function actionGet(int $friend_id, int $last_id)
+    {
+        $friend = Friend::get(['id' => $friend_id]);
+        $messages = Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend_id, 'start' => $last_id]);
+
+        $this->set('friend', $friend);
+        $this->set('messages', $messages);
+        $this->set('crypt', new Crypt($this->user->publicKey, $this->user->privateKey));
+        $this->set('cryptFriend', new Crypt($friend->publicKey));
+        $this->display_element('message/message-list');
     }
 }

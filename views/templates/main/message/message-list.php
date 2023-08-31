@@ -10,20 +10,16 @@
  * @var string $friendLastName
  */
 
+$name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
+$lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
+
+$friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
+$friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
+
 $date = '';
 $_monthsList = [
-    1 => 'января',
-    2 => 'февраля',
-    3 => 'марта',
-    4 => 'апреля',
-    5 => 'мая',
-    6 => 'июня',
-    7 => 'июля',
-    8 => 'августа',
-    9 => 'сентября',
-    10 => 'октября',
-    11 => 'ноября',
-    12 => 'декабря'
+    1 => 'января', 2 => 'февраля', 3 => 'марта',     4 => 'апреля',   5 => 'мая',     6 => 'июня',
+    7 => 'июля',   8 => 'августа', 9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря'
 ];
 
 if (!empty($messages) && is_array($messages)):

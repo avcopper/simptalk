@@ -53,197 +53,143 @@ class Route
     {
         $class  = null;            // класс контроллера
         $action = null;            // метод контроллера
-        $param  = null;          // параметр метода
+        $param1  = null;          // параметр1 метода
+        $param2  = null;          // параметр2 метода
         $route  = ROUTE;         // массив роутов
-        $count  = count($route); // количество роутов
 
-        if ($count > 1) {
-            $last = $count - 1; // индекс последнего элемента массива роутов
-
-            $base = 'Controllers';
-            for ($i = 0; $i < $last - 1; $i++) {
-                $base .= '\\' . $route[$i];
-            }
-
-            if (class_exists($base . '\\' . $route[$last - 1] . '\\' . $route[$last] . '\\Index') &&
-                method_exists($base . '\\' . $route[$last - 1] . '\\' . $route[$last] . '\\Index', 'actionDefault'))
-            { // \Controllers\Blog\Index -> actionDefault()
-                $class = $base . '\\' . $route[$last - 1] . '\\' . $route[$last] . '\\Index';
-                $action = 'actionDefault';
-            }
-            elseif (class_exists($base . '\\' . $route[$last - 1] . '\\' . $route[$last]) &&
-                method_exists($base . '\\' . $route[$last - 1] . '\\' . $route[$last], 'actionDefault'))
-            { // Controllers\Blog\News -> actionDefault()
-                $class = $base . '\\' . $route[$last - 1] . '\\' . $route[$last];
-                $action = 'actionDefault';
-            }
-            elseif (class_exists($base . '\\' . $route[$last - 1])) {
-                if (method_exists($base . '\\' . $route[$last - 1], 'action' . $route[$last])) { // Controllers\Blog\News -> actionSave()
-                    $class = $base . '\\' . $route[$last - 1];
-                    $action = 'action' . $route[$last];
+        $base = 'Controllers';
+        switch (count($route)) {
+            case 4:
+                if (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3] . '\\' . 'Index') &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3] . '\\' . 'Index', 'actionDefault'))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3] . '\\' . 'Index';
+                    $action = 'actionDefault';
                 }
-                elseif (method_exists($base . '\\' . $route[$last - 1], 'actionShow')) { // Controllers\Blog\News -> actionShow(10)
-                    $class = $base . '\\' . $route[$last - 1];
-                    $action = 'actionShow';
-                    $param = $route[$last];
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3], 'actionDefault'))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . $route[3];
+                    $action = 'actionDefault';
                 }
-            }
-            elseif (class_exists($base) && method_exists($base, 'action' . $route[$last - 1])) { // Controllers\Blog -> actionEdit(10)
-                $class = $base;
-                $action = 'action' . $route[$last - 1];
-                $param = $route[$last];
-            }
-        }
-        elseif ($count === 1) { //shop/blog/
-            if (class_exists('Controllers\\' . $route[0]) &&
-                method_exists('Controllers\\' . $route[0], 'actionDefault'))
-            { // Controllers\Blog -> actionDefault()
-                $class  = 'Controllers\\' . $route[0];
-                $action = 'actionDefault';
-            }
-            elseif (class_exists('Controllers\\' . $route[0] . '\\Index') &&
-                method_exists('Controllers\\' . $route[0] . '\\Index', 'actionDefault'))
-            { // Controllers\Blog\Index -> actionDefault()
-                $class  = 'Controllers\\' . $route[0] . '\\Index';
-                $action = 'actionDefault';
-            }
-        }
-        else {
-            $class  = 'Controllers\\Index';
-            $action = 'actionDefault';
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2], "action{$route[3]}"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2];
+                    $action = "action{$route[3]}";
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2], "actionShow"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2];
+                    $action = "actionShow";
+                    $param1 = $route[3];
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1], "action{$route[2]}"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1];
+                    $action = "action{$route[2]}";
+                    $param1 = $route[3];
+                }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "action{$route[1]}"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "action{$route[1]}";
+                    $param1 = $route[2];
+                    $param2 = $route[3];
+                }
+                break;
+            case 3:
+                if (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . 'Index') &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . 'Index', "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2] . '\\' . 'Index';
+                    $action = "actionDefault";
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2], "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . $route[2];
+                    $action = "actionDefault";
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1], "action{$route[2]}"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1];
+                    $action = "action{$route[2]}";
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1], "actionShow"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1];
+                    $action = "actionShow";
+                    $param1 = $route[2];
+                }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "action{$route[1]}"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "action{$route[1]}";
+                    $param1 = $route[2];
+                }
+                break;
+            case 2:
+                if (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . 'Index') &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1] . 'Index', "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1] . '\\' . 'Index';
+                    $action = "actionDefault";
+                }
+                elseif (class_exists($base . '\\' . $route[0] . '\\' . $route[1]) &&
+                    method_exists($base . '\\' . $route[0] . '\\' . $route[1], "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . $route[1];
+                    $action = "actionDefault";
+                }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "action{$route[1]}"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "action{$route[1]}";
+                }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "actionShow"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "actionShow";
+                    $param1 = $route[1];
+                }
+                break;
+            case 1:
+                if (class_exists($base . '\\' . $route[0] . '\\' . 'Index') &&
+                    method_exists($base . '\\' . $route[0] . 'Index', "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0] . '\\' . 'Index';
+                    $action = "actionDefault";
+                }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "actionDefault"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "actionDefault";
+                }
+                break;
+            case 0:
+                $class = $base . '\\Index';
+                $action = "actionDefault";
+                break;
         }
 
         if (!empty($class) && !empty($action)) {
             $controller = new $class;
-            $controller->action($action, mb_strtolower($param) ?? null);
-        }
-        else
+
+            if (!empty($param1) && !empty($param2)) $controller->action($action, mb_strtolower($param1), mb_strtolower($param2));
+            elseif (!empty($param1)) $controller->action($action, mb_strtolower($param1));
+            else$controller->action($action);
+
+        } else
             if (!in_array('Js', ROUTE)) throw new NotFoundException(); // inputmask какого-то хрена далет еще один запрос...
-    }
-
-    public static function startApi()
-    {
-        $class  = null;  // класс контроллера
-        $action = null;  // метод контроллера
-        $param1  = null; // параметр метода
-        $param2  = null; // параметр метода
-        $route  = ROUTE; // массив роутов
-
-        if (!empty($route[0])) {
-            $base_dir = 'Api\\Controllers' . '\\' . $route[0];
-
-            switch (true) {
-                case Request::isGet():
-                    $subClass = 'Read';
-                    break;
-                case Request::isPost():
-                    $subClass = 'Create';
-                    break;
-                case Request::isPut():
-                    $subClass = 'Update';
-                    break;
-                case Request::isDelete():
-                    $subClass = 'Delete';
-                    break;
-                case Request::isPatch():
-                    $subClass = 'Patch';
-                    break;
-                default:
-                    $subClass = '';
-                    break;
-            }
-
-            switch (count($route)) {
-                case 4:
-                    if (class_exists($base_dir . '\\' . $route[1] . '\\' . $route[2] . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $route[1] . '\\' . $route[2] . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[1] . '\\' . $route[2] . '\\' . $subClass;
-                        $param1 = $route[3];
-                        $action = 'actionDefault';
-                    }
-                    elseif (class_exists($base_dir . '\\' . $route[2] . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $route[2] . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[2] . '\\' . $subClass;
-                        $param1 = $route[1];
-                        $param2 = $route[3];
-                        $action = 'actionDefault';
-                    }
-                    break;
-                case 3:
-                    if (class_exists($base_dir . '\\' . $route[1]) &&
-                        method_exists($base_dir . '\\' . $route[1], "action{$route[2]}"))
-                    {
-                        $class = $base_dir . '\\' . $route[1];
-                        $action = "action{$route[2]}";
-                    }
-                    elseif (class_exists($base_dir . '\\' . $route[1]) &&
-                        method_exists($base_dir . '\\' . $route[1], 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[1];
-                        $param1 = $route[2];
-                        $action = 'actionDefault';
-                    }
-                    elseif (class_exists($base_dir . '\\' . $route[1] . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $route[1] . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[1] . '\\' . $subClass;
-                        $param1 = $route[2];
-                        $action = 'actionDefault';
-                    }
-                    elseif (class_exists($base_dir . '\\' . $route[2] . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $route[2] . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[2] . '\\' . $subClass;
-                        $param1 = $route[1];
-                        $action = 'actionDefault';
-                    }
-                    break;
-                case 2:
-                    if (class_exists($base_dir . '\\' . $route[1]) &&
-                        method_exists($base_dir . '\\' . $route[1], 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[1];
-                        $action = 'actionDefault';
-                    }
-                    elseif (class_exists($base_dir . '\\' . $route[1] . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $route[1] . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $route[1] . '\\' . $subClass;
-                        $action = 'actionDefault';
-                    }
-                    elseif (class_exists($base_dir . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $subClass;
-                        $param1 = $route[1];
-                        $action = 'actionDefault';
-                    }
-                    break;
-                case 1:
-                    if (class_exists($base_dir . '\\' . $subClass) &&
-                        method_exists($base_dir . '\\' . $subClass, 'actionDefault'))
-                    {
-                        $class = $base_dir . '\\' . $subClass;
-                        $action = 'actionDefault';
-                    }
-                    break;
-            }
-        }
-
-        if (!empty($class) && !empty($action)) {
-            $controller = new $class;
-
-            if (!empty($param1) && !empty($param2))
-                $controller->action($action, mb_strtolower($param1), mb_strtolower($param2));
-            elseif (!empty($param1))
-                $controller->action($action, mb_strtolower($param1));
-            else
-                $controller->action($action);
-
-        } else {
-            throw new NotFoundException();
-        }
     }
 }

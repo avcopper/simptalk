@@ -71,7 +71,7 @@ class View implements \Iterator, \Countable, \ArrayAccess
     }
 
     /**
-     * Отображает HTML-код шаблона
+     * Отображает HTML-код файла
      * @param string $file
      */
     public function display_element(string $file)

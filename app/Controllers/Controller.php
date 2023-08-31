@@ -35,15 +35,21 @@ abstract class Controller
     /**
      * Проверяет доступ и формирует полное имя action
      * @param string $action
-     * @param null $param
-     * @throws ForbiddenException|NotFoundException
+     * @param null $param1
+     * @param null $param2
+     * @throws \Exceptions\ForbiddenException
+     * @throws \Exceptions\NotFoundException
      */
-    public function action(string $action, $param = null)
+    public function action(string $action, $param1 = null, $param2 = null)
     {
         if (method_exists($this, $action)) {
             if ($this->access($action)) {
                 if (method_exists($this, 'before')) $this->before();
-                $this->$action($param ?? null);
+
+                if (!empty($param1) && !empty($param2)) $this->$action($param1, $param2);
+                elseif (!empty($param1)) $this->$action($param1);
+                else$this->$action();
+
                 if (method_exists($this, 'after')) $this->after();
                 die;
             } else throw new ForbiddenException();
@@ -58,6 +64,24 @@ abstract class Controller
     protected function set($var, $value = null)
     {
         $this->view->$var = $value;
+    }
+
+    /**
+     * Отображает HTML-код шаблона
+     * @param $file
+     */
+    protected function display($file)
+    {
+        $this->view->display($file);
+    }
+
+    /**
+     * Отображает HTML-код файла
+     * @param $file
+     */
+    protected function display_element($file)
+    {
+        $this->view->display_element($file);
     }
 
     /**
