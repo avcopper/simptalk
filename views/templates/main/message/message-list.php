@@ -12,7 +12,6 @@
 
 $name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
 $lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
-
 $friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
 $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
 

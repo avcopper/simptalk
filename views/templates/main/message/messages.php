@@ -6,10 +6,6 @@
  * @var \Entity\Friend $friend
  */
 
-//$name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
-//$secondName = !empty($user->secondName) ? $crypt->decryptByPublicKey($user->secondName) : '';
-//$lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
-
 $friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
 $friendSecondName = !empty($friend->secondName) ? $cryptFriend->decryptByPublicKey($friend->secondName) : '';
 $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
