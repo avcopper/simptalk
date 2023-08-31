@@ -22,8 +22,6 @@ abstract class Controller
      */
     public function __construct()
     {
-        $this->checkAuthorization();
-
         $this->view = new View();
         $this->user = ModelUser::getCurrent();
         //$this->token = ModelUser::getUserToken();
@@ -96,7 +94,7 @@ abstract class Controller
 
     protected function checkAuthorization()
     {
-        if (!ModelUser::isAuthorized() && !in_array('Auth', ROUTE)) {
+        if (!ModelUser::isAuthorized()) {
             header('Location: /auth/');
             die;
         }

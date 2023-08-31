@@ -62,6 +62,7 @@ class Message extends Model
     }
 
     /**
+     * Сохраняет сообщение
      * @param \Entity\User $user - пользователь
      * @param int $message_to - id собеседника
      * @param string $message - сообщение

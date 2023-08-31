@@ -8,6 +8,11 @@ namespace Controllers;
  */
 class Index extends Controller
 {
+    protected function before()
+    {
+        $this->checkAuthorization();
+    }
+
     /**
      * Выводит стартовую страницу
      */

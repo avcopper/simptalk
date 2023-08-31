@@ -12,6 +12,11 @@ use System\Request;
  */
 class Messages extends Controller
 {
+    protected function before()
+    {
+        $this->checkAuthorization();
+    }
+
     /**
      * Выводит страницу с сообщениями
      */
@@ -20,6 +25,10 @@ class Messages extends Controller
         $this->view->display('messages');
     }
 
+    /**
+     * Показывает переписку с собеседником
+     * @param int $friend_id - id собеседника
+     */
     protected function actionShow(int $friend_id)
     {
         $friend = Friend::get(['id' => $friend_id]);
@@ -32,6 +41,10 @@ class Messages extends Controller
         $this->display('message/messages');
     }
 
+    /**
+     * Отправляет сообщение собеседнику
+     * @param int $friend_id - id собеседника
+     */
     protected function actionSend(int $friend_id)
     {
         // TODO добавить проверку разрешений писать выбранному адресату
@@ -49,6 +62,11 @@ class Messages extends Controller
         }
     }
 
+    /**
+     * Показывает последние сообщения
+     * @param int $friend_id - id собеседника
+     * @param int $last_id - id последнего сообщения
+     */
     protected function actionGet(int $friend_id, int $last_id)
     {
         $friend = Friend::get(['id' => $friend_id]);
