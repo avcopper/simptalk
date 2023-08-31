@@ -81,7 +81,7 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
             let messageList = document.querySelector('.message-list'),
                 last = $('#message-list .message-item').last().data('id');
             $.ajax({
-                method: "POST",
+                method: "GET",
                 dataType: 'text',
                 url: '/messages/get/' + <?= $friend->id ?> + '/' + last + '/',
                 beforeSend: function() {

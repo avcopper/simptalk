@@ -61,41 +61,12 @@ abstract class Model
      * @param bool $object
      * @return bool|mixed
      */
-    public static function getById(int $id, bool $active = true)
+    public static function getById(int $id, bool $active = true, bool $object = true)
     {
         $db = Db::getInstance();
         $where = !empty($active) ? ' AND active IS NOT NULL' : '';
         $db->params = ['id' => $id];
         $db->sql = "SELECT * FROM " . self::$db_prefix . static::$db_table . " WHERE id = :id {$where}";
-        $data = $db->query();
-        return !empty($data) ? array_shift($data) : false;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Находит и возвращает одну запись из БД по полю и его значению
-     * @param string $field
-     * @param string $value
-     * @param bool $active
-     * @param bool $object
-     * @return array|false
-     */
-    public static function getByField(string $field, string $value, bool $active = true, bool $object = true)
-    {
-        $db = Db::getInstance();
-        $activity = !empty($active) ? ' AND active IS NOT NULL' : '';
-        $db->params = ['value' => $value];
-        $db->sql = "SELECT * FROM `" . self::$db_prefix . static::$db_table . "` WHERE {$field} = :value {$activity}";
         $data = $db->query($object ? static::class : null);
         return !empty($data) ? array_shift($data) : false;
     }
