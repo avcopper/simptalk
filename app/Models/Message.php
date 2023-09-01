@@ -1,5 +1,4 @@
 <?php
-
 namespace Models;
 
 use System\Db;
@@ -70,6 +69,7 @@ class Message extends Model
      */
     public static function saveMessage(\Entity\User $user, int $message_to, string $message)
     {
+        $message = strip_tags(nl2br(trim($message)), '<br>');
         $msg = new self();
         $msg->from_user_id = $user->id;
         $msg->to_user_id = $message_to;
@@ -77,24 +77,44 @@ class Message extends Model
         return $msg->save();
     }
 
-//    public static function checkData($friend, $message)
-//    {
-//        return self::checkUser($friend) && self::checkMessage($message);
-//    }
-
-//    public static function checkUser($friend)
-//    {
-//        return !empty($friend->id);
-//    }
-
-//    public static function checkMessage($message)
-//    {
-//        return !empty($message);
-//    }
-
-    public static function filter()
+    /**
+     * Проверяет данные для отправки сообщения
+     * @param \Entity\Friend $friend - собеседник
+     * @param string $message
+     * @return bool
+     */
+    public static function checkData(\Entity\Friend $friend, string $message)
     {
-        parent::filter();
+        return self::checkUser($friend) && self::checkMessage($message);
+    }
 
+    /**
+     * Проверяет собеседника и возможность писать ему сообщения
+     * @param \Entity\Friend $friend - собеседник
+     * @return bool
+     */
+    public static function checkUser(\Entity\Friend $friend)
+    {
+        return !empty($friend->id) && self::canMessageUser($friend->id);
+    }
+
+    /**
+     * Проверяет возможность писать сообщения собеседнику TODO доделать это говно
+     * @param int $friend_id - id собеседника
+     * @return bool
+     */
+    public static function canMessageUser(int $friend_id)
+    {
+        return true;
+    }
+
+    /**
+     * Проверяет сообщение
+     * @param $message - сообщение
+     * @return bool
+     */
+    public static function checkMessage($message)
+    {
+        return !empty($message);
     }
 }

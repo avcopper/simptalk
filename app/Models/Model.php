@@ -167,23 +167,4 @@ abstract class Model
         }
         return $this;
     }
-
-    public static function filter()
-    {
-        //var_dump($this);
-//        foreach ($this as $key => $value) {
-//            switch ($key) {
-//                case 'id':
-//                    if (!is_null($this->$key)) $this->$key = (int) $value;
-//                    break;
-//                case 'active':
-//                    if (!is_null($this->$key)) $this->$key = (bool) $value;
-//                    break;
-//                case 'created':
-//                case 'updated':
-//                    break;
-//            }
-//        }
-        //var_dump($this);die;
-    }
 }

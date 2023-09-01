@@ -50,28 +50,13 @@ class Messages extends Controller
      */
     protected function actionSend(int $friend_id, int $last_id = 0)
     {
-        if (Request::isPost() && $this->canMessageUser($friend_id)) {
-            $message = htmlspecialchars(
-                strip_tags(nl2br(trim(Request::post('message')), '<br>')),
-                ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5
-            );
+        if (Request::isPost()) {
             $friend = Friend::get(['id' => $friend_id]);
+            $message = trim(Request::post('message'));
 
-            if (!empty($message) && !empty($friend->id)) {
-                if (ModelMessage::saveMessage($this->user, $friend_id, $message)) {
-                    $this->actionShow($friend_id, $last_id);
-                }
+            if (ModelMessage::checkData($friend, $message) && ModelMessage::saveMessage($this->user, $friend->id, $message)) {
+                $this->actionShow($friend->id, $last_id);
             }
         }
-    }
-
-    /**
-     * Проверяет возможность писать сообщения собеседнику TODO доделать это
-     * @param $id - id собеседника
-     * @return bool
-     */
-    protected function canMessageUser($id)
-    {
-        return true;
     }
 }
