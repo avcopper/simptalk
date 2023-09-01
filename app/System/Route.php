@@ -134,6 +134,14 @@ class Route
                     $action = "action{$route[1]}";
                     $param1 = $route[2];
                 }
+                elseif (class_exists($base . '\\' . $route[0]) &&
+                    method_exists($base . '\\' . $route[0], "actionShow"))
+                {
+                    $class = $base . '\\' . $route[0];
+                    $action = "actionShow";
+                    $param1 = $route[1];
+                    $param2 = $route[2];
+                }
                 break;
             case 2:
                 if (class_exists($base . '\\' . $route[0] . '\\' . $route[1] . '\\' . 'Index') &&
