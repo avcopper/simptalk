@@ -20,9 +20,6 @@ use Models\User;
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/ondelay.jquery.js"></script>
     <script src="/js/jquery.cookie.js"></script>
-    <script src="/js/jquery.autocomplete.min.js"></script>
-    <script src="/js/jquery.inputmask.js"></script>
-    <script src="/js/cities.js"></script>
     <script src="/js/functions.js"></script>
     <script src="/js/scripts.js"></script>
     <script src="/js/ResizeSensor.js"></script>
