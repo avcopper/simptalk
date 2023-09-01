@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Views\View;
 use Entity\User;
+use System\Request;
 use Models\User as ModelUser;
 use Exceptions\NotFoundException;
 use Exceptions\ForbiddenException;
@@ -64,6 +65,11 @@ abstract class Controller
         $this->view->$var = $value;
     }
 
+    protected function render($file)
+    {
+        return $this->view->render($file);
+    }
+
     /**
      * Отображает HTML-код шаблона
      * @param $file
@@ -95,7 +101,8 @@ abstract class Controller
     protected function checkAuthorization()
     {
         if (!ModelUser::isAuthorized()) {
-            header('Location: /auth/');
+            header('HTTP/1.1 403 Forbidden', 403);
+            if (!Request::isAjax()) header('Location: /auth/');
             die;
         }
     }
