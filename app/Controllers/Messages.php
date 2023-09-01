@@ -5,6 +5,7 @@ use System\Crypt;
 use Entity\Friend;
 use Entity\Message;
 use System\Request;
+use \Models\Message as ModelMessage;
 
 /**
  * Class Messages
@@ -29,53 +30,48 @@ class Messages extends Controller
      * Показывает переписку с собеседником
      * @param int $friend_id - id собеседника
      */
-    protected function actionShow(int $friend_id)
+    protected function actionShow(int $friend_id, int $last_id = 0)
     {
         $friend = Friend::get(['id' => $friend_id]);
 
-        $this->set('showDate', true);
+        if (!Request::isAjax()) $this->set('showDate', true);
         $this->set('friend', $friend);
-        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id]));
+        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id]));
         $this->set('crypt', new Crypt($this->user->publicKey));
         $this->set('cryptFriend', new Crypt($friend->publicKey));
-        $this->display('message/messages');
+
+        if (Request::isAjax()) $this->display_element('message/message-list');
+        else $this->display('message/messages');
     }
 
     /**
      * Отправляет сообщение собеседнику
      * @param int $friend_id - id собеседника
      */
-    protected function actionSend(int $friend_id)
+    protected function actionSend(int $friend_id, int $last_id = 0)
     {
-        // TODO добавить проверку разрешений писать выбранному адресату
-        // TODO фильтровать сообщение
-
-        if (Request::isPost()) {
-            $params = Request::post();
+        if (Request::isPost() && $this->canMessageUser($friend_id)) {
+            $message = htmlspecialchars(
+                strip_tags(nl2br(trim(Request::post('message')), '<br>')),
+                ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5
+            );
             $friend = Friend::get(['id' => $friend_id]);
 
-            if (!empty($params['message']) && !empty($params['friend']) && intval($params['friend']) === $friend_id && !empty($friend->id)) {
-                if (\Models\Message::saveMessage($this->user, $friend_id, $params['message'])) {
-                    $this->actionGet($friend_id, $params['last']);
+            if (!empty($message) && !empty($friend->id)) {
+                if (ModelMessage::saveMessage($this->user, $friend_id, $message)) {
+                    $this->actionShow($friend_id, $last_id);
                 }
             }
         }
     }
 
     /**
-     * Показывает последние сообщения
-     * @param int $friend_id - id собеседника
-     * @param int $last_id - id последнего сообщения
+     * Проверяет возможность писать сообщения собеседнику TODO доделать это
+     * @param $id - id собеседника
+     * @return bool
      */
-    protected function actionGet(int $friend_id, int $last_id)
+    protected function canMessageUser($id)
     {
-        $friend = Friend::get(['id' => $friend_id]);
-        $messages = Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend_id, 'start' => $last_id]);
-
-        $this->set('friend', $friend);
-        $this->set('messages', $messages);
-        $this->set('crypt', new Crypt($this->user->publicKey, $this->user->privateKey));
-        $this->set('cryptFriend', new Crypt($friend->publicKey));
-        $this->display_element('message/message-list');
+        return true;
     }
 }
