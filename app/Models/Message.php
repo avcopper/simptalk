@@ -91,4 +91,10 @@ class Message extends Model
 //    {
 //        return !empty($message);
 //    }
+
+    public static function filter()
+    {
+        parent::filter();
+
+    }
 }

@@ -99,13 +99,13 @@ abstract class Model
         $cols = [];
         $db->params = [];
         foreach ($this as $key => $val) {
-            //if ($val === null) continue;
+            if ($val === null) continue;
             $cols[] = $key;
             $db->params[$key] = $val;
         }
         $db->sql =  "
             INSERT INTO " . self::$db_prefix . static::$db_table . " (" . implode(', ', $cols) . ") 
-            VALUES (" . ":" . implode(', :', $cols) . ")";
+            VALUES (" . ":" . implode(', :', $cols) . ")";//echo json_encode($db->sql);die;
         $res = $db->execute();
         return !empty($res) ? $db->lastInsertId() : false;
     }
@@ -166,5 +166,24 @@ abstract class Model
             $this->$key = $value;
         }
         return $this;
+    }
+
+    public static function filter()
+    {
+        //var_dump($this);
+//        foreach ($this as $key => $value) {
+//            switch ($key) {
+//                case 'id':
+//                    if (!is_null($this->$key)) $this->$key = (int) $value;
+//                    break;
+//                case 'active':
+//                    if (!is_null($this->$key)) $this->$key = (bool) $value;
+//                    break;
+//                case 'created':
+//                case 'updated':
+//                    break;
+//            }
+//        }
+        //var_dump($this);die;
     }
 }
