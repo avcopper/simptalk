@@ -115,7 +115,7 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
                 beforeSend: function() {
                     clearInterval(timerMessages);
                 },
-                success: function(data, textStatus, jqXHR){console.log(data);
+                success: function(data, textStatus, jqXHR){//console.log(data);
                     $('.message-text').html('');
                     $('.message-list').append(data);
                     messageList.scrollTop = messageList.scrollHeight;
