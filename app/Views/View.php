@@ -33,7 +33,7 @@ class View implements \Iterator, \Countable, \ArrayAccess
         $ext = $file[1] ?? 'php';
         $tmpl = defined('TEMPLATE') ? TEMPLATE : 'main';
         $file_path =
-            _TEMPLATES . DIRECTORY_SEPARATOR .
+            DIR_TEMPLATES . DIRECTORY_SEPARATOR .
             $tmpl .
             (mb_substr($file_name, 0, 1) === '/' || mb_substr($file_name, 0, 1) === '\\' ? '' : DIRECTORY_SEPARATOR) .
             $file_name . '.' .

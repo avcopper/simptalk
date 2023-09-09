@@ -4,7 +4,25 @@ namespace Models;
 
 class Setting extends Model
 {
-    protected static $db_table = 'simptalk.settings';
+    protected static $db_table = 'mesigo.settings';
+
+    /**
+     * Возвращает массив настроек из БД
+     * @return array
+     */
+    public static function getSiteSettings()
+    {
+        $settings = [];
+        $data = Setting::getList();
+
+        if (!empty($data) && is_array($data)) {
+            foreach ($data as $item) {
+                $settings[$item->name] = $item->value;
+            }
+        }
+
+        return $settings;
+    }
 
     public function filter_id($id)
     {

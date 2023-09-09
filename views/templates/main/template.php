@@ -9,7 +9,7 @@ use Models\User;
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Simptalk</title>
+    <title>Mesigo</title>
 
     <link rel="stylesheet" href="/css/styles.css" media="all">
     <link rel="stylesheet" href="/css/media.css" media="all">
@@ -50,7 +50,7 @@ use Models\User;
 </section>
 <footer>
     <div class="container">
-        <a href="https://t.me/andrewcooper">@simptalk</a>
+        <a href="https://t.me/andrewcooper">@mesigo</a>
     </div>
 </footer>
 </body>

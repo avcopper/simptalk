@@ -7,10 +7,6 @@ use Exceptions\UserException;
 
 class Api
 {
-    const API_PROTOCOL = 'http';
-    const API_URL = '//api.simptalk';
-    const API_VERSION = 'v1';
-
     const URL_LOGIN = '/users/login/';
     const URL_VALIDATION = '/users/validate/';
 
@@ -35,7 +31,7 @@ class Api
 
     public function __construct()
     {
-        $this->url = self::API_PROTOCOL . ':' . self::API_URL . '/' . self::API_VERSION;
+        $this->url = API_URL;
         $this->token = !empty($_SESSION['token']) ? $_SESSION['token'] : (!empty($_COOKIE['token']) ? $_COOKIE['token'] : null);
         $this->device = base64_encode($_SERVER['HTTP_USER_AGENT']);
         $this->ip = base64_encode($_SERVER['REMOTE_ADDR']);
@@ -68,7 +64,7 @@ class Api
                 $user = (new User())->init($response['response']['data']['user']);
                 $_SESSION['token'] = $response['response']['token'];
                 $_SESSION['user'] = $user;
-                if ($remember) setcookie('token', $response['response']['token'], time() + UserSession::LIFE_TIME, '/', SITE, 0);
+                if ($remember) setcookie('token', $response['response']['token'], time() + UserSession::LIFE_TIME, '/', SITE_URL, 0);
 
                 return $user;
             }

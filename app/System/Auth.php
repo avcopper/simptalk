@@ -102,7 +102,7 @@ class Auth
     {
         if (empty($userSession)) throw new UserException(self::NOT_AUTHORIZED, 401);
 
-        if ($token->iss !== SITE || $token->aud !== $userSession->login ||
+        if ($token->iss !== SITE_URL || $token->aud !== $userSession->login ||
             $token->data->id !== $userSession->userId || $token->data->serviceId !== $userSession->serviceId ||
             $token->data->ip !== $userSession->ip || $token->data->device !== $userSession->device
         ) throw new UserException(self::WRONG_TOKEN);
@@ -139,7 +139,7 @@ class Auth
 
             $_SESSION['user'] = $this->user;
             $_SESSION['token'] = $this->token;
-            if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE, 0);
+            if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE_URL, 0);
             header('Location: /');
             die;
         }

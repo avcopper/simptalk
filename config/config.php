@@ -4,7 +4,7 @@ return [
     'db' => [
         'host'     => 'localhost',
         'dbprefix' => 'talk_',
-        'dbname'   => 'simptalk',
+        'dbname'   => 'mesigo',
         'user'     => 'root',
         'password' => 'root'
     ],

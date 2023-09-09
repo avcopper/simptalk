@@ -1,9 +1,8 @@
 <?php
 require __DIR__ . '/../config/autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../config/constants.php';
-
 session_start();
+require __DIR__ . '/../config/constants.php';
 
 use System\Route;
 use System\Request;

@@ -6,7 +6,7 @@ use System\Crypt;
 
 class Message extends Model
 {
-    protected static $db_table = 'simptalk.messages';
+    protected static $db_table = 'mesigo.messages';
 
     public $id;
     public $active = 1;

@@ -35,7 +35,7 @@ class Friend extends Entity
     public function init(array $data, array $properties = [])
     {
         parent::init($data, $properties);
-        $publicKeyFile = _CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'public.pem';
+        $publicKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'public.pem';
         $this->publicKey = (is_file($publicKeyFile) && filesize($publicKeyFile) > 0) ? file_get_contents($publicKeyFile) : null;
     }
 

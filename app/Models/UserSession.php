@@ -10,7 +10,7 @@ use Exceptions\DbException;
 
 class UserSession extends Model
 {
-    const SERVER = 'simptalk'; // сервер токена
+    const SERVER = 'mesigo'; // сервер токена
     const SERVICES = [1, 2]; // сервисы, использующие авторизацию: 1 - мобильные, 2 - сайт
     const SERVICE_MOBILE = 1; // сервис мобильный
     const SERVICE_SITE = 2; // сервис сайт
@@ -23,7 +23,7 @@ class UserSession extends Model
                 'H2mCo6UjM9m8vVbkaaw5hNapjhHILOgN5UVcXGI6b3XoyKZwYX0hTpnImydmDGUJ'.
                 'XwIDAQAB'; // ключ для шифрования токена
 
-    protected static $db_table = 'auth.user_sessions';
+    protected static $db_table = 'users.user_sessions';
 
     public $id;         // id сессии
     public $active;     // активность сессии
@@ -51,8 +51,8 @@ class UserSession extends Model
         $db->sql = "
             SELECT us.id, us.active, us.user_id, u.login, us.service_id, s.name service, us.ip, us.device, us.log_in, us.expire, us.token
             FROM " . self::$db_prefix . self::$db_table . " us 
-            LEFT JOIN " . self::$db_prefix . "auth.users u ON us.user_id = u.id 
-            LEFT JOIN " . self::$db_prefix . "auth.services s ON us.service_id = s.id 
+            LEFT JOIN " . self::$db_prefix . "users.users u ON us.user_id = u.id 
+            LEFT JOIN " . self::$db_prefix . "users.services s ON us.service_id = s.id 
             WHERE us.token = :token {$activity}";
         $data = $db->query();
         return !empty($data) ? array_shift($data) : false;
@@ -97,7 +97,7 @@ class UserSession extends Model
     public function getToken(\Entity\User $user, \Entity\UserSession $userSession, int $timeStamp)
     {
         $data = [
-            "iss" => SITE, // адрес или имя удостоверяющего центра
+            "iss" => SITE_URL, // адрес или имя удостоверяющего центра
             "aud" => $user->login, // имя клиента для которого токен выпущен
             "iat" => $timeStamp, // время, когда был выпущен JWT
             "nbf" => $timeStamp, // время, начиная с которого может быть использован (не раньше, чем)
