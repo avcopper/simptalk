@@ -29,7 +29,14 @@ abstract class Entity
                     case 'datetime':
                         $this->$prop =
                             !empty($data[$key]) ?
-                                (is_string($data[$key]) ? \DateTime::createFromFormat('Y-m-d H:i:s', $data[$key]) : \DateTime::__set_state($data[$key])) : null;
+                                ($data[$key] instanceof \DateTime ?
+                                    $data[$key] :
+                                    (is_string($data[$key]) ?
+                                        \DateTime::createFromFormat('Y-m-d H:i:s', $data[$key]) :
+                                        (is_array($data[$key]) ?
+                                            \DateTime::__set_state($data[$key]) :
+                                            null))) :
+                                null;
                         break;
                     default:
                         $this->$prop = $data[$key];

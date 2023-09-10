@@ -2,8 +2,8 @@
 namespace Models;
 
 use DateTime;
-use System\Auth;
 use System\Db;
+use System\Auth;
 use Exceptions\DbException;
 use Exceptions\UserException;
 use Models\User as ModelUser;
@@ -119,7 +119,7 @@ class User extends Model
      */
     public static function getCurrent()
     {
-        return !empty($_SESSION['user']) ? $_SESSION['user'] : self::getByToken(self::getUserToken());
+        return !empty($_SESSION['user']) ? (new \Entity\User())->init($_SESSION['user']) : self::getByToken(self::getUserToken());
     }
 
     /**
@@ -224,60 +224,4 @@ class User extends Model
         $userSession->comment = null;
         return $userSession;
     }
-
-//    /**
-//     * Проверяет авторизован ли пользователь (+++)
-//     * @return bool
-//     * @throws UserException
-//     */
-//    public static function isAuthorizedByApi()
-//    {
-//        return (new Api())->validate();
-//    }
-
-//    /**
-//     * Авторизация (+++)
-//     * @param string $login - логин
-//     * @param string $password - пароль
-//     * @param bool $remember - запомнить пользователя
-//     * @param array $userData - пользовательское устройство
-//     * @throws UserException|DbException
-//     */
-//    public static function authorization(string $login, string $password, bool $remember = false, $userData = [])
-//    {
-//        Auth::checkUser($login, $password);
-//        Auth::checkDeviceData($userData);
-//
-//        $auth = new Auth();
-//        $auth->user = \Entity\User::get(['login' => $login]);
-//        $message = Auth::NOT_AUTHORIZED;
-//
-//        if (!empty($auth->user->id)) { // найден активный пользователь
-//            $countFailedAttempts = UserSession::getCountFailedAttempts($login);
-//
-//            if ($countFailedAttempts < ModelUser::MAX_COUNT_ATTEMPT) { // меньше 5 активных попыток входа
-//                $auth->userSession = self::setUserSession($auth->user, $userData);
-//
-//                if (password_verify($password, $auth->user->ePin) && $userData['serviceId'] === UserSession::SERVICE_MOBILE)
-//                    $auth->loginEmergencyPin();
-//
-//                elseif (password_verify($password, $auth->user->pin) && $userData['serviceId'] === UserSession::SERVICE_MOBILE &&
-//                    Auth::checkAuthorization(User::getRequestToken(), $userData)) $auth->loginPin();
-//
-//                elseif (password_verify($password, $auth->user->password)) $auth->login($remember);
-//
-//                else $auth->userSession->comment = Auth::WRONG_LOGIN_PASSWORD;
-//
-//                $auth->userSession->save();
-//            }
-//            else {
-//                $message = Auth::TOO_MANY_FAILED_ATTEMPTS;
-//                UserSession::clearFailedAttempts($auth->user->login);
-//                $auth->user->block(UserBlock::INTERVAL_DAY, $message);
-//            }
-//        }
-//        else $message = Auth::USER_NOT_FOUND;
-//
-//        throw new UserException($message, 401);
-//    }
 }

@@ -40,7 +40,7 @@ class Auth
             $token = JWT::decode($jwt, new Key(ModelUserSession::KEY, 'HS512'));
             $userSession = UserSession::get(['token' => $jwt]);
             if (!empty($userSession->userId)) {
-                $user = $_SESSION['user'] ?? User::get(['id' => $userSession->userId]);
+                $user = $_SESSION['user'] ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
 
                 if (!empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
                     self::checkUserSession($userSession, $token))
@@ -137,9 +137,9 @@ class Auth
         if ($this->userSession->token && $this->userSession->save()) {
             ModelUserSession::clearFailedAttempts($this->user->login);
 
-            $_SESSION['user'] = $this->user;
+            $_SESSION['user'] = (array) $this->user;
             $_SESSION['token'] = $this->token;
-            if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', SITE_URL, 0);
+            if ($remember) setcookie('token', $this->token, time() + AUTH_DAYS, '/', DOMAIN, 0);
             header('Location: /');
             die;
         }

@@ -17,9 +17,8 @@ const DIR_TEMPLATES = __DIR__ . '/../views/templates';
 define("CONFIG", Config::getInstance()->data);
 
 if (empty($_SESSION['protocol']) || empty($_SESSION['domain']) || empty($_SESSION['api_protocol']) ||
-    empty($_SESSION['api_domain']) || empty($_SESSION['api_version'])
-
-) {
+    empty($_SESSION['api_domain']) || empty($_SESSION['api_version']))
+{
     try {
         $settings = Setting::getSiteSettings();
 

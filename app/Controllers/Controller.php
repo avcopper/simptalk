@@ -32,6 +32,18 @@ abstract class Controller
     }
 
     /**
+     * Проверяет авторизавон ли пользователь
+     */
+    protected function checkAuthorization()
+    {
+        if (!ModelUser::isAuthorized()) {
+            header('HTTP/1.1 403 Forbidden', 403);
+            if (!Request::isAjax()) header('Location: /auth/');
+            die;
+        }
+    }
+
+    /**
      * Проверяет доступ и формирует полное имя action
      * @param string $action
      * @param null $param1
@@ -96,14 +108,5 @@ abstract class Controller
     protected function access($action):bool
     {
         return true;
-    }
-
-    protected function checkAuthorization()
-    {
-        if (!ModelUser::isAuthorized()) {
-            header('HTTP/1.1 403 Forbidden', 403);
-            if (!Request::isAjax()) header('Location: /auth/');
-            die;
-        }
     }
 }
