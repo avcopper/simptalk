@@ -14,9 +14,8 @@ use Exceptions\ForbiddenException;
  */
 abstract class Controller
 {
-    //protected ?string $token; // текущий токен
-    protected ?User $user;    // текущий пользователь
-    protected View $view;     // объект view
+    protected View $view;  // объект view
+    protected ?User $user; // текущий пользователь
 
     /**
      * Controller constructor
@@ -25,10 +24,7 @@ abstract class Controller
     {
         $this->view = new View();
         $this->user = ModelUser::getCurrent();
-        //$this->token = ModelUser::getUserToken();
-
         $this->set('user', $this->user);
-        //$this->set('token', $this->token);
     }
 
     /**
@@ -77,6 +73,11 @@ abstract class Controller
         $this->view->$var = $value;
     }
 
+    /**
+     * Возвращает отрендеренный файл
+     * @param $file
+     * @return false|string|null
+     */
     protected function render($file)
     {
         return $this->view->render($file);
