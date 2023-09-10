@@ -139,7 +139,7 @@ class Auth
 
             $_SESSION['user'] = (array) $this->user;
             $_SESSION['token'] = $this->token;
-            if ($remember) setcookie('token', $this->token, time() + AUTH_DAYS, '/', DOMAIN, 0);
+            if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', DOMAIN, 0);
             header('Location: /');
             die;
         }

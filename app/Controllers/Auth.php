@@ -23,7 +23,7 @@ class Auth extends Controller
      */
     protected function actionDefault()
     {
-        $this->view->display('auth');
+        $this->display('auth');
     }
 
     /**
@@ -43,7 +43,6 @@ class Auth extends Controller
             $remember = (bool)Request::post('remember');
 
             User::authorize($login, $password, $remember);
-            //(new Api())->authorizeByApi($login, $password, $remember);
         }
     }
 
