@@ -14,6 +14,7 @@ return [
     ],
     'image' => [
         'images'     => __DIR__ . '/../public/images/',
-        'uploads'     => __DIR__ . '/../public/uploads/'
+        'uploads'     => __DIR__ . '/../public/uploads/',
+        'files'     => __DIR__ . '/../public/files/'
     ]
 ];
