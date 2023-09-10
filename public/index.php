@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require __DIR__ . '/../app/System/ErrorSupervisor.php';
 require __DIR__ . '/../config/autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../config/constants.php';
@@ -39,4 +39,3 @@ try {
     if (Request::isAjax()) Response::result(false, $e->getMessage());
     else (new Errors($e))->action('action400');
 }
-
