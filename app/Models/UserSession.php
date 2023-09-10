@@ -39,11 +39,11 @@ class UserSession extends Model
 
     /**
      * Получает сессию по токену (!+)
-     * @param string $token - токен
+     * @param string|null $token - токен
      * @param bool $active - только активные или нет искать
      * @return false|mixed|null
      */
-    public static function getByToken(string $token, bool $active = true)
+    public static function getByToken(?string $token, bool $active = true)
     {
         $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND us.active IS NOT NULL AND us.expire > NOW()' : '';
         $db = Db::getInstance();
