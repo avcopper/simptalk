@@ -3,7 +3,8 @@
 spl_autoload_register(
     function ($class){
         $name = str_replace('\\', '/', $class);
-        $file = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $name . '.php';
+        $appDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app';
+        $file = $appDir . DIRECTORY_SEPARATOR . $name . '.php';
         if (file_exists($file)) require_once $file;
     }
 );
