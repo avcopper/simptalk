@@ -45,7 +45,7 @@ class Auth
                 if (!empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
                     self::checkUserSession($userSession, $token))
                 {
-                    if (empty($_SESSION['user'])) $_SESSION['user'] = $user;
+                    if (empty($_SESSION['user'])) $_SESSION['user'] = (array) $user;
                     return true;
                 } else {
                     ModelUser::logout();

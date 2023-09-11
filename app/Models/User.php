@@ -41,7 +41,7 @@ class User extends Model
     /**
      * Возвращает пользователя по id (!+)
      */
-    public static function getById(int $id, bool $active = true, $object = true)
+    public static function getById(int $id, bool $active = true, $object = false)
     {
         $db = Db::getInstance();
         $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
@@ -65,7 +65,7 @@ class User extends Model
     /**
      * Возвращает пользователя по логину (!+)
      */
-    public static function getByLogin(string $login, bool $active = true, $object = true)
+    public static function getByLogin(string $login, bool $active = true, $object = false)
     {
         $db = Db::getInstance();
         $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
@@ -89,7 +89,7 @@ class User extends Model
     /**
      * Возвращает пользователя по токену (!+)
      */
-    public static function getByToken(?string $token, bool $active = true, bool $object = true)
+    public static function getByToken(?string $token, bool $active = true, bool $object = false)
     {
         if ($token === null) return null;
 
@@ -119,7 +119,9 @@ class User extends Model
      */
     public static function getCurrent()
     {
-        return !empty($_SESSION['user']) ? (new \Entity\User())->init($_SESSION['user']) : self::getByToken(self::getUserToken());
+        return !empty($_SESSION['user']) ?
+            (new \Entity\User())->init($_SESSION['user']) :
+            (new \Entity\User())->init(self::getByToken(self::getUserToken()));
     }
 
     /**
