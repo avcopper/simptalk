@@ -39,6 +39,7 @@ class Auth
         try {
             $token = JWT::decode($jwt, new Key(ModelUserSession::KEY, 'HS512'));
             $userSession = UserSession::get(['token' => $jwt]);
+
             if (!empty($userSession->userId)) {
                 $user = $_SESSION['user'] ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
 
