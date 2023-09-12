@@ -121,7 +121,7 @@ class User extends Entity
      * Создает запись о блокировке пользователя
      * @param int $time - время блокировки
      * @param string|null $reason - причина блокировки
-     * @return bool
+     * @return bool|int
      */
     public function block(int $time, ?string $reason = null)
     {
