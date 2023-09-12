@@ -53,11 +53,26 @@ class Auth
                     return false;
                 }
             }
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return false;
         }
 
         return false;
+    }
+
+    /**
+     * Проверяет наличие логина/пароля в данных
+     * @param $login - логин
+     * @param $password - пароль
+     * @return bool
+     * @throws UserException
+     */
+    public static function checkUser($login, $password)
+    {
+        // TODO добавить проверку регулярками
+        if (empty($login) || empty($password)) throw new UserException(self::WRONG_LOGIN_PASSWORD, 401);
+        return true;
     }
 
     /**
@@ -108,20 +123,6 @@ class Auth
             $token->data->ip !== $userSession->ip || $token->data->device !== $userSession->device
         ) throw new UserException(self::WRONG_TOKEN);
 
-        return true;
-    }
-
-    /**
-     * Проверяет наличие логина/пароля в данных
-     * @param $login - логин
-     * @param $password - пароль
-     * @return bool
-     * @throws UserException
-     */
-    public static function checkUser($login, $password)
-    {
-        // TODO добавить проверку регулярками
-        if (empty($login) || empty($password)) throw new UserException(self::WRONG_LOGIN_PASSWORD, 401);
         return true;
     }
 

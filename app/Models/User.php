@@ -155,7 +155,7 @@ class User extends Model
         return [
             'device' => $_SERVER['HTTP_USER_AGENT'],
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'serviceId' => 2
+            'serviceId' => UserSession::SERVICE_SITE
         ];
     }
 
@@ -200,9 +200,9 @@ class User extends Model
     {
         unset($_SESSION['token']);
         unset($_SESSION['user']);
-        session_destroy();
         setcookie('token', '', time() - UserSession::LIFE_TIME, '/', SITE_URL, 0);
         setcookie('PHPSESSID', '', time() - UserSession::LIFE_TIME, '/', SITE_URL, 0);
+        session_destroy();
         return UserSession::deleteCurrent();
     }
 

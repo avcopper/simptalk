@@ -116,11 +116,12 @@ class UserSession extends Model
 
     /**
      * Удаляет текущую сессию пользователя (разлогинивает) (!+)
+     * @param null $token - токен
      * @return bool
      */
-    public static function deleteCurrent()
+    public static function deleteCurrent($token = null)
     {
-        $token = User::getUserToken();
+        if (empty($token)) $token = User::getUserToken();
         $userSession = \Entity\UserSession::get(['token' => $token]);
 
         if (!empty($userSession->id)) {
