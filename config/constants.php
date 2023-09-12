@@ -4,15 +4,15 @@ use \System\Config;
 use Models\Setting;
 use Exceptions\DbException;
 
-const DIR_ROOT = __DIR__ . '/..';
-const DIR_APP = __DIR__ . '/../app';
-const DIR_CONFIG = __DIR__ . '/../config';
-const DIR_VENDOR = __DIR__ . '/../vendor';
-const DIR_LOGS = __DIR__ . '/../logs';
-const DIR_PUBLIC = __DIR__ . '/../public';
-const DIR_VIEWS = __DIR__ . '/../views';
-const DIR_CERTIFICATES = __DIR__ . '/../certificates';
-const DIR_TEMPLATES = __DIR__ . '/../views/templates';
+const DIR_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
+const DIR_APP = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app';
+const DIR_CONFIG = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config';
+const DIR_VENDOR = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor';
+const DIR_LOGS = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'logs';
+const DIR_PUBLIC = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public';
+const DIR_VIEWS = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views';
+const DIR_CERTIFICATES = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'certificates';
+const DIR_TEMPLATES = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views/templates';
 define("CONFIG", Config::getInstance()->data);
 
 if (empty($_SESSION['protocol']) || empty($_SESSION['domain']) || empty($_SESSION['api_protocol']) ||

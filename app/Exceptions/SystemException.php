@@ -1,5 +1,4 @@
 <?php
-
 namespace Exceptions;
 
 use Throwable;
@@ -12,7 +11,7 @@ use System\Logger;
 class SystemException extends BaseException
 {
     protected $code = 500;
-    protected $message = 'Систменая ошибка';
+    protected $message = 'System error';
 
     public function __construct($message = '', $code = 0, Throwable $previous = null)
     {

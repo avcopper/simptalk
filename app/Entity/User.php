@@ -1,5 +1,4 @@
 <?php
-
 namespace Entity;
 
 use DateTime;
@@ -42,6 +41,9 @@ class User extends Entity
                 break;
             case !empty($params['login']):
                 $user = \Models\User::getByLogin($params['login'], $params['active'] ?? true, false);
+                break;
+            case !empty($params['token']):
+                $user = \Models\User::getByToken($params['token'], $params['active'] ?? true, false);
                 break;
         }
 
