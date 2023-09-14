@@ -53,7 +53,7 @@ class User extends Entity
         return $object;
     }
 
-    public function init(array $data, array $properties = [])
+    public function init(?array $data, array $properties = [])
     {
         parent::init($data, $properties);
         $publicKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'public.pem';

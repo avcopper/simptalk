@@ -3,8 +3,10 @@ namespace Entity;
 
 abstract class Entity
 {
-    public function init(array $data, array $properties = [])
+    public function init(?array $data, array $properties = [])
     {
+        if (empty($data)) return null;
+
         $fields = $properties ?: $this->getFields();
 
         foreach ($fields as $key => $field) {
