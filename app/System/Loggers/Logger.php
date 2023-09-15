@@ -10,10 +10,6 @@ use Psr\Log\AbstractLogger;
  */
 abstract class Logger extends AbstractLogger
 {
-    use Singleton;
-
-    protected $resource;
-
     protected function __construct()
     {
     }

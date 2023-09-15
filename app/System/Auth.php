@@ -10,6 +10,7 @@ use Entity\UserSession;
 use Exceptions\DbException;
 use Exceptions\UserException;
 use \Models\User as ModelUser;
+use System\Loggers\AccessLogger;
 use Models\UserSession as ModelUserSession;
 
 class Auth
@@ -138,6 +139,7 @@ class Auth
 
         if ($this->userSession->token && $this->userSession->save()) {
             ModelUserSession::clearFailedAttempts($this->user->login);
+            AccessLogger::getInstance()->info("Пользователь {$this->userSession->login} залогинен. UserId: {$this->userSession->userId}.");
 
             $_SESSION['user'] = (array) $this->user;
             $_SESSION['token'] = $this->token;
