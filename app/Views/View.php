@@ -1,24 +1,21 @@
 <?php
-
 namespace Views;
 
-use Traits\Count;
 use Traits\Magic;
-use Traits\Iterator;
-use Traits\ArrayAccess;
 
 /**
  * Class View
  * @package App\Views
  */
-class View implements \Iterator, \Countable, \ArrayAccess
+class View
 {
     public $view; // содержимое страницы для вывода в шаблоне
+    public $user; // пользователь
 
     use Magic;
-    use Iterator;
-    use Count;
-    use ArrayAccess;
+    //use Iterator;
+    //use Count;
+    //use ArrayAccess;
 
     /**
      * Возвращает строку - HTML-код шаблона

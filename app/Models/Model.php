@@ -4,7 +4,6 @@ namespace Models;
 
 use System\Db;
 use Traits\Magic;
-use Traits\CastableToArray;
 
 /**
  * Class Model
@@ -16,7 +15,6 @@ abstract class Model
     protected static $db_table = null;
 
     use Magic;
-    use CastableToArray;
 
     /**
      * Создает объект вызвавшего класса и заполняет его свойства
