@@ -1,7 +1,6 @@
 <?php
 namespace System\Loggers;
 
-use Traits\Singleton;
 use Psr\Log\AbstractLogger;
 
 /**
@@ -10,9 +9,7 @@ use Psr\Log\AbstractLogger;
  */
 abstract class Logger extends AbstractLogger
 {
-    protected function __construct()
-    {
-    }
+    protected $resource;
 
     /**
      * Формирует строку с описанием пойманного исключения и записывает ее в лог-файл

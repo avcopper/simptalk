@@ -42,7 +42,7 @@ class Auth
             $userSession = UserSession::get(['token' => $jwt]);
 
             if (!empty($userSession->userId)) {
-                $user = $_SESSION['user'] ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
+                $user = !empty($_SESSION['user']) ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
 
                 if (!empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
                     self::checkUserSession($userSession, $token))
