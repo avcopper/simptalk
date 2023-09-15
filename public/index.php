@@ -11,11 +11,7 @@ use System\Response;
 use System\Security;
 use Controllers\Errors;
 use Exceptions\DbException;
-use Exceptions\EditException;
-use Exceptions\MailException;
 use Exceptions\UserException;
-use Exceptions\DeleteException;
-use Exceptions\UploadException;
 use Exceptions\NotFoundException;
 use Exceptions\ForbiddenException;
 
@@ -35,7 +31,7 @@ try {
 } catch (ForbiddenException $e) {
     if (Request::isAjax()) Response::result(false, $e->getMessage());
     else (new Errors($e))->action('action403');
-} catch (DeleteException | EditException | MailException | UploadException | UserException $e) {
+} catch (UserException $e) {
     if (Request::isAjax()) Response::result(false, $e->getMessage());
     else (new Errors($e))->action('action400');
 }

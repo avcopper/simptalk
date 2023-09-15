@@ -13,9 +13,6 @@ class View
     public $user; // пользователь
 
     use Magic;
-    //use Iterator;
-    //use Count;
-    //use ArrayAccess;
 
     /**
      * Возвращает строку - HTML-код шаблона

@@ -98,6 +98,7 @@ abstract class Model
         $db->params = [];
         foreach ($this as $key => $val) {
             if ($val === null) continue;
+            if ($key === 'data') continue;
             $cols[] = $key;
             $db->params[$key] = $val;
         }
@@ -118,10 +119,12 @@ abstract class Model
         $db->params = [];
         foreach ($this as $key => $val) {
             //if ($val === null) continue;
+            if ($key === 'data') continue;
             if ('id' !== $key) $binds[] = $key . ' = :' . $key;
             $db->params[$key] = $val;
         }
         $db->sql = 'UPDATE ' . self::$db_prefix . static::$db_table . ' SET ' . implode(', ', $binds) . ' WHERE id = :id';
+        //echo '<pre>';var_dump($db->params);var_dump($db->sql);die;
         return $db->execute() ? $this->id : false;
     }
 
