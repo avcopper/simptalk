@@ -3,6 +3,8 @@ namespace System;
 
 use Throwable;
 use Exceptions\SystemException;
+use System\Loggers\ErrorLogger;
+use System\Loggers\WarningLogger;
 
 class ErrorSupervisor
 {
@@ -23,7 +25,7 @@ class ErrorSupervisor
      */
     public function OtherErrorCatcher($errno, $errstr, $errfile = null, $errline = null)
     {
-        Logger::getInstance()->warning("Lvl {$errno}. {$errstr}\n{$errfile}:{$errline}");
+        WarningLogger::getInstance()->warning("Lvl {$errno}. {$errstr}\n{$errfile}:{$errline}");
     }
 
     /**
@@ -44,7 +46,7 @@ class ErrorSupervisor
      */
     public function ExceptionCatcher(Throwable $e)
     {
-        Logger::getInstance()->error("Code {$e->getCode()}. {$e->getMessage()}\n{$e->getFile()}:{$e->getLine()}");
+        ErrorLogger::getInstance()->error("Code {$e->getCode()}. {$e->getMessage()}\n{$e->getFile()}:{$e->getLine()}");
         echo $e->getMessage();
         die;
     }

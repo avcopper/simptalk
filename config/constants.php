@@ -1,8 +1,8 @@
 <?php
-use System\Logger;
 use \System\Config;
 use Models\Setting;
 use Exceptions\DbException;
+use System\Loggers\ErrorLogger;
 
 const DIR_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
 const DIR_APP = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app';
@@ -35,7 +35,7 @@ if (empty($_SESSION['protocol']) || empty($_SESSION['domain']) || empty($_SESSIO
         $_SESSION['tg'] = $settings['tg'] ?: null;
     }
     catch (DbException $e) {
-        Logger::getInstance()->error($e);
+        ErrorLogger::getInstance()->error($e);
         echo 'Нет соединения в базой данных. Попробуйте позже.';
         die;
     }

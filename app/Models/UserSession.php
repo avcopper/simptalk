@@ -3,10 +3,10 @@
 namespace Models;
 
 use System\Db;
-use System\Access;
-use System\Logger;
 use Firebase\JWT\JWT;
 use Exceptions\DbException;
+use System\Loggers\ErrorLogger;
+use System\Loggers\AccessLogger;
 
 class UserSession extends Model
 {
@@ -130,10 +130,10 @@ class UserSession extends Model
             $userSession->save();
 
             if ($userSession->save()) {
-                Access::getInstance()->info("Пользователь {$userSession->login} разлогинен. UserId: {$userSession->userId}.");
+                AccessLogger::getInstance()->info("Пользователь {$userSession->login} разлогинен. UserId: {$userSession->userId}.");
                 return true;
-            } else Logger::getInstance()->error('Не удалось удалить сессию пользователя. UserId: ' . $userSession->userId);
-        } else Logger::getInstance()->error('Не обнаружена текущая сессия для удаления');
+            } else ErrorLogger::getInstance()->error('Не удалось удалить сессию пользователя. UserId: ' . $userSession->userId);
+        } else ErrorLogger::getInstance()->error('Не обнаружена текущая сессия для удаления');
 
         return false;
     }
