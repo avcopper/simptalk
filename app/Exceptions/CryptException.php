@@ -1,5 +1,4 @@
 <?php
-
 namespace Exceptions;
 
 use Throwable;
@@ -11,10 +10,7 @@ use System\Loggers\ErrorLogger;
  */
 class CryptException extends BaseException
 {
-    protected $code = 500;
-    protected $message = 'Ошибка шифрования';
-
-    public function __construct($message = '', $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Crypt error', $code = 500, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         ErrorLogger::getInstance()->error($this);

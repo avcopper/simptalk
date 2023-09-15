@@ -1,5 +1,4 @@
 <?php
-
 namespace Exceptions;
 
 use Throwable;
@@ -14,7 +13,7 @@ class ForbiddenException extends BaseException
     protected $code = 403;
     protected $message = 'Доступ запрещен';
 
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Forbidden', $code = 403, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         AccessLogger::getInstance()->error($this);

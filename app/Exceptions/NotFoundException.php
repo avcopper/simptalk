@@ -1,5 +1,4 @@
 <?php
-
 namespace Exceptions;
 
 use Throwable;
@@ -11,10 +10,7 @@ use System\Loggers\ErrorLogger;
  */
 class NotFoundException extends BaseException
 {
-    protected $code = 404;
-    protected $message = 'Страница не найдена';
-
-    public function __construct($message = '', $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Page not found', $code = 404, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         ErrorLogger::getInstance()->error($this);

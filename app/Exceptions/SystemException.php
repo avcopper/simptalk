@@ -10,10 +10,7 @@ use System\Loggers\SystemLogger;
  */
 class SystemException extends BaseException
 {
-    protected $code = 500;
-    protected $message = 'System error';
-
-    public function __construct($message = '', $code = 0, Throwable $previous = null)
+    public function __construct($message = 'System error', $code = 500, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         SystemLogger::getInstance()->error($this);
