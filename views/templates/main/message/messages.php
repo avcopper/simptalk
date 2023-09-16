@@ -1,14 +1,14 @@
 <?php
 /**
- * @var \System\Crypt $crypt
- * @var \System\Crypt $cryptFriend
  * @var \Entity\User $user
+ * @var \System\Crypt $crypt
  * @var \Entity\Friend $friend
+ * @var \System\Crypt $cryptFriend
  */
 
-$friendName = !empty($this->friend->name) ? $this->cryptFriend->decryptByPublicKey($this->friend->name) : '';
-$friendSecondName = !empty($this->friend->secondName) ? $this->cryptFriend->decryptByPublicKey($this->friend->secondName) : '';
-$friendLastName = !empty($this->friend->lastName) ? $this->cryptFriend->decryptByPublicKey($this->friend->lastName) : '';
+$friendName = !empty($friend->name) ? $this->cryptFriend->decryptByPublicKey($friend->name) : '';
+$friendSecondName = !empty($friend->secondName) ? $cryptFriend->decryptByPublicKey($friend->secondName) : '';
+$friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
 ?>
 
 <div class="message">
@@ -34,7 +34,7 @@ $friendLastName = !empty($this->friend->lastName) ? $this->cryptFriend->decryptB
         <div class="message-send"></div>
 
         <form action="">
-            <input type="hidden" name="friend" value="<?= $this->friend->id ?>">
+            <input type="hidden" name="friend" value="<?= $friend->id ?>">
             <div class="message-text" tabindex="0" contenteditable="true" id="message-text" role="textbox" aria-multiline="true" ondragend="return true"></div>
         </form>
 
@@ -83,7 +83,7 @@ $friendLastName = !empty($this->friend->lastName) ? $this->cryptFriend->decryptB
             $.ajax({
                 method: "GET",
                 dataType: 'text',
-                url: '/messages/' + <?= $this->friend->id ?> + '/' + last + '/',
+                url: '/messages/' + <?= $friend->id ?> + '/' + last + '/',
                 beforeSend: function() {
                 },
                 success: function(data, textStatus, jqXHR){//console.log(data);
@@ -110,7 +110,7 @@ $friendLastName = !empty($this->friend->lastName) ? $this->cryptFriend->decryptB
             $.ajax({
                 method: "POST",
                 dataType: 'text',
-                url: '/messages/send/' + <?= $this->friend->id ?> + '/' + last + '/',
+                url: '/messages/send/' + <?= $friend->id ?> + '/' + last + '/',
                 data: data,
                 beforeSend: function() {
                     clearInterval(timerMessages);

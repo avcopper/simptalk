@@ -11,6 +11,7 @@ class View
 {
     public $view; // содержимое страницы для вывода в шаблоне
     public $user; // пользователь
+    public $crypt; // пользователь
 
     use Magic;
 
@@ -38,6 +39,12 @@ class View
         ob_start();
         foreach ($this as $name => $value) {
             $$name = $value;
+        }
+
+        if (!empty($this->data) && is_array($this->data)) {
+            foreach ($this->data as $k => $item) {
+                $$k = $item;
+            }
         }
 
         if (!empty($vars) && is_array($vars)) {

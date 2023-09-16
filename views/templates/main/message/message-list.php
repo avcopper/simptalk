@@ -1,8 +1,16 @@
 <?php
-$name = !empty($this->user->name) ? $this->crypt->decryptByPublicKey($this->user->name) : '';
-$lastName = !empty($this->user->lastName) ? $this->crypt->decryptByPublicKey($this->user->lastName) : '';
-$friendName = !empty($this->friend->name) ? $this->cryptFriend->decryptByPublicKey($this->friend->name) : '';
-$friendLastName = !empty($this->friend->lastName) ? $this->cryptFriend->decryptByPublicKey($this->friend->lastName) : '';
+/**
+ * @var \Entity\User $user
+ * @var \System\Crypt $crypt
+ * @var \Entity\Friend $friend
+ * @var \System\Crypt $cryptFriend
+ * @var bool $showdate
+ */
+
+$name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
+$lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
+$friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
+$friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
 
 $date = '';
 $_monthsList = [
@@ -10,7 +18,7 @@ $_monthsList = [
     7 => 'июля',   8 => 'августа', 9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря'
 ];
 
-if (!empty($this->messages) && is_array($this->messages)):
+if (!empty($messages) && is_array($this->messages)):
     foreach ($this->messages as $message):
         $time = $message->created->format('H:s');
         $dt =
@@ -20,25 +28,25 @@ if (!empty($this->messages) && is_array($this->messages)):
 
         if (!empty($showDate) && (empty($date) || $date !== $dt)): ?>
             <div class="message-date"><?= $dt; ?></div>
-        <?php endif;
-        $date = $dt; ?>
+        <?php endif; ?>
+        <?php $date = $dt; ?>
 
         <div class="message-item
-            <?= ($this->user->id === $message->messageFromUserId && !$message->isRead) ? 'unread' : '' ?>
-            <?= ($this->user->id === $message->messageFromUserId) ? 'my' : '' ?>" data-id="<?= $message->id ?>">
+            <?= ($user->id === $message->messageFromUserId && !$message->isRead) ? 'unread' : '' ?>
+            <?= ($user->id === $message->messageFromUserId) ? 'my' : '' ?>" data-id="<?= $message->id ?>">
             <div class="message-photo">
                 <img src="/images/user.jpg" alt="">
             </div>
 
             <div class="message-name">
-                <?= $this->user->id === $message->messageFromUserId ? "{$name} {$lastName}" : "{$friendName} {$friendLastName}" ?>
+                <?= $user->id === $message->messageFromUserId ? "{$name} {$lastName}" : "{$friendName} {$friendLastName}" ?>
                 <span class="message-time"><?= $time ?></span>
             </div>
 
             <div class="message-body">
-                <?= $this->user->id === $message->messageFromUserId ?
-                    str_replace("\r\n", '<br>', $this->crypt->decryptByPublicKey($message->message)) :
-                    str_replace("\r\n", '<br>', $this->cryptFriend->decryptByPublicKey($message->message)) ?>
+                <?= $user->id === $message->messageFromUserId ?
+                    str_replace("\r\n", '<br>', $crypt->decryptByPublicKey($message->message)) :
+                    str_replace("\r\n", '<br>', $cryptFriend->decryptByPublicKey($message->message)) ?>
             </div>
         </div>
     <?php endforeach;
