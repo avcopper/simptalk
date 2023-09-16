@@ -36,9 +36,8 @@ class Messages extends Controller
 
         if (!Request::isAjax()) $this->set('showDate', true);
         $this->set('friend', $friend);
-        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id]));
-        $this->set('crypt', new Crypt($this->user->publicKey));
         $this->set('cryptFriend', new Crypt($friend->publicKey));
+        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id]));
 
         if (Request::isAjax()) $this->display_element('message/message-list');
         else $this->display('message/messages');

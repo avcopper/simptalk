@@ -3,6 +3,8 @@ namespace Controllers;
 
 use Views\View;
 use Entity\User;
+use Models\Model;
+use System\Crypt;
 use System\Request;
 use Models\User as ModelUser;
 use Exceptions\NotFoundException;
@@ -16,6 +18,8 @@ abstract class Controller
 {
     protected View $view;  // объект view
     protected ?User $user; // текущий пользователь
+    protected ?Crypt $crypt; // объект шифрования
+    protected ?Model $model;
 
     /**
      * Controller constructor
@@ -24,7 +28,9 @@ abstract class Controller
     {
         $this->view = new View();
         $this->user = ModelUser::getCurrent();
+        $this->crypt = new Crypt($this->user->publicKey, $this->user->privateKey);
         $this->set('user', $this->user);
+        $this->set('crypt', $this->crypt);
     }
 
     /**
