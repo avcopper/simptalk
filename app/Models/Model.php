@@ -124,7 +124,7 @@ abstract class Model
             $db->params[$key] = $val;
         }
         $db->sql = 'UPDATE ' . self::$db_prefix . static::$db_table . ' SET ' . implode(', ', $binds) . ' WHERE id = :id';
-        //echo '<pre>';var_dump($db->params);var_dump($db->sql);die;
+
         return $db->execute() ? $this->id : false;
     }
 

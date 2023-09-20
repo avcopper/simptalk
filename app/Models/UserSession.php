@@ -10,10 +10,10 @@ use System\Loggers\AccessLogger;
 
 class UserSession extends Model
 {
-    const SERVER = 'mesigo'; // сервер токена
+    const SERVER = 'https://mesigo.net'; // сервер токена
     const SERVICE_MOBILE = 1; // сервис мобильный
     const SERVICE_SITE = 2; // сервис сайт
-    const SERVICES = [self::SERVICE_MOBILE, self::SERVICE_SITE]; // сервисы, использующие авторизацию: 1 - мобильные, 2 - сайт
+    const SERVICES = [self::SERVICE_MOBILE, self::SERVICE_SITE]; // сервисы, использующие авторизацию
     const LIFE_TIME = 60 * 60 * 24 * AUTH_DAYS; // время жизни токена
     const KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl7rrc5Co4lgcrq6xVeMt'.
                 't/RAJ9w0TZab8451RgSd+TyMncLazFZrJOOnL9/Sif3McH3wXzkMo0pjdIqEZi2j'.
