@@ -61,7 +61,7 @@ abstract class Controller
 
                 if (!empty($param1) && !empty($param2)) $this->$action($param1, $param2);
                 elseif (!empty($param1)) $this->$action($param1);
-                else$this->$action();
+                else $this->$action();
 
                 if (method_exists($this, 'after')) $this->after();
                 die;

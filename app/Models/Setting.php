@@ -25,7 +25,7 @@ class Setting extends Model
 
         if (!empty($data) && is_array($data)) {
             foreach ($data as $item) {
-                $settings[$item->name] = $item->value;
+                $settings[$item['name']] = $item['value'];
             }
         }
 

@@ -34,7 +34,7 @@ class View
             $file_name . '.' .
             $ext;
 
-        if (empty($template) || !is_file($file_path)) return false;
+        if (empty($template) || !is_file($file_path)) return '';
 
         ob_start();
         foreach ($this as $name => $value) {

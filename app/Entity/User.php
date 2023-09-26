@@ -56,11 +56,21 @@ class User extends Entity
     public function init(?array $data, array $properties = [])
     {
         parent::init($data, $properties);
-        $publicKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'public.pem';
-        $privateKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'private.pem';
-        $this->publicKey = (is_file($publicKeyFile) && filesize($publicKeyFile) > 0) ? file_get_contents($publicKeyFile) : null;
-        $this->privateKey = (is_file($privateKeyFile) && filesize($privateKeyFile) > 0) ? file_get_contents($privateKeyFile) : null;
+        $this->publicKey = self::getPublicKey($this->id);
+        $this->privateKey = self::getPrivateKey($this->id);
         return $this;
+    }
+
+    public static function getPublicKey($user_id)
+    {
+        $publicKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR . 'public.pem';
+        return (is_file($publicKeyFile) && filesize($publicKeyFile) > 0) ? file_get_contents($publicKeyFile) : null;
+    }
+
+    public static function getPrivateKey($user_id)
+    {
+        $privateKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR . 'private.pem';
+        return (is_file($privateKeyFile) && filesize($privateKeyFile) > 0) ? file_get_contents($privateKeyFile) : null;
     }
 
     public function getFields()

@@ -18,45 +18,50 @@ class Message extends Model
     public $updated;
 
     /**
-     * Возвращает список сообщений
-     * @param int $user_id - id пользователя
-     * @param int $friend_id - id собеседника
-     * @param int $limit - лимит сообщений для выдачи
-     * @param int $start - стартовое сообщение, от которого вести поиск
-     * @param bool $active - активные сообщения
-     * @param bool $object - возвращать объект/массив
-     * @return array|null
+     * @param $params
+     * $params['user_id'] - id пользователя
+     * $params['friend_id'] - id собеседника
+     * $params['limit'] - лимит сообщений для выдачи
+     * $params['start'] - стартовое сообщение, от которого вести поиск
+     * $params['active'] - только активные сообщения
+     * $params['sort'] - поле сортировки
+     * $params['order'] - направление сортировки
+     * @return null
      */
-    public static function getAll(int $user_id, int $friend_id, int $limit = 0, int $start = 0, bool $active = true, $object = true)
+    public static function getList(?array $params = [])
     {
-        $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND active IS NOT NULL' : '';
-        $start_msg = !empty($start) ? 'AND id > :start ' : '';
-        $quantity = !empty($limit) ? "LIMIT {$limit}" : '';
-
-        $db->params = [
-            ':user_id' => $user_id,
-            ':friend_id' => $friend_id,
+        $params += [
+            'active' => true,
+            'object' => false
         ];
-        if (!empty($start)) $db->params['start'] = $start;
+
+        $db = Db::getInstance();
+        $friend = !empty($params['friend_id']) ? 'AND (m.from_user_id = :friend_id OR m.to_user_id = :friend_id)' : '';
+        $active = !empty($params['active']) ? 'AND m.active IS NOT NULL' : '';
+        $start = !empty($params['start']) ? 'AND m.id > :start ' : '';
+        $sort = !empty($params['sort']) ? "m.{$params['sort']}" : 'm.id';
+        $order = !empty($params['order']) ? strtoupper($params['order']) : 'ASC';
+        $limit = !empty($params['limit']) ? "LIMIT {$params['limit']}" : '';
+
+        $db->params = ['user_id' => $params['user_id']];
+        if (!empty($params['friend_id'])) $db->params['friend_id'] = $params['friend_id'];
+        if (!empty($params['start'])) $db->params['start'] = $params['start'];
 
         $db->sql = "
-            SELECT * 
-                FROM (
-                    SELECT 
-                        id, active, is_read, from_user_id, to_user_id, message, created, updated 
-                    FROM " . self::$db_prefix . self::$db_table . " 
-                    WHERE 
-                        (from_user_id = :user_id OR from_user_id = :friend_id) AND 
-                        (to_user_id = :user_id OR to_user_id = :friend_id) 
-                        {$activity} 
-                        {$start_msg} 
-                    ORDER BY created DESC, id DESC 
-                    {$quantity}
-                ) m 
-            ORDER BY m.created, m.id";
+            SELECT 
+                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, u.id friend_id, u.login friend_login, 
+                u.name friend_name, u.last_name friend_last_name, m.message, m.created, m.updated 
+            FROM " . self::$db_prefix . self::$db_table . " m 
+            LEFT JOIN  " . self::$db_prefix . "users.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
+            WHERE 
+                (m.from_user_id = :user_id OR m.to_user_id = :user_id) 
+                {$friend} 
+                {$active} 
+                {$start} 
+            ORDER BY {$sort} {$order} 
+            {$limit}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ?? null;
     }
 

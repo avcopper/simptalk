@@ -23,7 +23,8 @@ class Messages extends Controller
      */
     protected function actionDefault()
     {
-        $this->view->display('messages');
+        $this->set('messages', Message::getUserList(['user_id' => $this->user->id, 'order' => 'desc']));
+        $this->display('message/users');
     }
 
     /**

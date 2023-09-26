@@ -37,18 +37,29 @@ abstract class Model
 
     /**
      * Находит и возвращает записи из БД
-     * @param string $order
-     * @param string $sort
-     * @param bool $active
-     * @param bool $object
+     * @param $params
+     * $params['active'] - только активные сообщения
+     * $params['sort'] - поле сортировки
+     * $params['order'] - направление сортировки
+     * $params['limit'] - лимит сообщений для выдачи
      * @return array|bool
      */
-    public static function getList(string $order = 'created', string $sort = 'ASC', bool $active = true, bool $object = true)
+    public static function getList(?array $params = [])
     {
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'WHERE active IS NOT NULL' : '';
-        $db->sql = "SELECT * FROM " . self::$db_prefix . static::$db_table . " {$activity} ORDER BY {$order} " . strtoupper($sort);
-        $data = $db->query($object ? static::class : null);
+        $active = !empty($params['active']) ? 'WHERE active IS NOT NULL' : '';
+        $sort = !empty($params['sort']) ? $params['sort'] : 'id';
+        $order = !empty($params['order']) ? strtoupper($params['order']) : 'ASC';
+        $limit = !empty($params['limit']) ? "LIMIT {$params['limit']}" : '';
+
+        $db->sql = "
+            SELECT * 
+            FROM " . self::$db_prefix . static::$db_table . " 
+            {$active} 
+            ORDER BY {$sort} {$order} 
+            {$limit}";
+
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ?? false;
     }
 
