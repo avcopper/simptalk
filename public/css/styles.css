@@ -119,9 +119,6 @@ aside.compact .nav-item a.nav-home:before {
 aside.compact .nav-item a.nav-messages:before {
     content: "\f086";
 }
-aside.compact .nav-item a.nav-friends:before {
-    content: "\f007";
-}
 aside.compact .nav-item a.nav-exit:before {
     content: "\f08b";
 }

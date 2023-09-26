@@ -40,7 +40,6 @@ use Models\User;
                 <nav>
                     <div class="nav-item"><a href="/" class="nav-home" title="Моя страница">Моя страница</a></div>
                     <div class="nav-item"><a href="/messages/" class="nav-messages" title="Сообщения">Сообщения</a></div>
-                    <div class="nav-item"><a href="/friends/" class="nav-friends" title="Друзья">Друзья</a></div>
                     <div class="nav-item"><a href="/auth/logout/" class="nav-exit" title="Выход">Выход</a></div>
                 </nav>
             </aside>
