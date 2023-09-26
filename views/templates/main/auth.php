@@ -4,6 +4,7 @@
         flex: 1 0 auto;
         align-items: center;
         justify-content: center;
+        background-color: #edeef0;
     }
     .auth-main {
         width: 300px;
