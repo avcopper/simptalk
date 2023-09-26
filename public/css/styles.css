@@ -89,7 +89,7 @@ main {
 }
 /* NAV */
 nav {
-    /*position: fixed;*/
+    position: fixed;
 }
 .nav-item {
 }

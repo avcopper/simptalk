@@ -14,9 +14,9 @@
         top: 0;
         left: 0;
         right: 0;
-        /*flex: 0 0 auto;*/
-        /*width: 780px;*/
         height: 50px;
+        font: 14px/50px "OpenSansSemiBold";
+        text-align: center;
         background-color: #ffffff;
         border-bottom: 1px solid #dddddd;
         z-index: 1;
