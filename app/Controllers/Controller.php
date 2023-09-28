@@ -39,6 +39,7 @@ abstract class Controller
     protected function checkAuthorization()
     {
         if (!ModelUser::isAuthorized()) {
+            unset($_SESSION['user'], $_SESSION['token']);
             header('HTTP/1.1 403 Forbidden', 403);
             if (!Request::isAjax()) header('Location: /auth/');
             die;
