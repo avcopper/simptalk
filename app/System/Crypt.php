@@ -36,46 +36,53 @@ class Crypt
         return $this;
     }
 
+    /**
+     * @throws \Exceptions\CryptException
+     */
     public function load($id)
     {
-        if (!is_file(__DIR__ . "/../../certificates/{$id}/private.pem") ||
-            !is_file(__DIR__ . "/../../certificates/{$id}/public.pem")
+        if (!is_file(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "private.pem") ||
+            !is_file(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "public.pem")
         ) throw new CryptException('Не найдены файлы с ключами', 523);
 
-        $this->privateKey = file_get_contents(__DIR__ . "/../../certificates/{$id}/private.pem");
-        $this->publicKey = file_get_contents(__DIR__ . "/../../certificates/{$id}/public.pem");
+        $this->privateKey = file_get_contents(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "private.pem");
+        $this->publicKey = file_get_contents(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "public.pem");
         return $this;
     }
 
     public function save($id)
     {
-        if (!is_dir(__DIR__ . "/../../certificates")) mkdir(__DIR__ . "/../../certificates");
-        if (!is_dir(__DIR__ . "/../../certificates/{$id}")) mkdir(__DIR__ . "/../../certificates/{$id}");
-        file_put_contents(__DIR__ . "/../../certificates/{$id}/public.pem", $this->publicKey);
-        file_put_contents(__DIR__ . "/../../certificates/{$id}/private.pem", $this->privateKey);
+        if (!is_dir(DIR_CERTIFICATES)) mkdir(DIR_CERTIFICATES);
+        if (!is_dir(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id)) mkdir(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id);
+        file_put_contents(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "public.pem", $this->publicKey);
+        file_put_contents(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "private.pem", $this->privateKey);
         return $this;
     }
 
     public function encryptByPublicKey(string $plaintext, $encodeBase64 = true)
     {
+        if (empty($this->publicKey)) return $plaintext;
         openssl_public_encrypt($plaintext, $encrypted, $this->publicKey);
         return $encodeBase64 ? base64_encode($encrypted) : $encrypted;
     }
 
     public function encryptByPrivateKey(string $plaintext, $encodeBase64 = true)
     {
+        if (empty($this->privateKey)) return $plaintext;
         openssl_private_encrypt($plaintext, $encrypted, $this->privateKey);
         return $encodeBase64 ? base64_encode($encrypted) : $encrypted;
     }
 
     public function decryptByPublicKey(string $ciphertext, $encodedBase64 = true)
     {
+        if (empty($this->publicKey)) return $ciphertext;
         openssl_public_decrypt($encodedBase64 ? base64_decode($ciphertext) : $ciphertext, $out, $this->publicKey);
         return $out;
     }
 
     public function decryptByPrivateKey(string $ciphertext, $encodedBase64 = true)
     {
+        if (empty($this->privateKey)) return $ciphertext;
         openssl_private_decrypt($encodedBase64 ? base64_decode($ciphertext) : $ciphertext, $out, $this->privateKey);
         return $out;
     }
