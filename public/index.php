@@ -34,4 +34,7 @@ try {
 } catch (UserException $e) {
     if (Request::isAjax()) Response::result(false, $e->getMessage());
     else (new Errors($e))->action('action400');
+} catch (Exception $e) {
+    if (Request::isAjax()) Response::result(false, $e->getMessage());
+    else (new Errors($e))->action('action500');
 }
