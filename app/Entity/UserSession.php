@@ -1,6 +1,8 @@
 <?php
 namespace Entity;
 
+use DateTime;
+
 class UserSession extends Entity
 {
     public $id;
@@ -54,8 +56,14 @@ class UserSession extends Entity
         $userSession->service_id = $this->serviceId;
         $userSession->ip = $this->ip;
         $userSession->device = $this->device;
-        $userSession->log_in = $this->logIn->format('Y-m-d H:i:s');
-        $userSession->expire = $this->expire ? $this->expire->format('Y-m-d H:i:s') : null;
+        $userSession->log_in =
+            !empty($this->logIn) && $this->logIn instanceof DateTime ?
+                $this->logIn->format('Y-m-d H:i:s') :
+                (new DateTime())->format('Y-m-d H:i:s');
+        $userSession->expire =
+            !empty($this->expire) && $this->expire instanceof DateTime ?
+                $this->expire->format('Y-m-d H:i:s') :
+                null;
         $userSession->token = $this->token;
         $userSession->comment = $this->comment;
         return $userSession->save();

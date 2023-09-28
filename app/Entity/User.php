@@ -8,30 +8,30 @@ use Models\UserBlock;
 class User extends Entity
 {
     public $id;
-    public $isActive;
-    public $isBlocked;
+    public $isActive = true;
+    public $isBlocked = false;
     public $expire;
     public $groupId = 2; // группа "Пользователи"
     public $group;
     public $login;
     public $password;
-    public $pin;
-    public $ePin;
+    public $pin = null;
+    public $ePin = null;
     public $email;
-    public $phone;
+    public $phone = null;
     public $name;
-    public $secondName;
-    public $lastName;
-    public $genderId;
+    public $secondName = null;
+    public $lastName = null;
+    public $genderId = 1;
     public $gender;
-    public $hasPersonalDataAgreement;
-    public $hasMailingAgreement; // подписка на рассылку
+    public $hasPersonalDataAgreement = 1;
+    public $hasMailingAgreement = null; // подписка на рассылку
     public $mailingTypeId = 2; // тип рассылки html
     public $mailingType;
     public $created;
-    public $updated;
-    public $publicKey;
-    public $privateKey;
+    public $updated = null;
+    public $publicKey = null;
+    public $privateKey = null;
 
     public static function get(array $params)
     {
@@ -122,7 +122,9 @@ class User extends Entity
         $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
         $user->mailing = $this->hasMailingAgreement ? 1 : null;
         $user->mailing_type_id = $this->mailingTypeId;
-        $user->created = $this->created->format('Y-m-d H:i:s');
+        $user->created = !empty($this->created) && $this->created instanceof DateTime ?
+            $this->created->format('Y-m-d H:i:s') :
+            (new DateTime())->format('Y-m-d H:i:s');
         $user->updated = date('Y-m-d H:i:s');
         return $user->save();
     }

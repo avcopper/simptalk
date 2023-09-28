@@ -1,6 +1,8 @@
 <?php
 namespace Entity;
 
+use DateTime;
+
 class Message extends Entity
 {
     public $id;
@@ -93,7 +95,10 @@ class Message extends Entity
         $user->from_user_id = $this->messageFromUserId;
         $user->to_user_id = $this->messageToUserId;
         $user->message = $this->message;
-        $user->created = !empty($this->created) ? $this->created->format('Y-m-d H:i:s') : date('Y-m-d H:i:s');
+        $user->created =
+            !empty($this->created) && $this->created instanceof DateTime ?
+                $this->created->format('Y-m-d H:i:s') :
+                date('Y-m-d H:i:s');
         $user->updated = date('Y-m-d H:i:s');
         return $user->save();
     }
