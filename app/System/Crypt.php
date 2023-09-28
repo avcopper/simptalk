@@ -6,12 +6,12 @@ use Exceptions\CryptException;
 
 class Crypt
 {
-    private $public;
-    private $private;
-    private $publicKey;
-    private $privateKey;
+    private ?RSA\PublicKey $public;
+    private ?RSA\PrivateKey $private;
+    private ?string $publicKey;
+    private ?string $privateKey;
 
-    public function __construct($publicKey = null, $privateKey = null)
+    public function __construct(string $publicKey = null, string $privateKey = null)
     {
         $this->publicKey = $publicKey;
         $this->privateKey = $privateKey;
@@ -39,7 +39,7 @@ class Crypt
     /**
      * @throws \Exceptions\CryptException
      */
-    public function load($id)
+    public function load(int $id)
     {
         if (!is_file(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "private.pem") ||
             !is_file(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR . "public.pem")
@@ -50,7 +50,7 @@ class Crypt
         return $this;
     }
 
-    public function save($id)
+    public function save(int $id)
     {
         if (!is_dir(DIR_CERTIFICATES)) mkdir(DIR_CERTIFICATES);
         if (!is_dir(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id)) mkdir(DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $id);
@@ -59,28 +59,28 @@ class Crypt
         return $this;
     }
 
-    public function encryptByPublicKey(string $plaintext, $encodeBase64 = true)
+    public function encryptByPublicKey(string $plaintext, bool $encodeBase64 = true)
     {
         if (empty($this->publicKey)) return $plaintext;
         openssl_public_encrypt($plaintext, $encrypted, $this->publicKey);
         return $encodeBase64 ? base64_encode($encrypted) : $encrypted;
     }
 
-    public function encryptByPrivateKey(string $plaintext, $encodeBase64 = true)
+    public function encryptByPrivateKey(string $plaintext, bool $encodeBase64 = true)
     {
         if (empty($this->privateKey)) return $plaintext;
         openssl_private_encrypt($plaintext, $encrypted, $this->privateKey);
         return $encodeBase64 ? base64_encode($encrypted) : $encrypted;
     }
 
-    public function decryptByPublicKey(string $ciphertext, $encodedBase64 = true)
+    public function decryptByPublicKey(string $ciphertext, bool $encodedBase64 = true)
     {
         if (empty($this->publicKey)) return $ciphertext;
         openssl_public_decrypt($encodedBase64 ? base64_decode($ciphertext) : $ciphertext, $out, $this->publicKey);
         return $out;
     }
 
-    public function decryptByPrivateKey(string $ciphertext, $encodedBase64 = true)
+    public function decryptByPrivateKey(string $ciphertext, bool $encodedBase64 = true)
     {
         if (empty($this->privateKey)) return $ciphertext;
         openssl_private_decrypt($encodedBase64 ? base64_decode($ciphertext) : $ciphertext, $out, $this->privateKey);
@@ -92,8 +92,24 @@ class Crypt
         return $this->publicKey;
     }
 
+    /**
+     * @param string $publicKey
+     */
+    public function setPublicKey(string $publicKey): void
+    {
+        $this->publicKey = $publicKey;
+    }
+
     public function getPrivateKey()
     {
         return $this->privateKey;
+    }
+
+    /**
+     * @param string $privateKey
+     */
+    public function setPrivateKey(string $privateKey): void
+    {
+        $this->privateKey = $privateKey;
     }
 }
