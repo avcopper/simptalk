@@ -19,24 +19,24 @@ class User extends Model
     protected static $db_table = 'users.users';
 
     public $id;
-    public $active;
-    public $blocked;
+    public $active = true;
+    public $blocked = false;
     public $group_id = 2; // группа "Пользователи"
     public $login;
     public $password;
-    public $pin;
-    public $e_pin;
-    public $email;
-    public $phone;
-    public $name;
-    public $second_name;
-    public $last_name;
-    public $gender_id;
-    public $personal_data_agreement;
-    public $mailing = 1; // подписание на рассылку
+    public $pin = null;
+    public $e_pin = null;
+    public $email = null;
+    public $phone = null;
+    public $name = null;
+    public $second_name = null;
+    public $last_name = null;
+    public $gender_id = 1;
+    public $personal_data_agreement = 1;
+    public $mailing = null; // подписание на рассылку
     public $mailing_type_id = 2; // тип рассылки html
     public $created;
-    public $updated;
+    public $updated = null;
 
     /**
      * Возвращает пользователя по id (!+)
