@@ -5,14 +5,15 @@ use Exceptions\DbException;
 use System\Loggers\ErrorLogger;
 
 const DIR_ROOT = __DIR__ . DIRECTORY_SEPARATOR . '..';
-const DIR_APP = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app';
-const DIR_CONFIG = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config';
-const DIR_VENDOR = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor';
-const DIR_LOGS = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'logs';
-const DIR_PUBLIC = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public';
-const DIR_VIEWS = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views';
-const DIR_CERTIFICATES = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'certificates';
-const DIR_TEMPLATES = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views/templates';
+const DIR_APP = DIR_ROOT . DIRECTORY_SEPARATOR . 'app';
+const DIR_CONFIG = DIR_ROOT . DIRECTORY_SEPARATOR . 'config';
+const DIR_VENDOR = DIR_ROOT . DIRECTORY_SEPARATOR . 'vendor';
+const DIR_LOGS = DIR_ROOT . DIRECTORY_SEPARATOR . 'logs';
+const DIR_PUBLIC = DIR_ROOT . DIRECTORY_SEPARATOR . 'public';
+const DIR_FILES = DIR_PUBLIC . DIRECTORY_SEPARATOR . 'files';
+const DIR_VIEWS = DIR_ROOT . DIRECTORY_SEPARATOR . 'views';
+const DIR_CERTIFICATES = DIR_ROOT . DIRECTORY_SEPARATOR . 'certificates';
+const DIR_TEMPLATES = DIR_ROOT . DIRECTORY_SEPARATOR . 'views/templates';
 define("CONFIG", Config::getInstance()->data);
 
 if (empty($_SESSION['protocol']) || empty($_SESSION['domain']) || empty($_SESSION['api_protocol']) ||
