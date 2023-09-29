@@ -119,9 +119,11 @@ class User extends Model
      */
     public static function getCurrent()
     {
-        return !empty($_SESSION['user']) ?
-            (new \Entity\User())->init($_SESSION['user']) :
-            (new \Entity\User())->init(self::getByToken(self::getUserToken()));
+//        return !empty($_SESSION['user']) ?
+//            (new \Entity\User())->init($_SESSION['user']) :
+//            (new \Entity\User())->init(self::getByToken(self::getUserToken()));
+
+        return (new \Entity\User())->init(self::getByToken(self::getUserToken()));
     }
 
     /**
