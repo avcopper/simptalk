@@ -42,12 +42,13 @@ class Auth
             $userSession = UserSession::get(['token' => $jwt]);
 
             if (!empty($userSession->userId)) {
-                $user = !empty($_SESSION['user']) ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
+                //$user = !empty($_SESSION['user']) ? (new User())->init($_SESSION['user']) : User::get(['id' => $userSession->userId]);
+                $user = User::get(['id' => $userSession->userId]);
 
                 if (!empty($user->id) && self::checkToken($token ?? null) && self::checkUserData($userData, $token) &&
                     self::checkUserSession($userSession, $token))
                 {
-                    if (empty($_SESSION['user'])) $_SESSION['user'] = (array) $user;
+                    //if (empty($_SESSION['user'])) $_SESSION['user'] = $user;
                     return true;
                 } else {
                     ModelUser::logout();
@@ -141,7 +142,7 @@ class Auth
             ModelUserSession::clearFailedAttempts($this->user->login);
             AccessLogger::getInstance()->info("Пользователь {$this->userSession->login} залогинен. UserId: {$this->userSession->userId}.");
 
-            $_SESSION['user'] = (array) $this->user;
+            //$_SESSION['user'] = $this->user;
             $_SESSION['token'] = $this->token;
             if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', DOMAIN, 0);
             header('Location: /');
