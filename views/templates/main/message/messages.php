@@ -219,7 +219,6 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
         <div class="message-send"></div>
 
         <form action="">
-            <input type="hidden" name="friend" value="<?= $friend->id ?>">
             <div class="message-text" tabindex="0" contenteditable="true" id="message-text" role="textbox" aria-multiline="true" ondragend="return true"></div>
         </form>
 
@@ -264,11 +263,13 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
     function getMessages() {
         return setInterval(function () {
             let messageList = document.querySelector('.message-list'),
-                last = $('#message-list .message-item').last().data('id');
+                last = $('#message-list .message-item').last().data('id'),
+                friend = <?= json_encode($friend->login) ?>;
+
             $.ajax({
                 method: "GET",
                 dataType: 'text',
-                url: '/messages/' + <?= $friend->id ?> + '/' + last + '/',
+                url: "/messages/send/" + friend + "/" + last + "/",
                 beforeSend: function() {
                 },
                 success: function(data, textStatus, jqXHR){//console.log(data);
@@ -289,23 +290,24 @@ $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($
     function sendMessage(timerMessages) {
         let messageList = document.querySelector('.message-list'),
             last = $('#message-list .message-item').last().data('id'),
-            data = {'message': $('#message-text').html()};
+            message = $('#message-text').html(),
+            friend = <?= json_encode($friend->login) ?>;
 
-        if(data.message.length > 0) {
+        if(message.length > 0) {
             $.ajax({
                 method: "POST",
                 dataType: 'text',
-                url: '/messages/send/' + <?= $friend->id ?> + '/' + last + '/',
-                data: data,
+                url: "/messages/send/" + friend + "/" + last + "/",
+                data: {'message': message},
                 beforeSend: function() {
                     clearInterval(timerMessages);
                     $('.message-text').html('');
                 },
-                success: function(data, textStatus, jqXHR){//console.log(data);
+                success: function(data, textStatus, jqXHR) {//console.log(data);
                     $('.message-list').append(data);
                     messageList.scrollTop = messageList.scrollHeight;
                 },
-                error: function(jqXHR, textStatus, errorThrown){
+                error: function(jqXHR, textStatus, errorThrown) {
                     if (textStatus === 'error' && jqXHR.status === 403 && errorThrown === 'Forbidden')
                         window.location.href = '/auth/';
                 }

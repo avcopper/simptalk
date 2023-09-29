@@ -30,7 +30,7 @@
     <?php if (!empty($messages) && is_array($messages)): ?>
         <?php foreach ($messages as $message): ?>
             <div class="user-link">
-                <a href="<?= $message->friendId ?>/">
+                <a href="<?= $message->friendLogin ?>/">
                     <div class="user-image"><img src="/images/user.jpg" alt=""></div>
                     <div class="user-name"><?= $message->friendLogin ?></div>
                 </a>

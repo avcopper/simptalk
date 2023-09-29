@@ -7,9 +7,9 @@
         </div>
 
         <div class="errors-desc">
-            <div class="error-code">Ошибка <?=$this->code ?? null?></div>
+            <div class="error-code">Ошибка <?= $this->code ?? null ?></div>
             <div class="error-desc"><?//=$error ?? null?></div>
-            <div class="error-message"><?= $this->message ?? null ?></div>
+            <div class="error-message"><?= !empty($this->code) && !empty($this->message) ? $this->message : null ?></div>
             <a href="" class="btn">Перейти на главную</a>
             <div class="error-message">или <a href="">вернуться назад</a></div>
         </div>
