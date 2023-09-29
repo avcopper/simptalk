@@ -1,5 +1,4 @@
 <?php
-
 namespace Controllers;
 
 use Views\View;
@@ -18,42 +17,21 @@ class Errors extends Controller
     }
 
     /**
-     * Проблема с запросом
+     * Показ страницы ошибки
+     * @param int $code - код исключения
      */
-    protected function action400()
+    protected function actionError(int $code)
     {
-        header('HTTP/1.1 400 Bad Request ', 400);
-        $this->view->display('errors/error');
-        die();
-    }
+        $status = match ($code) {
+            400 => 'HTTP/1.1 400 Bad Request',
+            401 => 'HTTP/1.1 401 Unauthorized',
+            403 => 'HTTP/1.1 403 Forbidden',
+            404 => 'HTTP/1.1 404 Not Found',
+            default => 'HTTP/1.1 500 Internal Server Error',
+        };
 
-    /**
-     * Доступ запрещен
-     */
-    protected function action403()
-    {
-        header('HTTP/1.1 403 Forbidden', 403);
-        $this->view->display('errors/error');
-        die();
-    }
-
-    /**
-     * Элемент не найден
-     */
-    protected function action404()
-    {
-        header('HTTP/1.1 404 Not Found', 404);
-        $this->view->display('errors/error');
-        die();
-    }
-
-    /**
-     * Нет соединения с базой данных
-     */
-    protected function action500()
-    {
-        header('HTTP/1.1 500 Internal Server Error', 500);
-        $this->view->display('errors/error');
+        header($status, $code ?: 500);
+        $this->display('errors/error');
         die();
     }
 }

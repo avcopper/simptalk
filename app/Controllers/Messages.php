@@ -5,6 +5,7 @@ use System\Crypt;
 use Entity\Friend;
 use Entity\Message;
 use System\Request;
+use Exceptions\NotFoundException;
 use \Models\Message as ModelMessage;
 
 /**
@@ -29,11 +30,14 @@ class Messages extends Controller
 
     /**
      * Показывает переписку с собеседником
-     * @param int $friend_id - id собеседника
+     * @param string $friend_id - login собеседника
+     * @throws NotFoundException
      */
-    protected function actionShow(int $friend_id, int $last_id = 0)
+    protected function actionShow(string $friend_id, int $last_id = 0)
     {
-        $friend = Friend::get(['id' => $friend_id]);
+        //$friend_id = preg_replace('/[^0-9A-Za-z-_]/', '', $friend_id);
+        $friend = Friend::get(['login' => $friend_id]);
+        if (empty($friend)) throw new NotFoundException('User not found');
 
         if (!Request::isAjax()) $this->set('showDate', true);
         $this->set('friend', $friend);
@@ -46,16 +50,18 @@ class Messages extends Controller
 
     /**
      * Отправляет сообщение собеседнику
-     * @param int $friend_id - id собеседника
+     * @param string $friend_id - login собеседника
+     * @throws NotFoundException
      */
-    protected function actionSend(int $friend_id, int $last_id = 0)
+    protected function actionSend(string $friend_id, int $last_id = 0)
     {
         if (Request::isPost()) {
-            $friend = Friend::get(['id' => $friend_id]);
+            $friend = Friend::get(['login' => $friend_id]);
             $message = trim(Request::post('message'));
+            if (empty($friend)) throw new NotFoundException('User not found');
 
             if (ModelMessage::checkData($friend, $message) && ModelMessage::saveMessage($this->user, $friend->id, $message)) {
-                $this->actionShow($friend->id, $last_id);
+                $this->actionShow($friend->login, $last_id);
             }
         }
     }
