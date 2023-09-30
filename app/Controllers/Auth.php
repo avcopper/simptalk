@@ -23,6 +23,10 @@ class Auth extends Controller
      */
     protected function actionDefault()
     {
+        if (ModelUser::isAuthorized()) {
+            header('Location: /');
+            die;
+        }
         $this->display('auth');
     }
 
@@ -32,10 +36,6 @@ class Auth extends Controller
      */
     protected function actionLogin()
     {
-        if (ModelUser::isAuthorized()) {
-            header('Location: /');
-            die;
-        }
 
         if (Request::isPost()) {
             $login = Request::post('login');
