@@ -221,13 +221,15 @@ header .container {
 }
 /* SEARCH */
 .search-block ul {
-    padding: 10px 20px;
+    padding: 20px;
 }
 .search-block li {
+    display: flex;
     margin: 10px 0;
 }
-.search-block li a {
+.search-block .search-link {
     display: flex;
+    flex: 1;
 }
 .search-block li img {
     display: block;
@@ -238,6 +240,7 @@ header .container {
 .search-info {
     display: flex;
     flex-direction: column;
+    margin-right: 20px;
 }
 .search-login {
     font: 14px/16px 'OpenSansSemiBold';
@@ -247,6 +250,32 @@ header .container {
 }
 .search-empty {
     padding: 10px 20px;
+}
+.user-icon {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    font: 16px/30px 'FontAwesome';
+}
+.user-icon:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.user-lock:before {
+    content: "\f023";
+}
+.user-unlock:before {
+    content: "\f13e";
+}
+.user-message:before {
+    content: "\f003";
+}
+.user-request:before {
+    content: "\f0ec";
 }
 /* NAV */
 nav {

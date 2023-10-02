@@ -16,7 +16,7 @@ $crypt = new \System\Crypt();
         $lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
         ?>
         <li>
-            <a href="">
+            <a href="" class="search-link">
                 <img src="/images/user.jpg" alt="">
                 <div class="search-info">
                     <div class="search-login">
@@ -27,6 +27,10 @@ $crypt = new \System\Crypt();
                     </div>
                 </div>
             </a>
+            <a href="" class="user-icon user-message" title="Message"></a>
+            <a href="" class="user-icon user-request" title="Request"></a>
+            <span class="user-icon user-lock" title="Locked "></span>
+            <span class="user-icon user-unlock" title="Unlocked"></span>
         </li>
     <?php endforeach; ?>
 </ul>
