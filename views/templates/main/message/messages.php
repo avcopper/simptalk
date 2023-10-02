@@ -19,7 +19,7 @@
         text-align: center;
         background-color: #ffffff;
         border-bottom: 1px solid #dddddd;
-        z-index: 1;
+        /*z-index: 1;*/
     }
     .message-list {
         position: absolute;
@@ -191,7 +191,7 @@
  * @var \System\Crypt $cryptFriend
  */
 
-$friendName = !empty($friend->name) ? $this->cryptFriend->decryptByPublicKey($friend->name) : '';
+$friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
 $friendSecondName = !empty($friend->secondName) ? $cryptFriend->decryptByPublicKey($friend->secondName) : '';
 $friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
 ?>

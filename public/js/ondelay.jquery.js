@@ -1,18 +1,18 @@
 (function($){
     $.fn.onDelay = function(params, func){
-        var defaults = {
+        let defaults = {
             action: 'click',
             interval: 200
         };
 
-        var settings = $.extend(defaults, params);
+        let settings = $.extend(defaults, params);
 
         $(this).each(function(){
-            var timer;
+            let timer;
 
             $(this).on(settings.action, function(e){
                 clearInterval(timer);
-                var target = $(this);
+                let target = $(this);
 
                 timer = setTimeout(function(){
                     func.call(target, e);

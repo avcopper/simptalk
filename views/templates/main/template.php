@@ -15,7 +15,7 @@ use Models\User;
     <link rel="stylesheet" href="/css/media.css" media="all">
     <link rel="stylesheet" href="/css/loader.css" media="all">
 
-    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/ondelay.jquery.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="/js/functions.js"></script>
@@ -27,10 +27,36 @@ use Models\User;
 <body>
 <header>
     <div class="container">
-        <?php if (User::isAuthorized()): ?>
-            <div class="header-menu"></div>
-        <?php endif; ?>
-        header
+    <?php if (User::isAuthorized()): ?>
+        <div class="header-menu"></div>
+
+        <div class="header-user">
+        </div>
+
+        <div class="header-user-menu">
+            <ul>
+                <li>
+                    <a href="/profile/" class="header-menu-profile">My profile</a>
+                </li>
+                <li>
+                    <a href="/settings/" class="header-menu-settings">Settings</a>
+                </li>
+                <li>
+                    <a href="/auth/logout/" class="header-menu-exit">Exit</a>
+                </li>
+            </ul>
+        </div>
+
+        <form action="/search/" class="header-search">
+            <input type="text" name="q" id="search">
+            <label for="search"><button type="submit"></button></label>
+        </form>
+
+        <div class="header-results">
+            <div class="search-block"></div>
+            <div class="close"></div>
+        </div>
+    <?php endif; ?>
     </div>
 </header>
 <section class="main container">

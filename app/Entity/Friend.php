@@ -54,4 +54,22 @@ class Friend extends Entity
             'gender'      => ['type' => 'gender', 'field' => 'gender'],
         ];
     }
+
+    public static function search(array $params)
+    {
+        $login = preg_replace('/[^0-9A-Za-z-_]/', '', trim($params['login']));
+        if (mb_strlen($login) < 2) return [];
+        $users = \Models\Friend::searchByLogin($login, $params['user_id'] ?? null, $params['active'] ?? true, false);
+
+        $res = [];
+        if (!empty($users) && is_array($users)) {
+            foreach ($users as $user) {
+                $object = new self();
+                $object->init($user);
+                $res[] = $object;
+            }
+        }
+
+        return $res ?: null;
+    }
 }
