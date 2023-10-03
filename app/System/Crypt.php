@@ -93,9 +93,9 @@ class Crypt
     }
 
     /**
-     * @param string $publicKey
+     * @param string|null $publicKey
      */
-    public function setPublicKey(string $publicKey): void
+    public function setPublicKey(?string $publicKey): void
     {
         $this->publicKey = $publicKey;
     }
@@ -106,9 +106,9 @@ class Crypt
     }
 
     /**
-     * @param string $privateKey
+     * @param string|null $privateKey
      */
-    public function setPrivateKey(string $privateKey): void
+    public function setPrivateKey(?string $privateKey): void
     {
         $this->privateKey = $privateKey;
     }
