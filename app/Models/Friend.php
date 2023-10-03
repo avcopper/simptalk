@@ -98,7 +98,7 @@ class Friend extends Model
 
         $db->sql = "
             SELECT 
-                u.id, u.login, u.name,  u.second_name, u.last_name 
+                u.id, u.locked, u.need_request, u.login, u.name,  u.second_name, u.last_name 
             FROM {$prefix}{$table} u 
             LEFT JOIN {$prefix}users.user_groups ug ON u.group_id = ug.id 
             LEFT JOIN {$prefix}users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
