@@ -16,21 +16,36 @@ $crypt = new \System\Crypt();
         $lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
         ?>
         <li>
-            <a href="" class="search-link">
+            <?php if ($user->isLocked): ?>
+                <span class="search-link">
+            <?php else: ?>
+                <a href="" class="search-link">
+            <?php endif; ?>
+
                 <img src="/images/user.jpg" alt="">
+
                 <div class="search-info">
-                    <div class="search-login">
-                        <?= $user->login ?>
-                    </div>
-                    <div class="search-name">
-                        <?= "{$name} {$secondName} {$lastName}" ?>
-                    </div>
+                    <div class="search-login"><?= $user->login ?></div>
+                    <div class="search-name"><?= "{$name} {$secondName} {$lastName}" ?></div>
                 </div>
-            </a>
-            <a href="" class="user-icon user-message" title="Message"></a>
-            <a href="" class="user-icon user-request" title="Request"></a>
-            <span class="user-icon user-lock" title="Locked "></span>
-            <span class="user-icon user-unlock" title="Unlocked"></span>
+            <?php if (!$user->isLocked): ?>
+                </a>
+            <?php else: ?>
+                </span>
+            <?php endif; ?>
+
+
+            <?php if ($user->isNeedRequest): ?>
+                <a href="" class="user-icon user-request" title="Request"></a>
+            <?php else: ?>
+                <a href="" class="user-icon user-message" title="Message"></a>
+            <?php endif; ?>
+
+            <?php if ($user->isLocked): ?>
+                <span class="user-icon user-lock" title="Locked "></span>
+            <?php else: ?>
+                <span class="user-icon user-unlock" title="Unlocked"></span>
+            <?php endif; ?>
         </li>
     <?php endforeach; ?>
 </ul>
