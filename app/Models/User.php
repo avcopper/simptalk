@@ -19,15 +19,19 @@ class User extends Model
     protected static $db_table = 'users.users';
 
     public $id;
-    public $active = true;
-    public $blocked = false;
+    public $active = 1;
+    public $blocked = null;
+    public $locked = null;
+    public $need_request = 1;
     public $group_id = 2; // группа "Пользователи"
     public $login;
     public $password;
     public $pin = null;
     public $e_pin = null;
     public $email = null;
+    public $show_email = null;
     public $phone = null;
+    public $show_phone = null;
     public $name = null;
     public $second_name = null;
     public $last_name = null;
@@ -35,6 +39,7 @@ class User extends Model
     public $personal_data_agreement = 1;
     public $mailing = null; // подписание на рассылку
     public $mailing_type_id = 2; // тип рассылки html
+    public $timezone = null;
     public $created;
     public $updated = null;
 
@@ -48,9 +53,10 @@ class User extends Model
         $db->params = ['id' => $id];
         $db->sql = "
             SELECT 
-                u.id, u.active, u.blocked, ub.expire, u.group_id, ug.name group_name, u.login, u.password, u.pin, u.e_pin, u.email, u.phone, 
+                u.id, u.active, u.blocked, u.locked, u.need_request, ub.expire, u.group_id, ug.name group_name, 
+                u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
-                u.mailing_type_id, tt.name mailing_type, u.created, u.updated
+                u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
             FROM " . self::$db_prefix . self::$db_table . " u 
             LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
             LEFT JOIN " . self::$db_prefix . "users.user_genders ugn ON u.gender_id = ugn.id 
@@ -72,9 +78,10 @@ class User extends Model
         $db->params = ['login' => $login];
         $db->sql = "
             SELECT 
-                u.id, u.active, u.blocked, u.group_id, ug.name group_name, u.login, u.password, u.pin, u.e_pin, u.email, u.phone, 
+                u.id, u.active, u.blocked, u.locked, u.need_request, ub.expire, u.group_id, ug.name group_name, 
+                u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
-                u.mailing_type_id, tt.name mailing_type, u.created, u.updated
+                u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
             FROM " . self::$db_prefix . self::$db_table . " u 
             LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
             LEFT JOIN " . self::$db_prefix . "users.user_genders ugn ON u.gender_id = ugn.id 
@@ -98,9 +105,10 @@ class User extends Model
         $db->params = ['token' => $token];
         $db->sql = "
             SELECT 
-                u.id, u.active, u.blocked, u.group_id, ug.name group_name, u.login, u.password, u.pin, u.e_pin, u.email, u.phone, 
+                u.id, u.active, u.blocked, u.locked, u.need_request, ub.expire, u.group_id, ug.name group_name, 
+                u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
-                u.mailing_type_id, tt.name mailing_type, u.created, u.updated
+                u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
             FROM " . self::$db_prefix . "users.user_sessions us 
             LEFT JOIN " . self::$db_prefix . self::$db_table . " u ON us.login = u.login 
             LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
@@ -115,7 +123,7 @@ class User extends Model
 
     /**
      * Возвращает текущего пользователя (!+)
-     * @return mixed|null
+     * @return \Entity\User|null
      */
     public static function getCurrent()
     {
