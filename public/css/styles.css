@@ -9,7 +9,7 @@
     top: 0;
     right: 0;
     width: 30px;
-    height: 36px;
+    height: 30px;
     cursor: pointer;
 }
 .close:before {
@@ -17,9 +17,9 @@
     top: 0;
     left: 0;
     width: 30px;
-    height: 36px;
+    height: 30px;
     color: #aaa;
-    font: 100 20px/36px 'FontAwesome';
+    font: 20px/30px 'FontAwesome';
     content: "\f00d";
     text-align: center;
 
@@ -213,15 +213,17 @@ header .container {
     right: 0;
     display: none;
     width: 300px;
+    /*max-width: 75%;*/
     margin: 0 auto;
     text-align: left;
     border: 1px solid #ddd;
     border-top: none;
     border-radius: 0 0 3px 3px;
+    overflow: hidden;
 }
 /* SEARCH */
 .search-block ul {
-    padding: 20px;
+    padding: 20px 10px 10px;
 }
 .search-block li {
     display: flex;
@@ -229,7 +231,8 @@ header .container {
 }
 .search-block .search-link {
     display: flex;
-    flex: 1;
+    flex: 1 1 auto;
+    overflow: hidden;
 }
 .search-block li img {
     display: block;
@@ -253,6 +256,7 @@ header .container {
 }
 .user-icon {
     position: relative;
+    flex: 0 0 auto;
     width: 30px;
     height: 30px;
     font: 16px/30px 'FontAwesome';

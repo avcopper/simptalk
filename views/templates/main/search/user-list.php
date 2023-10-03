@@ -33,7 +33,6 @@ $crypt = new \System\Crypt();
             </span>
             <?php endif; ?>
 
-
             <?php if ($user->isNeedRequest): ?>
             <a href="" class="user-icon user-request" title="Request"></a>
             <?php else: ?>
