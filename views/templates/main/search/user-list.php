@@ -17,11 +17,10 @@ $crypt = new \System\Crypt();
         ?>
         <li>
             <?php if ($user->isLocked): ?>
-                <span class="search-link">
+            <span class="search-link">
             <?php else: ?>
-                <a href="" class="search-link">
+            <a href="" class="search-link">
             <?php endif; ?>
-
                 <img src="/images/user.jpg" alt="">
 
                 <div class="search-info">
@@ -29,22 +28,22 @@ $crypt = new \System\Crypt();
                     <div class="search-name"><?= "{$name} {$secondName} {$lastName}" ?></div>
                 </div>
             <?php if (!$user->isLocked): ?>
-                </a>
+            </a>
             <?php else: ?>
-                </span>
+            </span>
             <?php endif; ?>
 
 
             <?php if ($user->isNeedRequest): ?>
-                <a href="" class="user-icon user-request" title="Request"></a>
+            <a href="" class="user-icon user-request" title="Request"></a>
             <?php else: ?>
-                <a href="" class="user-icon user-message" title="Message"></a>
+            <a href="" class="user-icon user-message" title="Message"></a>
             <?php endif; ?>
 
             <?php if ($user->isLocked): ?>
-                <span class="user-icon user-lock" title="Locked "></span>
+            <span class="user-icon user-lock" title="Locked "></span>
             <?php else: ?>
-                <span class="user-icon user-unlock" title="Unlocked"></span>
+            <span class="user-icon user-unlock" title="Unlocked"></span>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
