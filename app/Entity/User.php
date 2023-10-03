@@ -10,6 +10,8 @@ class User extends Entity
     public $id;
     public $isActive = true;
     public $isBlocked = false;
+    public $isLocked = false;
+    public $isNeedRequest = true;
     public $expire;
     public $groupId = 2; // группа "Пользователи"
     public $group;
@@ -18,7 +20,9 @@ class User extends Entity
     public $pin = null;
     public $ePin = null;
     public $email;
+    public $isShowEmail = false;
     public $phone = null;
+    public $isShowPhone = false;
     public $name;
     public $secondName = null;
     public $lastName = null;
@@ -28,6 +32,7 @@ class User extends Entity
     public $hasMailingAgreement = null; // подписка на рассылку
     public $mailingTypeId = 2; // тип рассылки html
     public $mailingType;
+    public $timezone;
     public $created;
     public $updated = null;
     public $publicKey = null;
@@ -79,6 +84,8 @@ class User extends Entity
             'id'                      => ['type' => 'int', 'field' => 'id'],
             'active'                  => ['type' => 'bool', 'field' => 'isActive'],
             'blocked'                 => ['type' => 'bool', 'field' => 'isBlocked'],
+            'locked'                  => ['type' => 'bool', 'field' => 'isLocked'],
+            'need_request'            => ['type' => 'bool', 'field' => 'isNeedRequest'],
             'expire'                  => ['type' => 'datetime', 'field' => 'expire'],
             'group_id'                => ['type' => 'int', 'field' => 'groupId'],
             'group_name'              => ['type' => 'string', 'field' => 'group'],
@@ -87,7 +94,9 @@ class User extends Entity
             'pin'                     => ['type' => 'string', 'field' => 'pin'],
             'e_pin'                   => ['type' => 'string', 'field' => 'ePin'],
             'email'                   => ['type' => 'string', 'field' => 'email'],
+            'show_email'              => ['type' => 'bool', 'field' => 'isShowEmail'],
             'phone'                   => ['type' => 'string', 'field' => 'phone'],
+            'show_phone'              => ['type' => 'bool', 'field' => 'isShowPhone'],
             'name'                    => ['type' => 'string', 'field' => 'name'],
             'second_name'             => ['type' => 'string', 'field' => 'secondName'],
             'last_name'               => ['type' => 'gender', 'field' => 'lastName'],
@@ -97,37 +106,39 @@ class User extends Entity
             'mailing'                 => ['type' => 'bool', 'field' => 'hasMailingAgreement'],
             'mailing_type_id'         => ['type' => 'int', 'field' => 'mailingTypeId'],
             'mailing_type'            => ['type' => 'string', 'field' => 'mailingType'],
+            'timezone'                => ['type' => 'int', 'field' => 'timezone'],
             'created'                 => ['type' => 'datetime', 'field' => 'created'],
             'updated'                 => ['type' => 'datetime', 'field' => 'updated'],
         ];
     }
 
-    public function save()
-    {
-        $user = new \Models\User();
-        $user->id = $this->id;
-        $user->active = $this->isActive ? 1 : null;
-        $user->blocked = $this->isBlocked ? 1 : null;
-        $user->group_id = $this->groupId;
-        $user->login = $this->login;
-        $user->password = $this->password;
-        $user->pin = $this->pin;
-        $user->e_pin = $this->ePin;
-        $user->email = $this->email;
-        $user->phone = $this->phone;
-        $user->name = $this->name;
-        $user->second_name = $this->secondName;
-        $user->last_name = $this->lastName;
-        $user->gender_id = $this->genderId;
-        $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
-        $user->mailing = $this->hasMailingAgreement ? 1 : null;
-        $user->mailing_type_id = $this->mailingTypeId;
-        $user->created = !empty($this->created) && $this->created instanceof DateTime ?
-            $this->created->format('Y-m-d H:i:s') :
-            (new DateTime())->format('Y-m-d H:i:s');
-        $user->updated = date('Y-m-d H:i:s');
-        return $user->save();
-    }
+//    public function save()
+//    {
+//        parent::save();
+//        $user = new \Models\User();
+//        $user->id = $this->id;
+//        $user->active = $this->isActive ? 1 : null;
+//        $user->blocked = $this->isBlocked ? 1 : null;
+//        $user->group_id = $this->groupId;
+//        $user->login = $this->login;
+//        $user->password = $this->password;
+//        $user->pin = $this->pin;
+//        $user->e_pin = $this->ePin;
+//        $user->email = $this->email;
+//        $user->phone = $this->phone;
+//        $user->name = $this->name;
+//        $user->second_name = $this->secondName;
+//        $user->last_name = $this->lastName;
+//        $user->gender_id = $this->genderId;
+//        $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
+//        $user->mailing = $this->hasMailingAgreement ? 1 : null;
+//        $user->mailing_type_id = $this->mailingTypeId;
+//        $user->created = !empty($this->created) && $this->created instanceof DateTime ?
+//            $this->created->format('Y-m-d H:i:s') :
+//            (new DateTime())->format('Y-m-d H:i:s');
+//        $user->updated = date('Y-m-d H:i:s');var_dump($user);die;
+//        return $user->save();
+//    }
 
     /**
      * Создает запись о блокировке пользователя

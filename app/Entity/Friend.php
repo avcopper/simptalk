@@ -6,13 +6,20 @@ class Friend extends Entity
     public $id;
     public $isActive;
     public $isBlocked;
+    public $isLocked = false;
+    public $isNeedRequest = true;
     public $expire;
     public $login;
+    public $email;
+    public $isShowEmail = false;
+    public $phone = null;
+    public $isShowPhone = false;
     public $name;
     public $secondName;
     public $lastName;
     public $genderId;
     public $gender;
+    public $timezone;
     public $publicKey;
 
     public static function get(array $params)
@@ -45,13 +52,20 @@ class Friend extends Entity
             'id'          => ['type' => 'int', 'field' => 'id'],
             'active'      => ['type' => 'bool', 'field' => 'isActive'],
             'blocked'     => ['type' => 'bool', 'field' => 'isBlocked'],
+            'locked'                  => ['type' => 'bool', 'field' => 'isLocked'],
+            'need_request'            => ['type' => 'bool', 'field' => 'isNeedRequest'],
             'expire'      => ['type' => 'datetime', 'field' => 'expire'],
             'login'       => ['type' => 'string', 'field' => 'login'],
+            'email'                   => ['type' => 'string', 'field' => 'email'],
+            'show_email'              => ['type' => 'bool', 'field' => 'isShowEmail'],
+            'phone'                   => ['type' => 'string', 'field' => 'phone'],
+            'show_phone'              => ['type' => 'bool', 'field' => 'isShowPhone'],
             'name'        => ['type' => 'string', 'field' => 'name'],
             'second_name' => ['type' => 'string', 'field' => 'secondName'],
             'last_name'   => ['type' => 'gender', 'field' => 'lastName'],
             'gender_id'   => ['type' => 'int', 'field' => 'genderId'],
             'gender'      => ['type' => 'gender', 'field' => 'gender'],
+            'timezone'                => ['type' => 'int', 'field' => 'timezone'],
         ];
     }
 

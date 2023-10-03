@@ -46,26 +46,26 @@ class UserSession extends Entity
         ];
     }
 
-    public function save()
-    {
-        $userSession = new \Models\UserSession();
-        $userSession->id = $this->id;
-        $userSession->active = $this->isActive ? 1 : null;
-        $userSession->login = $this->login;
-        $userSession->user_id = $this->userId;
-        $userSession->service_id = $this->serviceId;
-        $userSession->ip = $this->ip;
-        $userSession->device = $this->device;
-        $userSession->log_in =
-            !empty($this->logIn) && $this->logIn instanceof DateTime ?
-                $this->logIn->format('Y-m-d H:i:s') :
-                (new DateTime())->format('Y-m-d H:i:s');
-        $userSession->expire =
-            !empty($this->expire) && $this->expire instanceof DateTime ?
-                $this->expire->format('Y-m-d H:i:s') :
-                null;
-        $userSession->token = $this->token;
-        $userSession->comment = $this->comment;
-        return $userSession->save();
-    }
+//    public function save()
+//    {
+//        $userSession = new \Models\UserSession();
+//        $userSession->id = $this->id;
+//        $userSession->active = $this->isActive ? 1 : null;
+//        $userSession->login = $this->login;
+//        $userSession->user_id = $this->userId;
+//        $userSession->service_id = $this->serviceId;
+//        $userSession->ip = $this->ip;
+//        $userSession->device = $this->device;
+//        $userSession->log_in =
+//            !empty($this->logIn) && $this->logIn instanceof DateTime ?
+//                $this->logIn->format('Y-m-d H:i:s') :
+//                (new DateTime())->format('Y-m-d H:i:s');
+//        $userSession->expire =
+//            !empty($this->expire) && $this->expire instanceof DateTime ?
+//                $this->expire->format('Y-m-d H:i:s') :
+//                null;
+//        $userSession->token = $this->token;
+//        $userSession->comment = $this->comment;
+//        return $userSession->save();
+//    }
 }
