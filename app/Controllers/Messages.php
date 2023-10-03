@@ -35,7 +35,6 @@ class Messages extends Controller
      */
     protected function actionShow(string $friend_id, int $last_id = 0)
     {
-        //$friend_id = preg_replace('/[^0-9A-Za-z-_]/', '', $friend_id);
         $friend = Friend::get(['login' => $friend_id]);
         if (empty($friend)) throw new NotFoundException('User not found');
 
