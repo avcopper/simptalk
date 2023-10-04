@@ -141,7 +141,8 @@ class Auth
             ModelUserSession::clearFailedAttempts($this->user->login);
             AccessLogger::getInstance()->info("Пользователь {$this->userSession->login} залогинен. UserId: {$this->userSession->userId}.");
 
-            $_SESSION['user'] = ModelUser::getById($this->user->id);
+            //$_SESSION['user'] = ModelUser::getById($this->user->id);
+            $_SESSION['user'] = (new ModelUser())->init($this->user)->toArray();
             $_SESSION['token'] = $this->token;
             if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', DOMAIN, 0);
             header('Location: /');
