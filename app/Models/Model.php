@@ -4,6 +4,7 @@ namespace Models;
 
 use System\Db;
 use Traits\Magic;
+use Entity\Entity;
 
 /**
  * Class Model
@@ -15,6 +16,57 @@ abstract class Model
     protected static $db_table = null;
 
     use Magic;
+
+    public function init(?Entity $data)
+    {
+        if (empty($data)) return null;
+
+        $fields = $data->getFields();
+
+        foreach ($fields as $key => $field) {
+            if (!property_exists($this, $key)) continue;
+
+            $prop = $field['field'];
+
+            switch ($field['type']) {
+                case 'int':
+                    $this->$key = (int) $data->$prop;
+                    break;
+                case 'float':
+                    $this->$key = (float) $data->$prop;
+                    break;
+                case 'string':
+                    $this->$key = (string) $data->$prop;
+                    break;
+                case 'bool':
+                    $this->$key = !empty($data->$prop) ? (bool) $data->$prop : null;
+                    break;
+                case 'datetime':
+                    $this->$key =
+                        !empty($data->$prop) ?
+                            ($data->$prop instanceof \DateTime ?
+                                $data->$prop->format('Y-m-d H:i:s') :
+                                (is_string($data->$prop) ? $data->$prop : null)) :
+                            null;
+                    break;
+                default:
+                    $this->$key = $data->$prop;
+            }
+        }
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this as $key => $value) {
+            if ($key === 'data') continue;
+            $result[$key] = $value;
+        }
+
+        return $result;
+    }
 
     /**
      * Создает объект вызвавшего класса и заполняет его свойства
