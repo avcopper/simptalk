@@ -58,9 +58,9 @@ class User extends Entity
         return $object;
     }
 
-    public function init(?array $data, array $properties = [])
+    public function init(?array $data)
     {
-        parent::init($data, $properties);
+        parent::init($data);
         $this->publicKey = self::getPublicKey($this->id);
         $this->privateKey = self::getPrivateKey($this->id);
         return $this;
@@ -112,33 +112,10 @@ class User extends Entity
         ];
     }
 
-//    public function save()
-//    {
-//        parent::save();
-//        $user = new \Models\User();
-//        $user->id = $this->id;
-//        $user->active = $this->isActive ? 1 : null;
-//        $user->blocked = $this->isBlocked ? 1 : null;
-//        $user->group_id = $this->groupId;
-//        $user->login = $this->login;
-//        $user->password = $this->password;
-//        $user->pin = $this->pin;
-//        $user->e_pin = $this->ePin;
-//        $user->email = $this->email;
-//        $user->phone = $this->phone;
-//        $user->name = $this->name;
-//        $user->second_name = $this->secondName;
-//        $user->last_name = $this->lastName;
-//        $user->gender_id = $this->genderId;
-//        $user->personal_data_agreement = $this->hasPersonalDataAgreement ? 1 : null;
-//        $user->mailing = $this->hasMailingAgreement ? 1 : null;
-//        $user->mailing_type_id = $this->mailingTypeId;
-//        $user->created = !empty($this->created) && $this->created instanceof DateTime ?
-//            $this->created->format('Y-m-d H:i:s') :
-//            (new DateTime())->format('Y-m-d H:i:s');
-//        $user->updated = date('Y-m-d H:i:s');var_dump($user);die;
-//        return $user->save();
-//    }
+    public function save()
+    {
+        return (new \Models\User())->init($this)->save();
+    }
 
     /**
      * Создает запись о блокировке пользователя
