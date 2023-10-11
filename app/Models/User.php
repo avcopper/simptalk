@@ -16,7 +16,7 @@ class User extends Model
 {
     const MAX_COUNT_ATTEMPT = 5;
 
-    protected static $db_table = 'users.users';
+    protected static $db_table = 'mesigo.users';
 
     public $id;
     public $active = 1;
@@ -58,10 +58,10 @@ class User extends Model
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
             FROM " . self::$db_prefix . self::$db_table . " u 
-            LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "users.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE u.id = :id {$activity}";
 
         $data = $db->query($object ? static::class : null);
@@ -83,10 +83,10 @@ class User extends Model
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
             FROM " . self::$db_prefix . self::$db_table . " u 
-            LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "users.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE u.login = :login {$activity}";
 
         $data = $db->query($object ? static::class : null);
@@ -109,12 +109,12 @@ class User extends Model
                 u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
-            FROM " . self::$db_prefix . "users.user_sessions us 
+            FROM " . self::$db_prefix . "mesigo.user_sessions us 
             LEFT JOIN " . self::$db_prefix . self::$db_table . " u ON us.login = u.login 
-            LEFT JOIN " . self::$db_prefix . "users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "users.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE us.token = :token {$activity}";
 
         $data = $db->query($object ? static::class : null);

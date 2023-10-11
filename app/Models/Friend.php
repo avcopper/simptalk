@@ -9,7 +9,7 @@ use System\Db;
  */
 class Friend extends Model
 {
-    protected static $db_table = 'users.users';
+    protected static $db_table = 'mesigo.users';
 
     public $id;
     public $active;
@@ -44,10 +44,10 @@ class Friend extends Model
                 u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.timezone 
             FROM {$prefix}{$table} u 
-            LEFT JOIN {$prefix}users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN {$prefix}users.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN {$prefix}users.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN {$prefix}users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE u.id = :id {$activity}";
 
         $data = $db->query($object ? static::class : null);
@@ -71,10 +71,10 @@ class Friend extends Model
                 u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.timezone 
             FROM {$prefix}{$table} u 
-            LEFT JOIN {$prefix}users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN {$prefix}users.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN {$prefix}users.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN {$prefix}users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE u.login = :login {$activity}";
 
         $data = $db->query($object ? static::class : null);
@@ -100,8 +100,8 @@ class Friend extends Model
             SELECT 
                 u.id, u.locked, u.need_request, u.login, u.name,  u.second_name, u.last_name 
             FROM {$prefix}{$table} u 
-            LEFT JOIN {$prefix}users.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN {$prefix}users.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
             WHERE u.login LIKE CONCAT(:login, '', '%') {$notSelf} {$activity} 
             ORDER BY u.id";
 

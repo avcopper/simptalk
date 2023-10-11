@@ -1,5 +1,4 @@
 <?php
-
 namespace Models;
 
 use System\Db;
@@ -23,7 +22,7 @@ class UserSession extends Model
                 'H2mCo6UjM9m8vVbkaaw5hNapjhHILOgN5UVcXGI6b3XoyKZwYX0hTpnImydmDGUJ'.
                 'XwIDAQAB'; // ключ для шифрования токена
 
-    protected static $db_table = 'users.user_sessions';
+    protected static $db_table = 'mesigo.user_sessions';
 
     public $id;         // id сессии
     public $active;     // активность сессии
@@ -51,8 +50,8 @@ class UserSession extends Model
         $db->sql = "
             SELECT us.id, us.active, us.user_id, u.login, us.service_id, s.name service, us.ip, us.device, us.log_in, us.expire, us.token
             FROM " . self::$db_prefix . self::$db_table . " us 
-            LEFT JOIN " . self::$db_prefix . "users.users u ON us.user_id = u.id 
-            LEFT JOIN " . self::$db_prefix . "users.services s ON us.service_id = s.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.users u ON us.user_id = u.id 
+            LEFT JOIN " . self::$db_prefix . "mesigo.services s ON us.service_id = s.id 
             WHERE us.token = :token {$activity}";
         $data = $db->query();
         return !empty($data) ? array_shift($data) : false;
@@ -68,7 +67,10 @@ class UserSession extends Model
     {
         $db = new Db();
         $db->params = ['login' => $login];
-        $db->sql = "SELECT count(id) count FROM " . self::$db_prefix . self::$db_table . " WHERE token IS NULL AND active IS NOT NULL AND login = :login";
+        $db->sql = "
+            SELECT count(id) count 
+            FROM " . self::$db_prefix . self::$db_table . " 
+            WHERE token IS NULL AND active IS NOT NULL AND login = :login";
         $res = $db->query();
         return !empty($res) ? array_shift($res)['count'] : 0;
     }

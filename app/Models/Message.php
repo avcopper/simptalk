@@ -52,7 +52,7 @@ class Message extends Model
                 m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, u.id friend_id, u.login friend_login, 
                 u.name friend_name, u.last_name friend_last_name, m.message, m.created, m.updated 
             FROM " . self::$db_prefix . self::$db_table . " m 
-            LEFT JOIN  " . self::$db_prefix . "users.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
+            LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
             WHERE 
                 (m.from_user_id = :user_id OR m.to_user_id = :user_id) 
                 {$friend} 
