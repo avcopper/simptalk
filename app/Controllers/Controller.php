@@ -41,7 +41,7 @@ abstract class Controller
         if (!ModelUser::isAuthorized()) {
             unset($_SESSION['user'], $_SESSION['token']);
             header('HTTP/1.1 403 Forbidden', 403);
-            if (!Request::isAjax()) header('Location: /auth/');
+            if (!Request::isAjax()) header('Location: /');
             die;
         }
     }
@@ -78,6 +78,15 @@ abstract class Controller
     protected function set($var, $value = null)
     {
         $this->view->$var = $value;
+    }
+
+    /**
+     * Устанавливает директорию шаблона
+     * @param $template - имя директории шаблона
+     */
+    protected function setTemplate(string $template)
+    {
+        $this->view->setTemplate($template);
     }
 
     /**

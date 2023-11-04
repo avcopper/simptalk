@@ -1,5 +1,4 @@
 <?php
-
 namespace Controllers;
 
 use Models\User;
@@ -27,6 +26,8 @@ class Auth extends Controller
             header('Location: /');
             die;
         }
+
+        $this->setTemplate('simple');
         $this->display('auth');
     }
 
@@ -36,7 +37,6 @@ class Auth extends Controller
      */
     protected function actionLogin()
     {
-
         if (Request::isPost()) {
             $login = Request::post('login');
             $password = Request::post('password');
@@ -52,7 +52,7 @@ class Auth extends Controller
     protected function actionLogout()
     {
         User::logout();
-        header('Location: /');
-        die;
+        $this->setTemplate('simple');
+        $this->display('logout');
     }
 }
