@@ -10,31 +10,40 @@ use Traits\Magic;
 class View
 {
     public $view; // содержимое страницы для вывода в шаблоне
+    private ?string $template; // используемый шаблон
     public $user; // пользователь
     public $crypt; // пользователь
+
+    /**
+     * View constructor.
+     */
+    public function __construct()
+    {
+        $this->template = defined('TEMPLATE') ? TEMPLATE : 'main';
+    }
 
     use Magic;
 
     /**
      * Возвращает строку - HTML-код шаблона
-     * @param string $template - шаблон
+     * @param string $file - шаблон
      * @param array $vars - переданные переменные для рендера в шаблоне
      * @return false|string|null
      */
-    public function render(string $template, $vars = [])
+    public function render(string $file, $vars = [])
     {
-        $file = explode('.', $template);
-        $file_name = $file[0];
-        $ext = $file[1] ?? 'php';
-        $tmpl = defined('TEMPLATE') ? TEMPLATE : 'main';
-        $file_path =
+        $fileArray = explode('.', $file);
+        $file_name = $fileArray[0];
+        $ext = $fileArray[1] ?? 'php';
+
+        $filePath =
             DIR_TEMPLATES . DIRECTORY_SEPARATOR .
-            $tmpl .
+            $this->template .
             (mb_substr($file_name, 0, 1) === '/' || mb_substr($file_name, 0, 1) === '\\' ? '' : DIRECTORY_SEPARATOR) .
             $file_name . '.' .
             $ext;
 
-        if (empty($template) || !is_file($file_path)) return '';
+        if (empty($file) || !is_file($filePath)) return '';
 
         ob_start();
         foreach ($this as $name => $value) {
@@ -53,7 +62,7 @@ class View
             }
         }
 
-        include $file_path;
+        include $filePath;
         $content = ob_get_contents();
         ob_end_clean();
 
@@ -80,4 +89,23 @@ class View
         echo $this->render($file);
         die;
     }
+
+    /**
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    /**
+     * Устанавливает директорию шаблона
+     * @param string $template - имя директории шаблона
+     */
+    public function setTemplate(string $template): void
+    {
+        $this->template = $template;
+    }
+
+
 }
