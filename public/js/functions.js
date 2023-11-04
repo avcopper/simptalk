@@ -9,7 +9,7 @@ function getMessages(user, container) {
             url: "/messages/get/" + user + "/" + last + "/",
             beforeSend: function () {
             },
-            success: function (data, textStatus, jqXHR) {console.log(data);
+            success: function (data, textStatus, jqXHR) {//console.log(data);
                 if (textStatus === 'success' && jqXHR.status === 200) {
                     if (data.result && data.message.length > 0) {
                         let needScroll = messageList.height() - container.scrollTop() - container.height() < 20;
@@ -41,7 +41,7 @@ function sendMessage(user, container, timer) {
                 clearInterval(timer);
                 $('#chat-input').val('');
             },
-            success: function(data, textStatus, jqXHR) {console.log(data);
+            success: function(data, textStatus, jqXHR) {//console.log(data);
                 if (textStatus === 'success' && jqXHR.status === 200) {
                     if (data.result && data.message.length > 0) {
                         messageList.append(data.message);
