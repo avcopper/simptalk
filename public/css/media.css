@@ -1,38 +1,240 @@
-/*==========  Desktop First Method  ==========*/
-/* Large Devices, Wide Screens */
-@media only screen and (max-width : 1200px) {
+@media (max-width: 575.98px) {
+    .user-chat-nav {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end
+    }
+    .chat-conversation .conversation-list {
+        max-width: 90%
+    }
+    .chat-conversation .conversation-list .ctext-wrap-content .attached-file .attached-file-avatar {
+        display: none
+    }
+    .chat-conversation .conversation-list .ctext-wrap-content .attached-file .dropdown .dropdown-toggle {
+        display: block
+    }
+    .chat-conversation .conversation-list .dropdown .dropdown-toggle {
+        display: none
+    }
+    .videocallModal .modal-content {
+        min-height: 350px
+    }
+    .user-profile-sidebar {
+        min-width: 100%
+    }
 }
-@media only screen and (max-width : 1024px) {
+@media (max-width: 991px) {
+    .user-profile-img .profile-img {
+        height: 160px
+    }
 }
-/* Medium Devices, Desktops */
-@media only screen and (max-width : 992px) {
+@media (max-width: 991.98px) {
+    .fg-emoji-picker {
+        left: 14px !important;
+        top: auto !important;
+        bottom: 60px
+    }
+    .side-menu {
+        position: fixed;
+        bottom: 0;
+        height: 60px;
+        min-width: 100%;
+        min-height: auto;
+        border-top: 1px solid var(--bs-sidebar-bg)
+    }
+    .side-menu .navbar-brand-box {
+        display: none
+    }
+    .sidemenu-navigation {
+        width: 100%
+    }
+    .sidemenu-navigation .tooltip {
+        display: none
+    }
+    .side-menu-nav {
+        -webkit-box-pack: justify !important;
+        -ms-flex-pack: justify !important;
+        justify-content: space-between !important;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row
+    }
+    .side-menu-nav .nav-item {
+        -ms-flex-preferred-size: 0;
+        flex-basis: 0;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        margin: 5px 0
+    }
+    .side-menu-nav .nav-item .nav-link::before {
+        width: 20px;
+        height: 2px;
+        right: auto;
+        top: -5px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%)
+    }
+    .side-menu-nav .nav-item .nav-link {
+        font-size: 20px;
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        margin: 0 auto
+    }
+    .chat-room-list {
+        height: calc(100vh - 190px)
+    }
+    .chat-group-list {
+        height: calc(100vh - 198px)
+    }
+    .chat-bookmark-list, .chat-call-list {
+        height: calc(100vh - 125px)
+    }
+    .user-chat {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+        z-index: 99
+    }
+    .user-chat.user-chat-show {
+        visibility: visible;
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
+    }
+    .chat-welcome-section {
+        display: none
+    }
+    .user-chat-topbar {
+        position: fixed;
+        background-color: rgba(255, 255, 255, .8)
+    }
+    .chat-conversation {
+        height: calc(100vh - 80px);
+        margin-bottom: 78px
+    }
+    .chat-input-section {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1
+    }
+    .chat-input-section .chat-input-collapse {
+        bottom: 74px
+    }
+    .file_Upload, .replyCard {
+        bottom: -12px
+    }
+    .file_Upload.show, .replyCard.show {
+        -webkit-transform: translateY(-86px);
+        transform: translateY(-86px)
+    }
+    .user-profile-desc {
+        height: calc(100vh - 194px)
+    }
+    .profile-desc {
+        height: calc(100vh - 330px)
+    }
+    .user-setting {
+        height: calc(100vh - 320px)
+    }
+    .auth-logo-section {
+        text-align: center
+    }
+    .auth-img {
+        display: none
+    }
 }
-/* Small Devices, Tablets */
-@media only screen and (max-width : 768px) {
+@media (max-width: 1199.98px) {
+    .user-profile-sidebar {
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 99
+    }
 }
-/* Extra Small Devices, Phones */
-@media only screen and (max-width : 480px) {
+
+@media (min-width: 992px) {
+    .chat-leftsidebar {
+        min-width: 300px;
+        max-width: 300px;
+        height: 100vh
+    }
+    .user-chat.user-chat-show .chat-content {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important
+    }
+    .user-profile-sidebar {
+        border-left: 4px solid var(--bs-border-color)
+    }
+    .auth-logo-section {
+        height: 100vh
+    }
 }
-/* Custom, iPhone Retina */
-@media only screen and (max-width : 320px) {
+@media (min-width: 1550px) {
+    .auth-img {
+        max-width: 200%
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1549.98px) {
+    .auth-img {
+        max-width: 220%
+    }
 }
 
 
-/*==========  Mobile First Method  ==========*/
-/* Custom, iPhone Retina */
-@media only screen and (min-width : 320px) {
+@-webkit-keyframes loadingLine {
+    0% {
+        height: 10px
+    }
+    50% {
+        height: 28px
+    }
+    100% {
+        height: 10px
+    }
 }
-/* Extra Small Devices, Phones */
-@media only screen and (min-width : 480px) {
+@keyframes loadingLine {
+    0% {
+        height: 10px
+    }
+    50% {
+        height: 28px
+    }
+    100% {
+        height: 10px
+    }
 }
-/* Small Devices, Tablets */
-@media only screen and (min-width : 769px) {
+@-webkit-keyframes wave {
+    0%, 100%, 60% {
+        -webkit-transform: initial;
+        transform: initial
+    }
+    30% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px)
+    }
 }
-/* Medium Devices, Desktops */
-@media only screen and (min-width : 992px) {
-}
-@media only screen and (min-width: 1024px) {
-}
-/* Large Devices, Wide Screens */
-@media only screen and (min-width : 1200px) {
+@keyframes wave {
+    0%, 100%, 60% {
+        -webkit-transform: initial;
+        transform: initial
+    }
+    30% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px)
+    }
 }

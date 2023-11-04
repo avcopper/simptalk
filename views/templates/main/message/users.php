@@ -1,48 +1,36 @@
-<style>
-    .user-list {
-        height: 100%;
-        padding: 10px;
-        background-color: #ffffff;
-    }
-    .user-link {
-        margin: 10px;
-    }
-    .user-link a {
-        display: flex;
-    }
-    .user-image {
-        height: 40px;
-    }
-    .user-image img {
-        height: 100%;
-    }
-    .user-name {
-        height: 40px;
-        padding: 10px;
-    }
-    .user-empty {
-        margin: 5px;
-        padding: 10px;
-    }
-</style>
-
-<div class="user-list">
+<div class="chat-message-list">
+    <ul id="favourite-users" class="list-unstyled chat-list chat-user-list">
     <?php if (!empty($messages) && is_array($messages)): ?>
         <?php foreach ($messages as $message): ?>
-            <div class="user-link">
-                <a href="<?= $message->friendLogin ?>/">
-                    <div class="user-image"><img src="/images/user.jpg" alt=""></div>
-                    <div class="user-name"><?= $message->friendLogin ?></div>
+            <li>
+                <a href="<?= $message->friendLogin ?>/" class="unread-msg-user">
+                    <div class="d-flex align-items-center">
+                        <div class="chat-user-img online align-self-center me-2 ms-0">
+                            <img src="/images/avatar-2.jpg" class="rounded-circle avatar-xs" alt="">
+                            <span class="user-status"></span>
+                        </div>
+
+                        <div class="overflow-hidden">
+                            <p class="text-truncate mb-0"><?= $message->friendLogin ?></p>
+                        </div>
+
+                        <div class="ms-auto">
+                            <span class="badge bg-dark-subtle text-reset rounded p-1">18</span>
+                        </div>
+                    </div>
                 </a>
-            </div>
+            </li>
         <?php endforeach; ?>
     <?php else: ?>
-        <div class="user-empty">Диалоги не обнаружены</div>
+        <li>
+            <div class="no-msg-user">
+                <div class="d-flex align-items-center">
+                    <div class="overflow-hidden">
+                        <p class="text-truncate mb-0">Диалоги не обнаружены</p>
+                    </div>
+                </div>
+            </div>
+        </li>
     <?php endif; ?>
+    </ul>
 </div>
-
-<script>
-    $(function () {
-
-    });
-</script>

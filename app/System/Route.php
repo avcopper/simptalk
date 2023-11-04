@@ -195,7 +195,7 @@ class Route
 
             if (!empty($param1) && !empty($param2)) $controller->action($action, mb_strtolower($param1), mb_strtolower($param2));
             elseif (!empty($param1)) $controller->action($action, mb_strtolower($param1));
-            else$controller->action($action);
+            else $controller->action($action);
 
         } else
             if (!in_array('Js', ROUTE)) throw new NotFoundException(); // inputmask какого-то хрена далет еще один запрос...

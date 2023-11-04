@@ -1,85 +1,44 @@
-<?php
-use Models\User;
-?>
 <!doctype html>
-<html lang="ru">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8"/>
+    <title>Chat</title>
 
-    <title>Mesigo</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="Chat"/>
+    <meta name="keywords" content="chat, web chat, communication, group chat, message, messenger"/>
+    <meta name="author" content="Andrew Cooper"/>
 
-    <link rel="stylesheet" href="/css/styles.css" media="all">
-    <link rel="stylesheet" href="/css/media.css" media="all">
-    <link rel="stylesheet" href="/css/loader.css" media="all">
+    <link rel="shortcut icon" href="/favicon.ico" id="tabIcon">
+
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/glightbox.min.css" rel="stylesheet">
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/media.css" rel="stylesheet" type="text/css"/>
 
     <script src="/js/jquery-3.7.1.min.js"></script>
-    <script src="/js/ondelay.jquery.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
-    <script src="/js/functions.js"></script>
-    <script src="/js/scripts.js"></script>
-    <script src="/js/ResizeSensor.js"></script>
-
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 </head>
-<body>
-<header>
-    <div class="container">
-    <?php if (User::isAuthorized()): ?>
-        <div class="header-menu"></div>
 
-        <div class="header-user">
-        </div>
+<body data-bs-theme="dark">
+<?= $this->render('menu/top') ?>
+<?= $this->render('menu/side') ?>
 
-        <div class="header-user-menu">
-            <ul>
-                <li>
-                    <a href="/profile/" class="header-menu-profile">My profile</a>
-                </li>
-                <li>
-                    <a href="/settings/" class="header-menu-settings">Settings</a>
-                </li>
-                <li>
-                    <a href="/auth/logout/" class="header-menu-exit">Exit</a>
-                </li>
-            </ul>
-        </div>
+<div class="layout-wrapper d-lg-flex main">
 
-        <form action="/search/" class="header-search">
-            <input type="text" name="q" id="search">
-            <label for="search"><button type="submit"></button></label>
-        </form>
+    <?= $view ?? null; ?>
+</div>
 
-        <div class="header-results">
-            <div class="search-block"></div>
-            <div class="close"></div>
-        </div>
-    <?php endif; ?>
-    </div>
-</header>
-<section class="main container">
-    <div class="main-body">
-        <?php if (User::isAuthorized()): ?>
-            <aside class="compact">
-                <nav>
-                    <div class="nav-item"><a href="/" class="nav-home" title="Моя страница">Моя страница</a></div>
-                    <div class="nav-item"><a href="/messages/" class="nav-messages" title="Сообщения">Сообщения</a></div>
-                    <div class="nav-item"><a href="/auth/logout/" class="nav-exit" title="Выход">Выход</a></div>
-                </nav>
-            </aside>
-        <?php endif; ?>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/simplebar.min.js"></script>
+<script src="/js/glightbox.min.js"></script>
+<script src="/js/swiper-bundle.min.js"></script>
+<script src="/js/fgEmojiPicker.js"></script>
+<script src="/js/functions.js"></script>
+<script src="/js/scripts.js"></script>
 
-        <main>
-            <?php echo $view ?? null; ?>
-        </main>
-    </div>
-</section>
-<footer>
-    <div class="container">
-        <a href="https://t.me/andrewcooper">@mesigo</a>
-    </div>
-</footer>
 </body>
 </html>
