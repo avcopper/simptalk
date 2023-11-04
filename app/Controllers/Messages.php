@@ -43,7 +43,6 @@ class Messages extends Controller
         $this->set('friend', $friend);
         $this->set('cryptFriend', new Crypt($friend->publicKey));
         $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'limit' => 100]));
-
         $this->display('message/messages');
     }
 
@@ -81,11 +80,8 @@ class Messages extends Controller
             $this->set('friend', $friend);
             $this->set('cryptFriend', new Crypt($friend->publicKey));
             $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id]));
-            $this->display_element('message/message-list');
-
-//            Response::result(200, true, 'OK',
-//                Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id])
-//            );
+            //$this->display_element('message/message-list');
+            Response::result(200, true, $this->render('message/message-list'));
         }
     }
 }

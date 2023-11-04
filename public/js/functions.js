@@ -5,15 +5,17 @@ function getMessages(user, container) {
 
         $.ajax({
             method: "POST",
-            dataType: 'text',
+            dataType: 'json',
             url: "/messages/get/" + user + "/" + last + "/",
             beforeSend: function () {
             },
             success: function (data, textStatus, jqXHR) {console.log(data);
-                if (textStatus === 'success' && jqXHR.status === 200 && data.length > 0) {
-                    let needScroll = messageList.height() - container.scrollTop() - container.height() < 20;
-                    messageList.append(data);
-                    if (needScroll) container.scrollTop(messageList.height());
+                if (textStatus === 'success' && jqXHR.status === 200) {
+                    if (data.result && data.message.length > 0) {
+                        let needScroll = messageList.height() - container.scrollTop() - container.height() < 20;
+                        messageList.append(data.message);
+                        if (needScroll) container.scrollTop(messageList.height());
+                    }
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -32,7 +34,7 @@ function sendMessage(user, container, timer) {
     if(message.length > 0) {
         $.ajax({
             method: "POST",
-            dataType: 'text',
+            dataType: 'json',
             url: "/messages/send/" + user + "/" + last + "/",
             data: {'message': message},
             beforeSend: function() {
@@ -40,9 +42,11 @@ function sendMessage(user, container, timer) {
                 $('#chat-input').val('');
             },
             success: function(data, textStatus, jqXHR) {console.log(data);
-                if (textStatus === 'success' && jqXHR.status === 200 && data.length > 0) {
-                    messageList.append(data);
-                    container.scrollTop(messageList.height());
+                if (textStatus === 'success' && jqXHR.status === 200) {
+                    if (data.result && data.message.length > 0) {
+                        messageList.append(data.message);
+                        container.scrollTop(messageList.height());
+                    }
                 }
                 timer = getMessages(user, container);
             },
