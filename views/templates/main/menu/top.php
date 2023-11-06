@@ -1,4 +1,4 @@
-<div class="header w-100 d-lg-flex flex-lg-row">
+<div class="header w-100 d-flex flex-row">
     <div class="header-item header-menu-button">
         <a href="#" class="nav-link">
             <i class='bx bx-menu'></i>
