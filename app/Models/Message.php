@@ -13,6 +13,9 @@ class Message extends Model
     public $is_read = null;
     public $from_user_id;
     public $to_user_id;
+    public $is_file = null;
+    public $is_audio = null;
+    public $is_image = null;
     public $message;
     public $created;
     public $updated;
@@ -50,7 +53,7 @@ class Message extends Model
         $db->sql = "
             SELECT 
                 m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, u.id friend_id, u.login friend_login, 
-                u.name friend_name, u.last_name friend_last_name, m.message, m.created, m.updated 
+                u.name friend_name, u.last_name friend_last_name, m.is_file, m.is_audio, m.is_image, m.message, m.created, m.updated 
             FROM " . self::$db_prefix . self::$db_table . " m 
             LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
             WHERE 
@@ -74,6 +77,16 @@ class Message extends Model
      */
     public static function saveMessage(\Entity\User $user, int $message_to, string $message)
     {
+        $message = strip_tags(nl2br(trim($message)), '<br>');
+        $msg = new self();
+        $msg->from_user_id = $user->id;
+        $msg->to_user_id = $message_to;
+        $msg->message = (new Crypt($user->publicKey, $user->privateKey))->encryptByPrivateKey($message);
+        return $msg->save();
+    }
+
+    public static function saveFile(\Entity\User $user, int $message_to, array $file)
+    {echo json_encode($file);die;
         $message = strip_tags(nl2br(trim($message)), '<br>');
         $msg = new self();
         $msg->from_user_id = $user->id;
@@ -121,5 +134,31 @@ class Message extends Model
     public static function checkMessage($message)
     {
         return !empty($message);
+    }
+
+    public static function checkFile(array $file)
+    {
+        return self::checkFileError($file['error']) && self::checkFileSize($file['size']) &&
+            self::checkTempFile($file['tmp_name']) && self::checkMimeType($file['type']);
+    }
+
+    public static function checkFileError($error)
+    {
+        return $error === 0;
+    }
+
+    public static function checkFileSize($file)
+    {
+        return $file > 0 && $file < 10000000;
+    }
+
+    public static function checkTempFile($file)
+    {
+        return !empty($file) && is_file($file);
+    }
+
+    public static function checkMimeType($type)
+    {
+        return in_array($type, ['audio/wav']);
     }
 }
