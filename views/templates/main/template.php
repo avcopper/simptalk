@@ -37,6 +37,7 @@
 <script src="/js/glightbox.min.js"></script>
 <script src="/js/swiper-bundle.min.js"></script>
 <script src="/js/fgEmojiPicker.js"></script>
+<script src="/js/waves.min.js"></script>
 <script src="/js/functions.js"></script>
 <script src="/js/scripts.js"></script>
 
