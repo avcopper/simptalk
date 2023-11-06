@@ -219,9 +219,9 @@ body {
     width: 4px;
     height: 10px;
     border-radius: 14px;
-    background-color: var(--bs-secondary-color)
+    /*background-color: var(--bs-secondary-color)*/
+    background-color: var(--bs-link-color);
 }
-
 .custom-accordion .card + .card {
     margin-top: .5rem
 }
@@ -271,6 +271,7 @@ body {
 .header {
     position: fixed;
     height: 70px;
+    min-width: 300px;
     background-color: var(--bs-sidebar-sub-bg);
     border-bottom: 1px solid var(--bs-menu-border);
     z-index: 2;
@@ -299,6 +300,9 @@ body {
 .header-user {
 }
 .side-menu {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
     position: fixed;
     top: 70px;
     min-width: 75px;
@@ -306,14 +310,16 @@ body {
     /*height: 100vh;*/
     height: calc(100vh - 70px);
     min-height: 570px;
+    padding: 0 8px;
     /*background-color: var(--bs-sidebar-bg);*/
     background-color: var(--bs-sidebar-sub-bg);
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
     z-index: 9;
     border-right: 1px solid var(--bs-menu-border);
-    padding: 0 8px
+    /*transition: all 0.3s !important;*/
+}
+.menu .side-menu {
+    width: 300px;
+    max-width: 300px;
 }
 .header .navbar-brand-box,
 .side-menu .navbar-brand-box {
@@ -364,9 +370,21 @@ body {
     padding: 0;
     position: relative
 }
+.side-menu-nav .nav-item .nav-link .nav-link-label {
+    display: none;
+    padding-left: 20px;
+    font: 900 20px 'OpenSansRegular';
+}
+.menu .side-menu-nav .nav-item .nav-link .nav-link-label {
+    display: inline-block;
+}
 .header .header-item .nav-link {
     height: 70px;
     line-height: 70px;
+}
+.menu .side-menu-nav .nav-item .nav-link {
+    padding-left: 15px;
+    text-align: left;
 }
 .header .nav-link i,
 .side-menu-nav .nav-item .nav-link i {
@@ -421,6 +439,9 @@ body[data-bs-theme=dark] .dark-mode {
 .main {
     padding-top: 70px;
     padding-left: 75px;
+}
+.menu .main {
+    padding-left: 300px;
 }
 .chat-leftsidebar {
     height: calc(100vh - 60px);
@@ -1062,7 +1083,8 @@ body[data-bs-theme=dark] .dark-mode {
 .chat-input-links {
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex
+    display: flex;
+    position: relative;
 }
 .chat-input-links .links-list-item > .btn {
     -webkit-box-shadow: none;
@@ -1075,9 +1097,33 @@ body[data-bs-theme=dark] .dark-mode {
 .chat-input-links .links-list-item > .btn.btn-link {
     color: var(--bs-gray-600);
 }
+.chat-input-links .links-list-item.active > .btn.btn-link {
+    color: var(--bs-link-color);
+}
+.chat-input-links .popover {
+    display: none;
+    position: absolute;
+    left: -15px;
+    bottom: 50px;
+}
 /*.chat-input-links .links-list-item > .btn.btn-link.message-menu {*/
 /*    padding-top: 5px;*/
 /*}*/
+#input-message-block {
+}
+#input-file-block {
+}
+#input-file-block .file-block-close button {
+    margin: 0 15px 0 0;
+    padding: 2px 0 0;
+    line-height: 15px;
+    border: none;
+}
+#input-file-block label {
+    /*line-height: 40px;*/
+}
+#chat-file {
+}
 .animate-typing .dot {
     display: inline-block;
     width: 4px;
@@ -1097,11 +1143,11 @@ body[data-bs-theme=dark] .dark-mode {
     -webkit-animation-delay: -.9s;
     animation-delay: -.9s
 }
-@-moz-document url-prefix() {
-    .chat-input-section, .user-chat-topbar {
-        background-color: #eaeaea !important
-    }
-}
+/*@-moz-document url-prefix() {*/
+/*    .chat-input-section, .user-chat-topbar {*/
+/*        background-color: #eaeaea !important*/
+/*    }*/
+/*}*/
 body[data-bs-theme=dark] .chat-conversation .right .conversation-list .ctext-wrap .ctext-wrap-content .replymessage-block {
     background-color: rgba(255, 255, 255, .075);
     color: rgba(255, 255, 255, .8)

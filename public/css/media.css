@@ -38,12 +38,20 @@
         bottom: 60px
     }
     .side-menu {
-        position: fixed;
-        bottom: 0;
-        height: 60px;
-        min-width: 100%;
-        min-height: auto;
-        border-top: 1px solid var(--bs-sidebar-bg)
+        left: -300px;
+        width: 300px;
+        max-width: 300px;
+        transition: left .3s;
+    /*    position: fixed;*/
+    /*    top: auto;*/
+    /*    bottom: 0;*/
+    /*    height: 60px;*/
+    /*    min-width: 100%;*/
+    /*    min-height: auto;*/
+    /*    border-top: 1px solid var(--bs-sidebar-bg)*/
+    }
+    .menu .side-menu {
+        left: 0;
     }
     .side-menu .navbar-brand-box {
         display: none
@@ -55,37 +63,42 @@
         display: none
     }
     .side-menu-nav {
-        -webkit-box-pack: justify !important;
-        -ms-flex-pack: justify !important;
-        justify-content: space-between !important;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row
+    /*    -webkit-box-pack: justify !important;*/
+    /*    -ms-flex-pack: justify !important;*/
+    /*    justify-content: space-between !important;*/
+    /*    -webkit-box-orient: horizontal;*/
+    /*    -webkit-box-direction: normal;*/
+    /*    -ms-flex-direction: row;*/
+    /*    flex-direction: row*/
     }
     .side-menu-nav .nav-item {
-        -ms-flex-preferred-size: 0;
-        flex-basis: 0;
-        -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-        flex-grow: 1;
-        margin: 5px 0
+    /*    -ms-flex-preferred-size: 0;*/
+    /*    flex-basis: 0;*/
+    /*    -webkit-box-flex: 1;*/
+    /*    -ms-flex-positive: 1;*/
+    /*    flex-grow: 1;*/
+    /*    margin: 5px 0*/
     }
     .side-menu-nav .nav-item .nav-link::before {
-        width: 20px;
-        height: 2px;
-        right: auto;
-        top: -5px;
-        left: 50%;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%)
+        /*width: 20px;*/
+        /*height: 2px;*/
+        /*right: auto;*/
+        /*top: -5px;*/
+        /*left: 50%;*/
+        /*-webkit-transform: translateX(-50%);*/
+        /*transform: translateX(-50%)*/
     }
     .side-menu-nav .nav-item .nav-link {
-        font-size: 20px;
-        width: 48px;
-        height: 48px;
-        line-height: 48px;
-        margin: 0 auto
+        padding-left: 10px;
+        text-align: left;
+    /*    font-size: 20px;*/
+    /*    width: 48px;*/
+    /*    height: 48px;*/
+    /*    line-height: 48px;*/
+    /*    margin: 0 auto*/
+    }
+    .side-menu-nav .nav-item .nav-link .nav-link-label {
+        display: inline-block;
     }
     .chat-room-list {
         height: calc(100vh - 190px)
@@ -102,10 +115,10 @@
         top: 0;
         width: 100%;
         height: 100%;
-        visibility: hidden;
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
-        z-index: 99
+        /*visibility: hidden;*/
+        /*-webkit-transform: translateX(100%);*/
+        /*transform: translateX(100%);*/
+        /*z-index: 99;*/
     }
     .user-chat.user-chat-show {
         visibility: visible;
@@ -121,13 +134,14 @@
     }
     .chat-conversation {
         height: calc(100vh - 80px);
-        margin-bottom: 78px
+        margin-bottom: 78px;
     }
     .chat-input-section {
         position: fixed;
         left: 0;
         right: 0;
         bottom: 0;
+        margin-bottom: 0;
         z-index: 1
     }
     .chat-input-section .chat-input-collapse {
