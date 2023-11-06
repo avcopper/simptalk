@@ -48,31 +48,43 @@ $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPubli
         let messageWrapper = $("#chat-conversation .simplebar-content-wrapper"),
             messageList = $("#users-conversation"),
             friend = <?= json_encode($friend->id) ?>,
-            timerMessages = getMessages(friend, messageWrapper);
+            timerMessages = getMessages(friend);
 
         messageWrapper && (messageWrapper.scrollTop(messageList.height()));
 
-        $('#chat-send').on('click', function (e) {
-            e.preventDefault();
-            sendMessage(friend, messageWrapper, timerMessages);
-        });
-
-        $('#chat-input').on('keydown', function (e) {
-            //if (e.ctrlKey && e.which === 13) message.append(document.createElement('br'));
-            if (e.ctrlKey && e.keyCode === 13) {
-                e.preventDefault();
-                sendMessage(friend, messageWrapper, timerMessages);
-            }
-        });
-
         new FgEmojiPicker({
             trigger: [".emoji-btn"],
-            removeOnSelection: !1,
+            removeOnSelection: !0,
             closeButton: !0,
             position: ["top", "right"],
             preFetch: !0,
             dir: "",
             insertInto: document.querySelector(".chat-input")
+        });
+
+        $('#chat-send').on('click', function (e) {
+            e.preventDefault();
+            sendMessage(friend, timerMessages);
+        });
+
+        $('#chat-input').on('keydown', function (e) {
+            if (e.ctrlKey && e.keyCode === 13) {
+                e.preventDefault();
+                sendMessage(friend, timerMessages);
+            }
+        });
+
+        $('#audio-input').on('click', function () {
+            recordAudio();
+        });
+
+        $('.file-block-close').on('click', function () {
+            hideFileBlock();
+        });
+
+        $('#user-file, #image-file, #audio-file').on('change', function () {
+            addAudioToForm($(this).get(0).files);
+            $('#chatinputmore').toggleClass('show');
         });
     });
 </script>

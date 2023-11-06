@@ -3,7 +3,7 @@
     <?php if (!empty($messages) && is_array($messages)): ?>
         <?php foreach ($messages as $message): ?>
             <li>
-                <a href="<?= $message->friendLogin ?>/" class="unread-msg-user">
+                <a href="<?= $message->friendId ?>/" class="unread-msg-user">
                     <div class="d-flex align-items-center">
                         <div class="chat-user-img online align-self-center me-2 ms-0">
                             <img src="/images/avatar-2.jpg" class="rounded-circle avatar-xs" alt="">
