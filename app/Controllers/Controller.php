@@ -51,8 +51,8 @@ abstract class Controller
      * @param string $action
      * @param null $param1
      * @param null $param2
-     * @throws \Exceptions\ForbiddenException
-     * @throws \Exceptions\NotFoundException
+     * @throws ForbiddenException
+     * @throws NotFoundException
      */
     public function action(string $action, $param1 = null, $param2 = null)
     {
@@ -92,11 +92,12 @@ abstract class Controller
     /**
      * Возвращает отрендеренный файл
      * @param $file
+     * @param array $vars
      * @return false|string|null
      */
-    protected function render($file)
+    protected function render($file, $vars = [])
     {
-        return $this->view->render($file);
+        return $this->view->render($file, $vars = []);
     }
 
     /**

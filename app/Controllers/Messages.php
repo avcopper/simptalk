@@ -5,9 +5,10 @@ use System\Crypt;
 use Entity\Friend;
 use Entity\Message;
 use System\Request;
-use Exceptions\NotFoundException;
-use \Models\Message as ModelMessage;
 use System\Response;
+use Exceptions\NotFoundException;
+use \Models\File as ModelFile;
+use \Models\Message as ModelMessage;
 
 /**
  * Class Messages
@@ -54,15 +55,30 @@ class Messages extends Controller
      */
     protected function actionSend(int $friend_id, int $last_id = 0)
     {
-        if (is_numeric($friend_id) && Request::isPost()) {
+        if (is_numeric($friend_id) && Request::isPost() && (!empty($_FILES['chat-file']) || !empty($_POST['message']))) {
             $friend = Friend::get(['id' => intval($friend_id)]);
-            $message = trim(Request::post('message'));
             if (empty($friend)) throw new NotFoundException('User not found');
 
-            if (ModelMessage::checkData($friend, $message) && ModelMessage::saveMessage($this->user, $friend->id, $message)) {
-                $this->actionGet($friend->id, $last_id);
-            }
+            if (ModelFile::checkFile($_FILES['chat-file'])) $fileId = $this->saveFile($friend);
+            $this->saveMessage($friend, $fileId ?? null);
+            $this->actionGet($friend->id, $last_id);
         }
+    }
+
+    private function saveFile(Friend $friend)
+    {
+        if (ModelMessage::checkUser($friend))
+            return ModelFile::saveFile($this->user, $friend->id, $_FILES['chat-file']);
+
+        return false;
+    }
+
+    private function saveMessage(Friend $friend, ?int $fileId)
+    {
+        $message = Request::post('chat-input');
+
+        return ModelMessage::checkData($friend, $message, $fileId) &&
+            ModelMessage::saveMessage($this->user, $friend->id, $message, $fileId);
     }
 
     /**
