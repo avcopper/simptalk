@@ -1,7 +1,7 @@
 $(function () {
     let body = $('body');
 
-    $('.header-item').on('click', function (e) {
+    $('.header-menu-button').on('click', function (e) {
         e.preventDefault();
         $('body').toggleClass('menu');
     });

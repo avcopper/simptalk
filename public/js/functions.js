@@ -128,7 +128,7 @@ function getMessages(user) {
         $.ajax({
             method: "POST",
             dataType: 'json',
-            url: "/messages/get/" + user + "/" + last + "/",
+            url: '/messages/get/' + user + '/' + last + '/',
             beforeSend: function () {
             },
             success: function (data, textStatus, jqXHR) {//console.log(data);
@@ -161,7 +161,7 @@ function sendMessage(user, timer) {
 
     if ($('#chat-input').val().length > 0 || $('#chat-file').val().length > 0) {
         $.ajax({
-            url: "/messages/send/" + user + "/" + last + "/",
+            url: '/messages/send/' + user + '/' + last + '/',
             type: "POST",
             dataType: 'json',
             data: formData,
@@ -191,14 +191,16 @@ function sendMessage(user, timer) {
 
 /**
  * Отправка аудио на сервер
+ * @param user
  * @param blob
  */
-function sendAudio(blob) {
-    let form = new FormData();
+function sendAudio(user, blob) {
+    let form = new FormData(),
+        last = $('#users-conversation .chat-list').last().data('id');
     form.append('chat-file', blob);
 
     $.ajax({
-        url: '/messages/send/2/50/',
+        url: '/messages/send/' + user + '/' + last + '/',
         type: "POST",
         dataType: 'json',
         data: form,
@@ -211,8 +213,6 @@ function sendAudio(blob) {
         }
     });
 }
-
-
 
 
 
