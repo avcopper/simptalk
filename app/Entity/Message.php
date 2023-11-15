@@ -1,6 +1,8 @@
 <?php
 namespace Entity;
 
+use \Models\Message as ModelMessage;
+
 class Message extends Entity
 {
     public $id;
@@ -12,16 +14,17 @@ class Message extends Entity
     public $friendLogin;
     public $friendName;
     public $friendLastName;
-    private bool $isFile = false;
-    private bool $isAudio = false;
-    private bool $isImage = false;
-    public $message;
+    protected ?int $fileId = null;
+    protected ?string $fileName = null;
+    protected ?string $fileLink = null;
+    protected ?\DateTime $fileDate = null;
+    protected ?string $message = null;
     public $created;
     public $updated = null;
 
     public static function getList(array $params)
     {
-        $messages = \Models\Message::getList($params);
+        $messages = ModelMessage::getList($params);
         $list = [];
 
         if (!empty($messages) && is_array($messages)) {
@@ -81,9 +84,10 @@ class Message extends Entity
             'friend_login'     => ['type' => 'string', 'field' => 'friendLogin'],
             'friend_name'      => ['type' => 'string', 'field' => 'friendName'],
             'friend_last_name' => ['type' => 'string', 'field' => 'friendLastName'],
-            'is_file'          => ['type' => 'bool', 'field' => 'isFile'],
-            'is_audio'         => ['type' => 'bool', 'field' => 'isAudio'],
-            'is_image'         => ['type' => 'bool', 'field' => 'isImage'],
+            'file_id'          => ['type' => 'string', 'field' => 'fileId'],
+            'file_name'        => ['type' => 'string', 'field' => 'fileName'],
+            'file_link'        => ['type' => 'string', 'field' => 'fileLink'],
+            'file_date'        => ['type' => 'datetime', 'field' => 'fileDate'],
             'message'          => ['type' => 'string', 'field' => 'message'],
             'created'          => ['type' => 'datetime', 'field' => 'created'],
             'updated'          => ['type' => 'datetime', 'field' => 'updated'],
@@ -92,7 +96,7 @@ class Message extends Entity
 
     public function save()
     {
-        return (new \Models\Message())->init($this)->save();
+        return (new ModelMessage())->init($this)->save();
     }
 
     public function getId()
@@ -185,34 +189,44 @@ class Message extends Entity
         $this->friendLastName = $friendLastName;
     }
 
-    public function isFile(): bool
+    public function getFileId(): ?int
     {
-        return $this->isFile;
+        return $this->fileId;
     }
 
-    public function setIsFile($isFile): void
+    public function setFileId(?int $fileId): void
     {
-        $this->isFile = $isFile;
+        $this->fileId = $fileId;
     }
 
-    public function isAudio(): bool
+    public function getFileName(): ?string
     {
-        return $this->isAudio;
+        return $this->fileName;
     }
 
-    public function setIsAudio($isAudio): void
+    public function setFileName(?string $fileName): void
     {
-        $this->isAudio = $isAudio;
+        $this->fileName = $fileName;
     }
 
-    public function isImage(): bool
+    public function getFileLink(): ?string
     {
-        return $this->isImage;
+        return $this->fileLink;
     }
 
-    public function setIsImage($isImage): void
+    public function setFileLink(?string $fileLink): void
     {
-        $this->isImage = $isImage;
+        $this->fileLink = $fileLink;
+    }
+
+    public function getFileDate(): ?\DateTime
+    {
+        return $this->fileDate;
+    }
+
+    public function setFileDate(?\DateTime $fileDate): void
+    {
+        $this->fileDate = $fileDate;
     }
 
     public function getMessage()
