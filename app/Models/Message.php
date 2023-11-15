@@ -13,9 +13,7 @@ class Message extends Model
     public $is_read = null;
     public $from_user_id;
     public $to_user_id;
-    public $is_file = null;
-    public $is_audio = null;
-    public $is_image = null;
+    public ?int $file_id = null;
     public $message;
     public $created;
     public $updated;
@@ -52,10 +50,13 @@ class Message extends Model
 
         $db->sql = "
             SELECT 
-                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, u.id friend_id, u.login friend_login, 
-                u.name friend_name, u.last_name friend_last_name, m.is_file, m.is_audio, m.is_image, m.message, m.created, m.updated 
+                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, 
+                u.id friend_id, u.login friend_login, u.name friend_name, u.last_name friend_last_name, 
+                f.id file_id, f.name file_name, f.link file_link, f.created file_date, 
+                m.message, m.created, m.updated 
             FROM " . self::$db_prefix . self::$db_table . " m 
             LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
+            LEFT JOIN  " . self::$db_prefix . "mesigo.files f ON f.id = m.file_id AND f.active IS NOT NULL 
             WHERE 
                 (m.from_user_id = :user_id OR m.to_user_id = :user_id) 
                 {$friend} 
@@ -69,41 +70,33 @@ class Message extends Model
     }
 
     /**
-     * Сохраняет сообщение
+     * Сохраняет сообщение в БД
      * @param \Entity\User $user - пользователь
      * @param int $message_to - id собеседника
-     * @param string $message - сообщение
+     * @param ?string $message - сообщение
      * @return bool|int
      */
-    public static function saveMessage(\Entity\User $user, int $message_to, string $message)
+    public static function saveMessage(\Entity\User $user, int $message_to, ?string $message = null, ?int $fileId = null)
     {
         $message = strip_tags(nl2br(trim($message)), '<br>');
         $msg = new self();
         $msg->from_user_id = $user->id;
         $msg->to_user_id = $message_to;
-        $msg->message = (new Crypt($user->publicKey, $user->privateKey))->encryptByPrivateKey($message);
-        return $msg->save();
-    }
-
-    public static function saveFile(\Entity\User $user, int $message_to, array $file)
-    {echo json_encode($file);die;
-        $message = strip_tags(nl2br(trim($message)), '<br>');
-        $msg = new self();
-        $msg->from_user_id = $user->id;
-        $msg->to_user_id = $message_to;
-        $msg->message = (new Crypt($user->publicKey, $user->privateKey))->encryptByPrivateKey($message);
+        $msg->file_id = $fileId;
+        $msg->message = !empty($message) ? (new Crypt($user->publicKey, $user->privateKey))->encryptByPrivateKey($message) : null;
         return $msg->save();
     }
 
     /**
      * Проверяет данные для отправки сообщения
      * @param \Entity\Friend $friend - собеседник
-     * @param string $message
+     * @param ?string $message
+     * @param ?int $fileId
      * @return bool
      */
-    public static function checkData(\Entity\Friend $friend, string $message)
+    public static function checkData(\Entity\Friend $friend, ?string $message = null, ?int $fileId = null)
     {
-        return self::checkUser($friend) && self::checkMessage($message);
+        return self::checkUser($friend) && (self::checkMessage($message) || self::checkFileId($fileId));
     }
 
     /**
@@ -136,29 +129,13 @@ class Message extends Model
         return !empty($message);
     }
 
-    public static function checkFile(array $file)
+    /**
+     * Проверяет загруженный файл
+     * @param $fileId - id файла
+     * @return bool
+     */
+    public static function checkFileId($fileId)
     {
-        return self::checkFileError($file['error']) && self::checkFileSize($file['size']) &&
-            self::checkTempFile($file['tmp_name']) && self::checkMimeType($file['type']);
-    }
-
-    public static function checkFileError($error)
-    {
-        return $error === 0;
-    }
-
-    public static function checkFileSize($file)
-    {
-        return $file > 0 && $file < 10000000;
-    }
-
-    public static function checkTempFile($file)
-    {
-        return !empty($file) && is_file($file);
-    }
-
-    public static function checkMimeType($type)
-    {
-        return in_array($type, ['audio/wav']);
+        return !empty($fileId);
     }
 }
