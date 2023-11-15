@@ -15,6 +15,9 @@ $this->friendSecondName = !empty($friend->secondName) ? $cryptFriend->decryptByP
 $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
 ?>
 
+<link href="/css/fg-emoji-picker.css" rel="stylesheet" type="text/css"/>
+<link href="/css/audio-player.css" rel="stylesheet" type="text/css"/>
+
 <div class="user-chat w-100 overflow-hidden">
     <div class="user-chat-overlay"></div>
 
@@ -25,8 +28,6 @@ $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPubli
 
                 <div id="chat-conversation" class="chat-conversation p-3" data-simplebar>
                     <ul id="users-conversation" class="list-unstyled chat-conversation-list">
-                        <?= $this->render('message/message-examples') ?>
-
                         <?= $this->render('message/message-list') ?>
                     </ul>
                 </div>
@@ -39,10 +40,11 @@ $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPubli
     </div>
 </div>
 
-<?= $this->render('message/message-audio') ?>
+<?= $this->render('message/call-audio') ?>
 
-<?= $this->render('message/message-video') ?>
+<?= $this->render('message/call-video') ?>
 
+<script src="/js/audio-player.js"></script>
 <script>
     $(function () {
         let messageWrapper = $("#chat-conversation .simplebar-content-wrapper"),
@@ -59,7 +61,7 @@ $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPubli
             position: ["top", "right"],
             preFetch: !0,
             dir: "",
-            insertInto: document.querySelector(".chat-input")
+            insertInto: document.querySelector("#chat-input")
         });
 
         $('#chat-send').on('click', function (e) {

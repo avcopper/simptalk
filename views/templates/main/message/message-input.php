@@ -1,3 +1,5 @@
+
+
 <div class="position-relative">
     <div class="chat-input-section p-3">
         <form id="chat-form" enctype="multipart/form-data">
@@ -23,7 +25,7 @@
                         <div id="input-file-block" class="chat-input-feedback w-100">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
-                                        <label for="chat-file">Message.wav</label>
+                                        <label for="chat-file"></label>
 
                                         <input type="file" name="chat-file" id="chat-file" class="d-none form-control form-control-lg chat-input">
                                     </div>
@@ -79,7 +81,8 @@
                             <div class="swiper-slide">
                                 <div class="text-center px-2 position-relative">
                                     <div>
-                                        <input type="file" id="user-file" class="d-none" accept=".zip,.rar,.7zip,.pdf">
+                                        <input type="file" id="user-file" class="d-none" accept=".zip,.rar,.7z,.pdf">
+
                                         <label for="user-file" class="avatar-sm mx-auto stretched-link">
                                             <span class="avatar-title font-size-18 bg-primary-subtle text-primary rounded-circle">
                                                 <i class="bx bx-paperclip"></i>
@@ -95,6 +98,7 @@
                                 <div class="text-center px-2 position-relative">
                                     <div>
                                         <input type="file" id="image-file" class="d-none" accept="image/png, image/gif, image/jpeg">
+
                                         <label for="image-file" class="avatar-sm mx-auto stretched-link">
                                             <span class="avatar-title font-size-18 bg-primary-subtle text-primary rounded-circle">
                                                 <i class="bx bx-images"></i>
@@ -110,6 +114,7 @@
                                 <div class="text-center px-2">
                                     <div>
                                         <input type="file" id="audio-file" class="d-none" accept="audio/*">
+
                                         <label for="audio-file" class="avatar-sm mx-auto stretched-link">
                                             <span class="avatar-title font-size-18 bg-primary-subtle text-primary rounded-circle">
                                                 <i class="bx bx-headphone"></i>

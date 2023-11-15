@@ -15,6 +15,8 @@
     <link href="/css/fonts.css" rel="stylesheet" type="text/css"/>
     <link href="/css/glightbox.min.css" rel="stylesheet">
     <link href="/css/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/css/simplebar.css" rel="stylesheet">
+    <link href="/css/waves-effect.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
