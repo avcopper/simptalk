@@ -5,14 +5,14 @@ use Models\File as ModelFile;
 
 class File extends Entity
 {
-    public $id;
-    public bool $isActive = true;
-    public int $userId;
-    public ?int $albumId;
-    public string $fileName;
-    public string $fileLink;
-    public $created;
-    public ?string $updated = null;
+    protected $id;
+    protected bool $isActive = true;
+    protected int $userId;
+    protected ?int $albumId = null;
+    protected string $fileName;
+    protected string $fileLink;
+    protected $created;
+    protected ?string $updated = null;
 
     public static function getList(array $params)
     {
@@ -33,6 +33,9 @@ class File extends Entity
     public static function get(array $params)
     {
         switch (true) {
+            case !empty($params['id']):
+                $user = ModelFile::getById($params['id'], $params['active'] ?? true);
+                break;
             case !empty($params['message_id']):
                 $user = ModelFile::getByMessageId($params['message_id'], $params);
                 break;

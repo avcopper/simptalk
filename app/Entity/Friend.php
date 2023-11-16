@@ -1,11 +1,11 @@
 <?php
 namespace Entity;
 
-class Friend extends Entity
+class Friend extends User
 {
     public $id;
-    public $isActive;
-    public $isBlocked;
+    public $isActive = true;
+    public $isBlocked = false;
     public $isLocked = false;
     public $isNeedRequest = true;
     public $expire;
@@ -15,21 +15,21 @@ class Friend extends Entity
     public $phone = null;
     public $isShowPhone = false;
     public $name;
-    public $secondName;
-    public $lastName;
-    public $genderId;
+    public $secondName = null;
+    public $lastName = null;
+    public $genderId = 1;
     public $gender;
     public $timezone;
-    public $publicKey;
+    public $publicKey = null;
 
     public static function get(array $params)
     {
         switch (true) {
             case !empty($params['id']):
-                $user = \Models\Friend::getById($params['id'], $params['active'] ?? true, false);
+                $user = \Models\Friend::getById($params['id'], $params['active'] ?? true);
                 break;
             case !empty($params['login']):
-                $user = \Models\Friend::getByLogin($params['login'], $params['active'] ?? true, false);
+                $user = \Models\Friend::getByLogin($params['login'], $params['active'] ?? true);
                 break;
         }
 
@@ -86,4 +86,186 @@ class Friend extends Entity
 
         return $res ?: null;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->isBlocked;
+    }
+
+    public function setIsBlocked(bool $isBlocked): void
+    {
+        $this->isBlocked = $isBlocked;
+    }
+
+    public function isLocked(): bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setIsLocked(bool $isLocked): void
+    {
+        $this->isLocked = $isLocked;
+    }
+
+    public function isNeedRequest(): bool
+    {
+        return $this->isNeedRequest;
+    }
+
+    public function setIsNeedRequest(bool $isNeedRequest): void
+    {
+        $this->isNeedRequest = $isNeedRequest;
+    }
+
+    public function getExpire()
+    {
+        return $this->expire;
+    }
+
+    public function setExpire($expire): void
+    {
+        $this->expire = $expire;
+    }
+
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    public function setLogin($login): void
+    {
+        $this->login = $login;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+
+    public function isShowEmail(): bool
+    {
+        return $this->isShowEmail;
+    }
+
+    public function setIsShowEmail(bool $isShowEmail): void
+    {
+        $this->isShowEmail = $isShowEmail;
+    }
+
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    public function setPhone($phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    public function isShowPhone(): bool
+    {
+        return $this->isShowPhone;
+    }
+
+    public function setIsShowPhone(bool $isShowPhone): void
+    {
+        $this->isShowPhone = $isShowPhone;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getSecondName()
+    {
+        return $this->secondName;
+    }
+
+    public function setSecondName($secondName): void
+    {
+        $this->secondName = $secondName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function getGenderId(): int
+    {
+        return $this->genderId;
+    }
+
+    public function setGenderId(int $genderId): void
+    {
+        $this->genderId = $genderId;
+    }
+
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    public function setGender($gender): void
+    {
+        $this->gender = $gender;
+    }
+
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone($timezone): void
+    {
+        $this->timezone = $timezone;
+    }
+
+    public function getPublicKey()
+    {
+        return $this->publicKey;
+    }
+
+    public function setPublicKey($publicKey): void
+    {
+        $this->publicKey = $publicKey;
+    }
+
+
 }
