@@ -59,13 +59,13 @@ class Messages extends Controller
             $friend = Friend::get(['id' => intval($friend_id)]);
             if (empty($friend)) throw new NotFoundException('User not found');
 
-            if (ModelFile::checkFile($_FILES['chat-file'])) $fileId = $this->saveFile($friend);
+            if (ModelFile::checkUserFile($_FILES['chat-file'])) $fileId = $this->saveUserFile($friend);
             $this->saveMessage($friend, $fileId ?? null);
             $this->actionGet($friend->id, $last_id);
         }
     }
 
-    private function saveFile(Friend $friend)
+    private function saveUserFile(Friend $friend)
     {
         if (ModelMessage::checkUser($friend))
             return ModelFile::saveFile($this->user, $friend->id, $_FILES['chat-file']);
