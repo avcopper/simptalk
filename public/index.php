@@ -8,6 +8,8 @@ require __DIR__ . '/../app/System/ErrorSupervisor.php';
 use System\Route;
 use System\Security;
 use Controllers\Errors;
+use System\Loggers\SystemLogger;
+use Exceptions\NotFoundException;
 
 Security::array_xss_clean($_GET);
 Security::array_xss_clean($_POST);
@@ -19,5 +21,6 @@ try {
 } catch (Exception $e) {
     (new Errors($e))->action('actionError');
 } catch(TypeError $e) {
-    (new Errors($e))->action('actionError');
+    SystemLogger::getInstance()->error($e);
+    (new Errors(new NotFoundException()))->action('actionError');
 }
