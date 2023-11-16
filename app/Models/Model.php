@@ -121,7 +121,7 @@ abstract class Model
      * @param bool $object
      * @return bool|mixed
      */
-    public static function getById(int $id, bool $active = true, bool $object = true)
+    public static function getById(int $id, bool $active = true, bool $object = false)
     {
         $db = Db::getInstance();
         $where = !empty($active) ? ' AND active IS NOT NULL' : '';

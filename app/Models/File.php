@@ -27,7 +27,7 @@ class File extends Model
      * $params['sort'] - поле сортировки
      * $params['order'] - направление сортировки
      * @return null
-     */
+     *//*
     public static function getList(?array $params = [])
     {
         $params += [
@@ -48,24 +48,45 @@ class File extends Model
         if (!empty($params['start'])) $db->params['start'] = $params['start'];
 
         $db->sql = "
-            SELECT 
-                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id, 
-                u.id friend_id, u.login friend_login, u.name friend_name, u.last_name friend_last_name, 
-                f.id file_id, f.name file_name, f.link file_link, 
-                m.message, m.created, m.updated 
-            FROM " . self::$db_prefix . self::$db_table . " m 
-            LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
-            LEFT JOIN  " . self::$db_prefix . "mesigo.files f ON f.id = m.file_id AND f.is_active IS NOT NULL 
-            WHERE 
-                (m.from_user_id = :user_id OR m.to_user_id = :user_id) 
-                {$friend} 
-                {$active} 
-                {$start} 
-            ORDER BY {$sort} {$order} 
+            SELECT
+                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id,
+                u.id friend_id, u.login friend_login, u.name friend_name, u.last_name friend_last_name,
+                f.id file_id, f.name file_name, f.link file_link,
+                m.message, m.created, m.updated
+            FROM " . self::$db_prefix . self::$db_table . " m
+            LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id)
+            LEFT JOIN  " . self::$db_prefix . "mesigo.files f ON f.id = m.file_id AND f.is_active IS NOT NULL
+            WHERE
+                (m.from_user_id = :user_id OR m.to_user_id = :user_id)
+                {$friend}
+                {$active}
+                {$start}
+            ORDER BY {$sort} {$order}
             {$limit}";
 
         $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ?? null;
+    }*/
+
+    public static function getById(int $id, bool $active = true, bool $object = false)
+    {
+//        $params += [
+//            'active' => true,
+//            'object' => false
+//        ];
+
+        $db = Db::getInstance();
+        $active = !empty($params['active']) ? 'AND f.active IS NOT NULL' : '';
+        $db->params = ['id' => $id];
+
+        $db->sql = "
+            SELECT *
+            FROM talk_mesigo.files f 
+            WHERE f.id = :id 
+            {$active}";
+
+        $data = $db->query(!empty($object) ? static::class : null);
+        return $data ? array_shift($data) : null;
     }
 
     public static function getByMessageId($message_id, ?array $params = [])
@@ -155,64 +176,23 @@ class File extends Model
         return $newFileName;
     }
 
-    /**
-     * Проверяет данные для отправки сообщения
-     * @param \Entity\Friend $friend - собеседник
-     * @param string $message
-     * @return bool
-     */
-    public static function checkData(\Entity\Friend $friend, string $message)
+    public static function checkUserFile(array $file)
     {
-        return self::checkUser($friend) && self::checkMessage($message);
+        return self::checkUserFileError($file['error']) && self::checkUserFileSize($file['size']) &&
+            self::checkFile($file['tmp_name']) && self::checkMimeType($file['type']);
     }
 
-    /**
-     * Проверяет собеседника и возможность писать ему сообщения
-     * @param \Entity\Friend $friend - собеседник
-     * @return bool
-     */
-    public static function checkUser(\Entity\Friend $friend)
-    {
-        return !empty($friend->id) && self::canMessageUser($friend->id);
-    }
-
-    /**
-     * Проверяет возможность писать сообщения собеседнику TODO доделать это говно
-     * @param int $friend_id - id собеседника
-     * @return bool
-     */
-    public static function canMessageUser(int $friend_id)
-    {
-        return true;
-    }
-
-    /**
-     * Проверяет сообщение
-     * @param $message - сообщение
-     * @return bool
-     */
-    public static function checkMessage($message)
-    {
-        return !empty($message);
-    }
-
-    public static function checkFile(array $file)
-    {
-        return self::checkFileError($file['error']) && self::checkFileSize($file['size']) &&
-            self::checkTempFile($file['tmp_name']) && self::checkMimeType($file['type']);
-    }
-
-    public static function checkFileError($error)
+    public static function checkUserFileError($error)
     {
         return $error === 0;
     }
 
-    public static function checkFileSize($file)
+    public static function checkUserFileSize($file)
     {
         return $file > 0 && $file < 50000000;
     }
 
-    public static function checkTempFile($file)
+    public static function checkFile($file)
     {
         return !empty($file) && is_file($file);
     }

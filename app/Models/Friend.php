@@ -30,7 +30,7 @@ class Friend extends Model
     /**
      * Возвращает пользователя по id (!+)
      */
-    public static function getById(int $id, bool $active = true, $object = true)
+    public static function getById(int $id, bool $active = true, $object = false)
     {
         $prefix = self::$db_prefix;
         $table = self::$db_table;
