@@ -36,7 +36,7 @@ class Route
      * Затем проверяется путь App\Controller\Blog\News\Edit\10 -> actionEdit(10)
      * Затем проверяется путь App\Controller\Blog\News -> actionDefault()
      * Проверка идет с конца адресной строки
-     * @throws NotFoundException|ForbiddenException
+     * @throws NotFoundException
      */
     public static function start()
     {
@@ -45,51 +45,53 @@ class Route
         $results = [];
         $params = [];
 
-        foreach ($routes as $i => $route) {
-            if (is_numeric($route)) {
-                $params[] = $route;
-                continue;
-            }
-
-            if ($i >= count($routes) - 3) {
-                if (class_exists($controller) && method_exists($controller, 'action' . $route)) {
-                    $params1 = [];
-                    if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
-                    if (!empty($routes[$i + 2])) $params1[] = $routes[$i + 2];
-                    $results[] = ['class' => $controller, 'method' => 'action' . $route, 'params' => array_merge($params, $params1)];
+        if (!empty($routes)) {
+            foreach ($routes as $i => $route) {
+                if (is_numeric($route)) {
+                    $params[] = $route;
+                    continue;
                 }
 
-                if (empty($routes[$i + 1]) && empty($routes[$i + 2])) {
-                    if (class_exists($controller . ('\\' . $route)) && method_exists($controller . ('\\' . $route), 'actionDefault')) {
-                        $results[] = ['class' => $controller . ('\\' . $route), 'method' => 'actionDefault'];
-                    }
-                }
-
-                if (class_exists($controller . ('\\Index')) && method_exists($controller . ('\\Index'), 'action' . $route)) {
-                    $params1 = [];
-                    if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
-                    if (!empty($routes[$i + 2])) $params1[] = $routes[$i + 2];
-                    $results[] = ['class' => $controller . ('\\Index'), 'method' => 'action' . $route, 'params' => array_merge($params, $params1)];
-                }
-
-                if (!empty($routes[$i + 1]) && empty($routes[$i + 2])) {
-                    if (class_exists($controller . ('\\' . $route)) && method_exists($controller . ('\\' . $route), 'actionShow')) {
+                if ($i >= count($routes) - 3) {
+                    if (class_exists($controller) && method_exists($controller, 'action' . $route)) {
                         $params1 = [];
                         if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
-                        $results[] = ['class' => $controller . ('\\' . $route), 'method' => 'actionShow', 'params' => array_merge($params, $params1)];
+                        if (!empty($routes[$i + 2])) $params1[] = $routes[$i + 2];
+                        $results[] = ['class' => $controller, 'method' => 'action' . $route, 'params' => array_merge($params, $params1)];
                     }
 
-                    if (class_exists($controller . ('\\' . $route) . ('\\Index')) && method_exists($controller . ('\\' . $route) . ('\\Index') , 'actionShow')) {
+                    if (empty($routes[$i + 1]) && empty($routes[$i + 2])) {
+                        if (class_exists($controller . ('\\' . $route)) && method_exists($controller . ('\\' . $route), 'actionDefault')) {
+                            $results[] = ['class' => $controller . ('\\' . $route), 'method' => 'actionDefault'];
+                        }
+                    }
+
+                    if (class_exists($controller . ('\\Index')) && method_exists($controller . ('\\Index'), 'action' . $route)) {
                         $params1 = [];
                         if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
-                        $results[] = ['class' => $controller . ('\\' . $route) . ('\\Index'), 'method' => 'actionShow', 'params' => array_merge($params, $params1)];
+                        if (!empty($routes[$i + 2])) $params1[] = $routes[$i + 2];
+                        $results[] = ['class' => $controller . ('\\Index'), 'method' => 'action' . $route, 'params' => array_merge($params, $params1)];
                     }
 
-                }
-            }
+                    if (!empty($routes[$i + 1]) && empty($routes[$i + 2])) {
+                        if (class_exists($controller . ('\\' . $route)) && method_exists($controller . ('\\' . $route), 'actionShow')) {
+                            $params1 = [];
+                            if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
+                            $results[] = ['class' => $controller . ('\\' . $route), 'method' => 'actionShow', 'params' => array_merge($params, $params1)];
+                        }
 
-            $controller .= ('\\' . $route);
-        }
+                        if (class_exists($controller . ('\\' . $route) . ('\\Index')) && method_exists($controller . ('\\' . $route) . ('\\Index') , 'actionShow')) {
+                            $params1 = [];
+                            if (!empty($routes[$i + 1])) $params1[] = $routes[$i + 1];
+                            $results[] = ['class' => $controller . ('\\' . $route) . ('\\Index'), 'method' => 'actionShow', 'params' => array_merge($params, $params1)];
+                        }
+
+                    }
+                }
+
+                $controller .= ('\\' . $route);
+            }
+        } else $results[] = ['class' => $controller . '\\Index', 'method' => 'actionDefault'];
 
         if (!empty($results) && is_array($results)) {
             $routeInfo = array_pop($results);
