@@ -98,8 +98,8 @@ abstract class Model
     public static function getList(?array $params = [])
     {
         $params += ['active' => true, 'object' => false];
-        $prefix = self::$db_prefix;
-        $table = self::$db_table;
+        $prefix = static::$db_prefix;
+        $table = static::$db_table;
 
         $db = Db::getInstance();
         $active = !empty($params['active']) ? 'WHERE active IS NOT NULL' : '';
@@ -127,8 +127,8 @@ abstract class Model
     public static function getById(int $id, ?array $params = [])
     {
         $params += ['active' => true, 'object' => false];
-        $prefix = self::$db_prefix;
-        $table = self::$db_table;
+        $prefix = static::$db_prefix;
+        $table = static::$db_table;
 
         $db = Db::getInstance();
         $active = !empty($params['active']) ? ' AND active IS NOT NULL' : '';
