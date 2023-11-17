@@ -17,63 +17,11 @@ class File extends Model
     public $created;
     public ?string $updated = null;
 
-    /**
-     * @param $params
-     * $params['user_id'] - id пользователя
-     * $params['friend_id'] - id собеседника
-     * $params['limit'] - лимит сообщений для выдачи
-     * $params['start'] - стартовое сообщение, от которого вести поиск
-     * $params['active'] - только активные сообщения
-     * $params['sort'] - поле сортировки
-     * $params['order'] - направление сортировки
-     * @return null
-     *//*
-    public static function getList(?array $params = [])
+    public static function getById(int $id, ?array $params = [])
     {
-        $params += [
-            'active' => true,
-            'object' => false
-        ];
-
-        $db = Db::getInstance();
-        $friend = !empty($params['friend_id']) ? 'AND (m.from_user_id = :friend_id OR m.to_user_id = :friend_id)' : '';
-        $active = !empty($params['active']) ? 'AND m.active IS NOT NULL' : '';
-        $start = !empty($params['start']) ? 'AND m.id > :start ' : '';
-        $sort = !empty($params['sort']) ? "m.{$params['sort']}" : 'm.id';
-        $order = !empty($params['order']) ? strtoupper($params['order']) : 'ASC';
-        $limit = !empty($params['limit']) ? "LIMIT {$params['limit']}" : '';
-
-        $db->params = ['user_id' => $params['user_id']];
-        if (!empty($params['friend_id'])) $db->params['friend_id'] = $params['friend_id'];
-        if (!empty($params['start'])) $db->params['start'] = $params['start'];
-
-        $db->sql = "
-            SELECT
-                m.id, m.active, m.is_read, m.from_user_id, m.to_user_id,
-                u.id friend_id, u.login friend_login, u.name friend_name, u.last_name friend_last_name,
-                f.id file_id, f.name file_name, f.link file_link,
-                m.message, m.created, m.updated
-            FROM " . self::$db_prefix . self::$db_table . " m
-            LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id)
-            LEFT JOIN  " . self::$db_prefix . "mesigo.files f ON f.id = m.file_id AND f.is_active IS NOT NULL
-            WHERE
-                (m.from_user_id = :user_id OR m.to_user_id = :user_id)
-                {$friend}
-                {$active}
-                {$start}
-            ORDER BY {$sort} {$order}
-            {$limit}";
-
-        $data = $db->query(!empty($params['object']) ? static::class : null);
-        return $data ?? null;
-    }*/
-
-    public static function getById(int $id, bool $active = true, bool $object = false)
-    {
-//        $params += [
-//            'active' => true,
-//            'object' => false
-//        ];
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
 
         $db = Db::getInstance();
         $active = !empty($params['active']) ? 'AND f.active IS NOT NULL' : '';
@@ -81,20 +29,19 @@ class File extends Model
 
         $db->sql = "
             SELECT *
-            FROM talk_mesigo.files f 
+            FROM {$prefix}{$table} f 
             WHERE f.id = :id 
             {$active}";
 
-        $data = $db->query(!empty($object) ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ? array_shift($data) : null;
     }
 
     public static function getByMessageId($message_id, ?array $params = [])
     {
-        $params += [
-            'active' => true,
-            'object' => false
-        ];
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
 
         $db = Db::getInstance();
         $active = !empty($params['active']) ? 'AND f.active IS NOT NULL AND m.active IS NOT NULL' : '';
@@ -102,13 +49,36 @@ class File extends Model
 
         $db->sql = "
             SELECT *
-            FROM talk_mesigo.files f 
-            LEFT JOIN talk_mesigo.messages m ON f.id = m.file_id
+            FROM {$prefix}{$table} f 
+            LEFT JOIN {$prefix}mesigo.messages m ON f.id = m.file_id
             WHERE m.id = :message_id 
             {$active}";
 
         $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ? array_shift($data) : null;
+    }
+
+    public static function isExistFileInMessages(int $user1, int $user2, int $fileId, $params = [])
+    {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
+        $db = Db::getInstance();
+        $active = !empty($params['active']) ? 'AND m.active IS NOT NULL AND f.active IS NOT NULL' : '';
+        $db->params = ['user1' => $user1, 'user2' => $user2, 'file_id' => $fileId];
+
+        $db->sql = "
+            SELECT m.id
+            FROM {$prefix}mesigo.messages m
+            JOIN {$prefix}{$table} f on f.id = m.file_id
+            WHERE (m.from_user_id = :user1 OR m.to_user_id = :user1) AND 
+                  m.file_id = :file_id {$active}";
+
+        $data = $db->query(!empty($params['object']) ? static::class : null);
+
+        return
+            (!empty($params['object']) && !empty($data[0]->id)) || (empty($params['object']) && !empty($data[0]['id']));
     }
 
     /**
@@ -121,8 +91,8 @@ class File extends Model
     public static function saveFile(\Entity\User $user, int $message_to, array $file)
     {
         $currentDate = date('Y-m-d');
-        $fileDir = DIR_UPLOADS . DIRECTORY_SEPARATOR . $user->id . DIRECTORY_SEPARATOR . $currentDate;
-        self::checkUploadDirectory($user->id, $fileDir);
+        $fileDir = DIR_UPLOADS . DIRECTORY_SEPARATOR . $user->getId() . DIRECTORY_SEPARATOR . $currentDate;
+        self::checkUploadDirectory($user->getId(), $fileDir);
 
         $uploadedFileInfo = pathinfo($file['name']);
         $uploadedFileName = $uploadedFileInfo['filename'];
@@ -132,11 +102,11 @@ class File extends Model
         $savedFilePath = $fileDir . DIRECTORY_SEPARATOR . "{$savedFileName}.{$uploadedFileExtension}";
         
         if (move_uploaded_file($file['tmp_name'], $savedFilePath)) {
-            $crypt = new Crypt($user->publicKey, $user->privateKey);
+            $crypt = new Crypt($user->getPublicKey(), $user->getPrivateKey());
             $msg = new self();
-            $msg->user_id = $user->id;
+            $msg->user_id = $user->getId();
             $msg->name = $crypt->encryptByPrivateKey("{$uploadedFileName}.{$uploadedFileExtension}");
-            $msg->link = $crypt->encryptByPrivateKey("/uploads/{$user->id}/{$currentDate}/{$savedFileName}.{$uploadedFileExtension}");
+            $msg->link = $crypt->encryptByPrivateKey("/uploads/{$user->getId()}/{$currentDate}/{$savedFileName}.{$uploadedFileExtension}");
             return $msg->save();
         }
         

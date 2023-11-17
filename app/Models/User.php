@@ -46,10 +46,14 @@ class User extends Model
     /**
      * Возвращает пользователя по id (!+)
      */
-    public static function getById(int $id, bool $active = true, $object = false)
+    public static function getById(int $id, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
         $db->params = ['id' => $id];
         $db->sql = "
             SELECT 
@@ -57,24 +61,28 @@ class User extends Model
                 u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
-            FROM " . self::$db_prefix . self::$db_table . " u 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE u.id = :id {$activity}";
+            FROM {$prefix}{$table} u 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            WHERE u.id = :id {$active}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : null;
     }
 
     /**
      * Возвращает пользователя по логину (!+)
      */
-    public static function getByLogin(string $login, bool $active = true, $object = false)
+    public static function getByLogin(string $login, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
         $db->params = ['login' => $login];
         $db->sql = "
             SELECT 
@@ -82,26 +90,30 @@ class User extends Model
                 u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
-            FROM " . self::$db_prefix . self::$db_table . " u 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE u.login = :login {$activity}";
+            FROM {$prefix}{$table} u 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            WHERE u.login = :login {$active}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : null;
     }
 
     /**
      * Возвращает пользователя по токену (!+)
      */
-    public static function getByToken(?string $token, bool $active = true, bool $object = false)
+    public static function getByToken(?string $token, ?array $params = [])
     {
         if ($token === null) return null;
 
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL AND us.expire > NOW()' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL AND us.expire > NOW()' : '';
         $db->params = ['token' => $token];
         $db->sql = "
             SELECT 
@@ -109,15 +121,15 @@ class User extends Model
                 u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
                 u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
                 u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
-            FROM " . self::$db_prefix . "mesigo.user_sessions us 
-            LEFT JOIN " . self::$db_prefix . self::$db_table . " u ON us.login = u.login 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_groups ug ON u.group_id = ug.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_genders ugn ON u.gender_id = ugn.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.text_types tt ON u.mailing_type_id = tt.id 
-            LEFT JOIN " . self::$db_prefix . "mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE us.token = :token {$activity}";
+            FROM {$prefix}mesigo.user_sessions us 
+            LEFT JOIN {$prefix}{$table} u ON us.login = u.login 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            WHERE us.token = :token {$active}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : null;
     }
 

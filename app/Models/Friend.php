@@ -30,13 +30,14 @@ class Friend extends Model
     /**
      * Возвращает пользователя по id (!+)
      */
-    public static function getById(int $id, bool $active = true, $object = false)
+    public static function getById(int $id, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
         $prefix = self::$db_prefix;
         $table = self::$db_table;
 
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
         $db->params = ['id' => $id];
         $db->sql = "
             SELECT 
@@ -48,22 +49,23 @@ class Friend extends Model
             LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
             LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
             LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE u.id = :id {$activity}";
+            WHERE u.id = :id {$active}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : null;
     }
 
     /**
      * Возвращает пользователя по логину (!+)
      */
-    public static function getByLogin(string $login, bool $active = true, $object = true)
+    public static function getByLogin(string $login, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
         $prefix = self::$db_prefix;
         $table = self::$db_table;
 
         $db = Db::getInstance();
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
         $db->params = ['login' => $login];
         $db->sql = "
             SELECT 
@@ -75,23 +77,24 @@ class Friend extends Model
             LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
             LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
             LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE u.login = :login {$activity}";
+            WHERE u.login = :login {$active}";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : null;
     }
 
     /**
      *
      */
-    public static function searchByLogin(string $login, int $user_id, bool $active = true, $object = true)
+    public static function searchByLogin(string $login, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
         $prefix = self::$db_prefix;
         $table = self::$db_table;
 
         $db = Db::getInstance();
-        $notSelf = !empty($user_id) ? 'AND u.id <> :id' : '';
-        $activity = !empty($active) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+        $notSelf = !empty($params['not_user_id']) && is_numeric($params['not_user_id']) ? 'AND u.id <> :id' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
 
         $db->params = ['login' => $login];
         if (!empty($user_id)) $db->params['id'] = $user_id;
@@ -102,10 +105,10 @@ class Friend extends Model
             FROM {$prefix}{$table} u 
             LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
             LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
-            WHERE u.login LIKE CONCAT(:login, '', '%') {$notSelf} {$activity} 
+            WHERE u.login LIKE CONCAT(:login, '', '%') {$notSelf} {$active} 
             ORDER BY u.id";
 
-        $data = $db->query($object ? static::class : null);
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return $data ?: null;
     }
 }

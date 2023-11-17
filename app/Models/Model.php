@@ -97,6 +97,10 @@ abstract class Model
      */
     public static function getList(?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
         $db = Db::getInstance();
         $active = !empty($params['active']) ? 'WHERE active IS NOT NULL' : '';
         $sort = !empty($params['sort']) ? $params['sort'] : 'id';
@@ -105,7 +109,7 @@ abstract class Model
 
         $db->sql = "
             SELECT * 
-            FROM " . self::$db_prefix . static::$db_table . " 
+            FROM {$prefix}{$table} 
             {$active} 
             ORDER BY {$sort} {$order} 
             {$limit}";
@@ -117,17 +121,20 @@ abstract class Model
     /**
      * Находит и возвращает одну запись из БД по id
      * @param int $id
-     * @param bool $active
-     * @param bool $object
+     * @param array|null $params
      * @return bool|mixed
      */
-    public static function getById(int $id, bool $active = true, bool $object = false)
+    public static function getById(int $id, ?array $params = [])
     {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
         $db = Db::getInstance();
-        $where = !empty($active) ? ' AND active IS NOT NULL' : '';
+        $active = !empty($params['active']) ? ' AND active IS NOT NULL' : '';
         $db->params = ['id' => $id];
-        $db->sql = "SELECT * FROM " . self::$db_prefix . static::$db_table . " WHERE id = :id {$where}";
-        $data = $db->query($object ? static::class : null);
+        $db->sql = "SELECT * FROM {$prefix}{$table} WHERE id = :id {$active}";
+        $data = $db->query(!empty($params['object']) ? static::class : null);
         return !empty($data) ? array_shift($data) : false;
     }
 

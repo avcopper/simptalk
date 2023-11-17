@@ -31,10 +31,9 @@ class Message extends Model
      */
     public static function getList(?array $params = [])
     {
-        $params += [
-            'active' => true,
-            'object' => false
-        ];
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
 
         $db = Db::getInstance();
         $friend = !empty($params['friend_id']) ? 'AND (m.from_user_id = :friend_id OR m.to_user_id = :friend_id)' : '';
@@ -54,9 +53,9 @@ class Message extends Model
                 u.id friend_id, u.login friend_login, u.name friend_name, u.last_name friend_last_name, 
                 f.id file_id, f.name file_name, f.link file_link, f.created file_date, 
                 m.message, m.created, m.updated 
-            FROM " . self::$db_prefix . self::$db_table . " m 
-            LEFT JOIN  " . self::$db_prefix . "mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
-            LEFT JOIN  " . self::$db_prefix . "mesigo.files f ON f.id = m.file_id AND f.active IS NOT NULL 
+            FROM {$prefix}{$table} m 
+            LEFT JOIN {$prefix}mesigo.users u ON u.id = IF(m.from_user_id != :user_id, m.from_user_id, m.to_user_id) 
+            LEFT JOIN {$prefix}mesigo.files f ON f.id = m.file_id AND f.active IS NOT NULL 
             WHERE 
                 (m.from_user_id = :user_id OR m.to_user_id = :user_id) 
                 {$friend} 
