@@ -6,7 +6,7 @@ use System\Db;
 use System\Auth;
 use Exceptions\DbException;
 use Exceptions\UserException;
-use Models\User as ModelUser;
+use Entity\User as EntityUser;
 
 /**
  * Class User
@@ -135,13 +135,13 @@ class User extends Model
 
     /**
      * Возвращает текущего пользователя (!+)
-     * @return \Entity\User|null
+     * @return EntityUser|null
      */
     public static function getCurrent()
     {
         return !empty($_SESSION['user']) ?
-            (new \Entity\User())->init($_SESSION['user']) :
-            (new \Entity\User())->init(self::getByToken(self::getUserToken()));
+            (new EntityUser())->init($_SESSION['user']) :
+            (new EntityUser())->init(self::getByToken(self::getUserToken()));
     }
 
     /**
@@ -188,14 +188,16 @@ class User extends Model
         Auth::checkUser($login, $password);
 
         $auth = new Auth();
-        $auth->user = \Entity\User::get(['login' => $login]);
+        $auth->user = EntityUser::get(['login' => $login]);
 
-        if (!empty($auth->user->id)) { // найден активный пользователь
+
+
+        if (!empty($auth->user->getId())) { // найден активный пользователь
             $auth->userSession = self::setUserSession($auth->user);
             $countFailedAttempts = UserSession::getCountFailedAttempts($login);
 
-            if ($countFailedAttempts < ModelUser::MAX_COUNT_ATTEMPT) { // меньше 5 активных попыток входа
-                if (password_verify($password, $auth->user->password)) $auth->login($remember);
+            if ($countFailedAttempts < self::MAX_COUNT_ATTEMPT) { // меньше 5 активных попыток входа
+                if (password_verify($password, $auth->user->getPassword())) $auth->login($remember);
                 else {
                     $auth->userSession->comment = Auth::WRONG_LOGIN_PASSWORD;
                     $auth->userSession->save();
@@ -203,7 +205,7 @@ class User extends Model
                 }
 
             } else {
-                UserSession::clearFailedAttempts($auth->user->login);
+                UserSession::clearFailedAttempts($auth->user->getLogin());
                 $auth->user->block(UserBlock::INTERVAL_DAY, Auth::TOO_MANY_FAILED_ATTEMPTS);
                 throw new UserException(Auth::TOO_MANY_FAILED_ATTEMPTS, 401);
             }
@@ -228,15 +230,15 @@ class User extends Model
 
     /**
      * Создает пользовательскую сессию (!+)
-     * @param $user
+     * @param EntityUser $user
      * @return \Entity\UserSession
      */
-    protected static function setUserSession($user)
+    protected static function setUserSession(EntityUser $user)
     {
         $userSession = new \Entity\UserSession();
         $userSession->isActive = 1;
-        $userSession->login = $user->login;
-        $userSession->userId = $user->id;
+        $userSession->login = $user->getLogin();
+        $userSession->userId = $user->getId();
         $userSession->serviceId = UserSession::SERVICE_SITE;
         $userSession->ip = $_SERVER['REMOTE_ADDR'];
         $userSession->device = $_SERVER['HTTP_USER_AGENT'];

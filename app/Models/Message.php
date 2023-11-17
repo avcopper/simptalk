@@ -79,10 +79,10 @@ class Message extends Model
     {
         $message = strip_tags(nl2br(trim($message)), '<br>');
         $msg = new self();
-        $msg->from_user_id = $user->id;
+        $msg->from_user_id = $user->getId();
         $msg->to_user_id = $message_to;
         $msg->file_id = $fileId;
-        $msg->message = !empty($message) ? (new Crypt($user->publicKey, $user->privateKey))->encryptByPrivateKey($message) : null;
+        $msg->message = !empty($message) ? (new Crypt($user->getPublicKey(), $user->getPrivateKey()))->encryptByPrivateKey($message) : null;
         return $msg->save();
     }
 
@@ -105,7 +105,7 @@ class Message extends Model
      */
     public static function checkUser(\Entity\Friend $friend)
     {
-        return !empty($friend->id) && self::canMessageUser($friend->id);
+        return !empty($friend->getId()) && self::canMessageUser($friend->getId());
     }
 
     /**

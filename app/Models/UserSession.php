@@ -100,7 +100,7 @@ class UserSession extends Model
     {
         $data = [
             "iss" => SITE_URL, // адрес или имя удостоверяющего центра
-            "aud" => $user->login, // имя клиента для которого токен выпущен
+            "aud" => $user->getLogin(), // имя клиента для которого токен выпущен
             "iat" => $timeStamp, // время, когда был выпущен JWT
             "nbf" => $timeStamp, // время, начиная с которого может быть использован (не раньше, чем)
             "exp" => $timeStamp + UserSession::LIFE_TIME, // время истечения срока действия токена
