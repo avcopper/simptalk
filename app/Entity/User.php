@@ -7,48 +7,48 @@ use Models\UserBlock;
 
 class User extends Entity
 {
-    public $id;
-    public $isActive = true;
-    public $isBlocked = false;
-    public $isLocked = false;
-    public $isNeedRequest = true;
-    public $expire;
-    public $groupId = 2; // группа "Пользователи"
-    public $group;
-    public $login;
-    public $password;
-    public $pin = null;
-    public $ePin = null;
-    public $email;
-    public $isShowEmail = false;
-    public $phone = null;
-    public $isShowPhone = false;
-    public $name;
-    public $secondName = null;
-    public $lastName = null;
-    public $genderId = 1;
-    public $gender;
-    public $hasPersonalDataAgreement = 1;
-    public $hasMailingAgreement = null; // подписка на рассылку
-    public $mailingTypeId = 2; // тип рассылки html
-    public $mailingType;
-    public $timezone;
-    public $created;
-    public $updated = null;
-    public $publicKey = null;
-    public $privateKey = null;
+    protected $id;
+    protected $isActive = true;
+    protected $isBlocked = false;
+    protected $isLocked = false;
+    protected $isNeedRequest = true;
+    protected $expire;
+    protected $groupId = 2; // группа "Пользователи"
+    protected $group;
+    protected $login;
+    protected $password;
+    protected $pin = null;
+    protected $ePin = null;
+    protected $email;
+    protected $isShowEmail = false;
+    protected $phone = null;
+    protected $isShowPhone = false;
+    protected $name;
+    protected $secondName = null;
+    protected $lastName = null;
+    protected $genderId = 1;
+    protected $gender;
+    protected $hasPersonalDataAgreement = 1;
+    protected $hasMailingAgreement = null; // подписка на рассылку
+    protected $mailingTypeId = 2; // тип рассылки html
+    protected $mailingType;
+    protected $timezone;
+    protected $created;
+    protected $updated = null;
+    protected $publicKey = null;
+    protected $privateKey = null;
 
     public static function get(array $params)
     {
         switch (true) {
             case !empty($params['id']):
-                $user = \Models\User::getById($params['id'], $params['active'] ?? true);
+                $user = \Models\User::getById($params['id'], $params);
                 break;
             case !empty($params['login']):
-                $user = \Models\User::getByLogin($params['login'], $params['active'] ?? true);
+                $user = \Models\User::getByLogin($params['login'], $params);
                 break;
             case !empty($params['token']):
-                $user = \Models\User::getByToken($params['token'], $params['active'] ?? true);
+                $user = \Models\User::getByToken($params['token'], $params);
                 break;
         }
 
@@ -438,6 +438,4 @@ class User extends Entity
     {
         $this->privateKey = $privateKey;
     }
-
-
 }

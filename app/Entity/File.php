@@ -34,7 +34,7 @@ class File extends Entity
     {
         switch (true) {
             case !empty($params['id']):
-                $user = ModelFile::getById($params['id'], $params['active'] ?? true);
+                $user = ModelFile::getById($params['id'], $params);
                 break;
             case !empty($params['message_id']):
                 $user = ModelFile::getByMessageId($params['message_id'], $params);

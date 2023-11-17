@@ -5,22 +5,22 @@ use \Models\Message as ModelMessage;
 
 class Message extends Entity
 {
-    public $id;
-    public bool $isActive = true;
-    public bool $isRead = false;
-    public $messageFromUserId;
-    public $messageToUserId;
-    public $friendId;
-    public $friendLogin;
-    public $friendName;
-    public $friendLastName;
+    protected $id;
+    protected bool $isActive = true;
+    protected bool $isRead = false;
+    protected $messageFromUserId;
+    protected $messageToUserId;
+    protected $friendId;
+    protected $friendLogin;
+    protected $friendName;
+    protected $friendLastName;
     protected ?int $fileId = null;
     protected ?string $fileName = null;
     protected ?string $fileLink = null;
     protected ?\DateTime $fileDate = null;
     protected ?string $message = null;
-    public $created;
-    public $updated = null;
+    protected $created;
+    protected $updated = null;
 
     public static function getList(array $params)
     {
@@ -258,6 +258,4 @@ class Message extends Entity
     {
         $this->updated = $updated;
     }
-
-
 }

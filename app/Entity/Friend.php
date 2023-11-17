@@ -3,33 +3,33 @@ namespace Entity;
 
 class Friend extends User
 {
-    public $id;
-    public $isActive = true;
-    public $isBlocked = false;
-    public $isLocked = false;
-    public $isNeedRequest = true;
-    public $expire;
-    public $login;
-    public $email;
-    public $isShowEmail = false;
-    public $phone = null;
-    public $isShowPhone = false;
-    public $name;
-    public $secondName = null;
-    public $lastName = null;
-    public $genderId = 1;
-    public $gender;
-    public $timezone;
-    public $publicKey = null;
+    protected $id;
+    protected $isActive = true;
+    protected $isBlocked = false;
+    protected $isLocked = false;
+    protected $isNeedRequest = true;
+    protected $expire;
+    protected $login;
+    protected $email;
+    protected $isShowEmail = false;
+    protected $phone = null;
+    protected $isShowPhone = false;
+    protected $name;
+    protected $secondName = null;
+    protected $lastName = null;
+    protected $genderId = 1;
+    protected $gender;
+    protected $timezone;
+    protected $publicKey = null;
 
     public static function get(array $params)
     {
         switch (true) {
             case !empty($params['id']):
-                $user = \Models\Friend::getById($params['id'], $params['active'] ?? true);
+                $user = \Models\Friend::getById($params['id'], $params);
                 break;
             case !empty($params['login']):
-                $user = \Models\Friend::getByLogin($params['login'], $params['active'] ?? true);
+                $user = \Models\Friend::getByLogin($params['login'], $params);
                 break;
         }
 
@@ -72,8 +72,8 @@ class Friend extends User
     public static function search(array $params)
     {
         $login = preg_replace('/[^0-9A-Za-z-_]/', '', trim($params['login']));
-        if (mb_strlen($login) < 2) return [];
-        $users = \Models\Friend::searchByLogin($login, $params['user_id'] ?? null, $params['active'] ?? true, false);
+        if (mb_strlen($login) < 3) return [];
+        $users = \Models\Friend::searchByLogin($login, $params);
 
         $res = [];
         if (!empty($users) && is_array($users)) {
@@ -266,6 +266,4 @@ class Friend extends User
     {
         $this->publicKey = $publicKey;
     }
-
-
 }
