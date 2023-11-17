@@ -26,7 +26,7 @@ class Messages extends Controller
      */
     protected function actionDefault()
     {
-        $this->set('messages', Message::getUserList(['user_id' => $this->user->id, 'order' => 'desc']));
+        $this->set('messages', Message::getUserList(['user_id' => $this->user->getId(), 'order' => 'desc']));
         $this->display('message/users');
     }
 
@@ -42,8 +42,8 @@ class Messages extends Controller
 
         $this->set('showDate', true);
         $this->set('friend', $friend);
-        $this->set('cryptFriend', new Crypt($friend->publicKey));
-        $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'limit' => 100]));
+        $this->set('cryptFriend', new Crypt($friend->getPublicKey()));
+        $this->set('messages', Message::getList(['user_id' => $this->user->getId(), 'friend_id' => $friend->getId(), 'limit' => 100]));
         $this->display('message/messages');
     }
 
@@ -61,14 +61,14 @@ class Messages extends Controller
 
             if (ModelFile::checkUserFile($_FILES['chat-file'])) $fileId = $this->saveUserFile($friend);
             $this->saveMessage($friend, $fileId ?? null);
-            $this->actionGet($friend->id, $last_id);
+            $this->actionGet($friend->getId(), $last_id);
         }
     }
 
     private function saveUserFile(Friend $friend)
     {
         if (ModelMessage::checkUser($friend))
-            return ModelFile::saveFile($this->user, $friend->id, $_FILES['chat-file']);
+            return ModelFile::saveFile($this->user, $friend->getId(), $_FILES['chat-file']);
 
         return false;
     }
@@ -78,7 +78,7 @@ class Messages extends Controller
         $message = Request::post('chat-input');
 
         return ModelMessage::checkData($friend, $message, $fileId) &&
-            ModelMessage::saveMessage($this->user, $friend->id, $message, $fileId);
+            ModelMessage::saveMessage($this->user, $friend->getId(), $message, $fileId);
     }
 
     /**
@@ -94,8 +94,8 @@ class Messages extends Controller
             if (empty($friend)) throw new NotFoundException('User not found');
 
             $this->set('friend', $friend);
-            $this->set('cryptFriend', new Crypt($friend->publicKey));
-            $this->set('messages', Message::getList(['user_id' => $this->user->id, 'friend_id' => $friend->id, 'start' => $last_id]));
+            $this->set('cryptFriend', new Crypt($friend->getPublicKey()));
+            $this->set('messages', Message::getList(['user_id' => $this->user->getId(), 'friend_id' => $friend->getId(), 'start' => $last_id]));
             //$this->display_element('message/message-list');
             Response::result(200, true, $this->render('message/message-list'));
         }

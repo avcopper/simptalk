@@ -28,7 +28,7 @@ abstract class Controller
     {
         $this->view = new View();
         $this->user = ModelUser::getCurrent();
-        $this->crypt = new Crypt($this->user->publicKey, $this->user->privateKey);
+        $this->crypt = new Crypt($this->user->getPublicKey(), $this->user->getPrivateKey());
         $this->set('user', $this->user);
         $this->set('crypt', $this->crypt);
     }

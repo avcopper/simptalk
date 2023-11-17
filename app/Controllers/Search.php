@@ -18,7 +18,7 @@ class Search extends Controller
     {
         $query = Request::get('q');
 
-        $this->set('users', Friend::search(['login' => $query, 'user_id' => $this->user->id]));
+        $this->set('users', Friend::search(['login' => $query, 'not_user_id' => $this->user->getId()]));
         if (Request::isAjax()) echo $this->render('search/user-list');
         else $this->display('search/users');
     }

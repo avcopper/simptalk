@@ -79,10 +79,10 @@ class Tests extends Controller
     protected function actionCrypt()
     {
         $user = User::get(['id' => 352]);
-        $crypt = (new Crypt())->load($user->id);
+        $crypt = (new Crypt())->load($user->getId());
 
-        var_dump($crypt->decryptByPublicKey($user->name));
-        var_dump($crypt->decryptByPublicKey($user->email));
+        var_dump($crypt->decryptByPublicKey($user->getName()));
+        var_dump($crypt->decryptByPublicKey($user->getEmail()));
         var_dump($user);
     }
 }

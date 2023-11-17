@@ -7,6 +7,7 @@ use System\Crypt;
 use Entity\Friend;
 use Models\File as ModelFile;
 use Exceptions\NotFoundException;
+use Exceptions\ForbiddenException;
 
 /**
  * Class Download
@@ -22,21 +23,38 @@ class Files extends Controller
     /**
      * @param int|null $id - id файла
      * @throws NotFoundException
+     * @throws ForbiddenException
      */
     protected function actionDownload(?int $id)
     {
         $file = File::get(['id' => $id]);
         if (empty($file) || empty($file->getId())) throw new NotFoundException('File not found');
 
-        // TODO проверить разрешения на скачивание
+        $fileOwner = Friend::get(['id' => $file->getUserId()]);
+        if (!User::checkUser($fileOwner)) throw new NotFoundException('User not found');
 
-        $user = Friend::get(['id' => $file->getUserId()]);
-        if (!User::checkUser($user)) throw new NotFoundException('User not found');
+        $this->checkPermissions($file, $fileOwner);
 
-        $crypt = new Crypt($user->getPublicKey());
+        $crypt = new Crypt($fileOwner->getPublicKey());
         $fileName = $crypt->decryptByPublicKey($file->getFileName());
         $fileLink = $crypt->decryptByPublicKey($file->getFileLink());
         $this->sendFile(DIR_PUBLIC . $fileLink, $fileName);
+    }
+
+    /**
+     * Проверяет резрешения для скачивания файла
+     * TODO доделать проверку разрешения скачивать файлы из профиля собеседников
+     * @param File $file - файл для скачивания
+     * @param User $fileOwner - владелец файла
+     * @return bool
+     * @throws ForbiddenException
+     */
+    private function checkPermissions(File $file, User $fileOwner)
+    {
+        if ($this->user->getId() === $fileOwner->getId()) return true;
+        if (ModelFile::isExistFileInMessages($this->user->getId(), $fileOwner->getId(), $file->getId())) return true;
+
+        throw new ForbiddenException();
     }
 
     /**
@@ -60,7 +78,4 @@ class Files extends Controller
         readfile($fileLink);
         die;
     }
-
-    private function checkPermissions($id, $user)
-    {}
 }
