@@ -9,7 +9,7 @@ use Entity\Message;
 
 <div class="dropdown-menu">
     <?php if (!empty($message->getFileId())): ?>
-    <a href="<?= $link ?>" class="dropdown-item d-flex align-items-center justify-content-between" download="">
+    <a href="/files/download/<?= $message->getFileId() ?>/" class="dropdown-item d-flex align-items-center justify-content-between" target="_blank">
         Download <i class="bx bx-download ms-2 text-muted"></i>
     </a>
     <?php endif; ?>

@@ -5,11 +5,11 @@ use System\Crypt;
 use Entity\Message;
 
 /**
- * @var Message $message
  * @var User $user
  * @var Crypt $crypt
  * @var Crypt $cryptFriend
  * @var string $link
+ * @var Message $message
  */
 ?>
 
@@ -83,7 +83,7 @@ use Entity\Message;
             </div>
 
             <p class="audio-label text-muted text-truncate font-size-11 mb-0">
-                <?= $user->id === $message->messageFromUserId ?
+                <?= $user->getId() === $message->getMessageFromUserId() ?
                     str_replace("\r\n", '<br>', $crypt->decryptByPublicKey($message->getFileName())) :
                     str_replace("\r\n", '<br>', $cryptFriend->decryptByPublicKey($message->getFileName())) ?>
             </p>

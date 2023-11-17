@@ -6,7 +6,6 @@ use Entity\Message;
 use Models\File as ModelFile;
 
 /**
- * @var Message $message
  * @var User $user
  * @var Crypt $crypt
  * @var Friend $friend
@@ -14,10 +13,10 @@ use Models\File as ModelFile;
  * @var bool $showdate
  */
 
-$name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
-$lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
-$friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
-$friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
+//$name = !empty($user->name) ? $crypt->decryptByPublicKey($user->name) : '';
+//$lastName = !empty($user->lastName) ? $crypt->decryptByPublicKey($user->lastName) : '';
+//$friendName = !empty($friend->getName()) ? $cryptFriend->decryptByPublicKey($friend->getName()) : '';
+//$friendLastName = !empty($friend->getLastName()) ? $cryptFriend->decryptByPublicKey($friend->getLastName()) : '';
 
 $date = '';
 $_monthsList = [
@@ -27,19 +26,19 @@ $_monthsList = [
 
 if (!empty($messages) && is_array($this->messages)):
     foreach ($this->messages as $this->message):
-        $time = $this->message->created->format('H:s');
-        $dt = $this->message->created->format('d') . ' ' .
-              $_monthsList[$this->message->created->format('n')] .
-              ($this->message->created->format('Y') !== date('Y') ? (' ' . $this->message->created->format('Y')) : ''); ?>
+        $time = $this->message->getCreated()->format('H:s');
+        $dt = $this->message->getCreated()->format('d') . ' ' .
+              $_monthsList[$this->message->getCreated()->format('n')] .
+              ($this->message->getCreated()->format('Y') !== date('Y') ? (' ' . $this->message->getCreated()->format('Y')) : ''); ?>
 
         <?php if (!empty($showDate) && (empty($date) || $date !== $dt)): ?>
             <div class="chat-date"><?= $dt; ?></div>
         <?php endif; ?>
         <?php $date = $dt; ?>
 
-        <li class="chat-list <?= ($user->id === $this->message->messageFromUserId) ? 'right' : 'left' ?>" data-id="<?= $this->message->id ?>">
+        <li class="chat-list <?= ($user->getId() === $this->message->getMessageFromUserId()) ? 'right' : 'left' ?>" data-id="<?= $this->message->getId() ?>">
             <div class="conversation-list">
-                <?php if($user->id !== $this->message->messageFromUserId): ?>
+                <?php if($user->getId() !== $this->message->getMessageFromUserId()): ?>
                     <div class="chat-avatar">
                         <img src="/images/avatar-2.jpg" alt="">
                     </div>
@@ -49,7 +48,7 @@ if (!empty($messages) && is_array($this->messages)):
                     <div class="ctext-wrap">
                         <?php if (!empty($this->message->getFileId())): ?>
                             <?php
-                            $this->link = $user->id === $this->message->messageFromUserId ?
+                            $this->link = $user->getId() === $this->message->getMessageFromUserId() ?
                                 str_replace("\r\n", '<br>', $crypt->decryptByPublicKey($this->message->getFileLink())) :
                                 str_replace("\r\n", '<br>', $cryptFriend->decryptByPublicKey($this->message->getFileLink()));
 
@@ -71,7 +70,7 @@ if (!empty($messages) && is_array($this->messages)):
                     <div class="conversation-name">
                         <small class="text-muted time"><?= $time ?></small>
 
-                        <span class="<?php if ($this->message->isRead): ?>text-success<?php endif; ?> check-message-icon">
+                        <span class="<?php if ($this->message->isRead()): ?>text-success<?php endif; ?> check-message-icon">
                             <i class="bx bx-check-double"></i>
                         </span>
                     </div>
@@ -80,4 +79,3 @@ if (!empty($messages) && is_array($this->messages)):
         </li>
     <?php endforeach;
 endif;
-

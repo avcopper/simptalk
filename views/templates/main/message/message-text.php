@@ -7,7 +7,7 @@ use Entity\Message;
 ?>
 
 <div class="ctext-wrap-content">
-    <?= $this->render('message/message-message', ['message' => $message]) ?>
+    <?= $this->render('message/message-message') ?>
 </div>
 
 <div class="dropdown align-self-start message-box-drop">
@@ -15,5 +15,5 @@ use Entity\Message;
         <i class="ri-more-2-fill"></i>
     </a>
 
-    <?= $this->render('menu/message-context', ['message' => $message]) ?>
+    <?= $this->render('menu/message-context') ?>
 </div>

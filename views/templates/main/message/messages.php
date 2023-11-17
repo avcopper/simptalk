@@ -10,9 +10,9 @@ use Entity\Friend;
  * @var Crypt $cryptFriend
  */
 
-$this->friendName = !empty($friend->name) ? $cryptFriend->decryptByPublicKey($friend->name) : '';
-$this->friendSecondName = !empty($friend->secondName) ? $cryptFriend->decryptByPublicKey($friend->secondName) : '';
-$this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPublicKey($friend->lastName) : '';
+$this->friendName = !empty($friend->getName()) ? $cryptFriend->decryptByPublicKey($friend->getName()) : '';
+$this->friendSecondName = !empty($friend->getSecondName()) ? $cryptFriend->decryptByPublicKey($friend->getSecondName()) : '';
+$this->friendLastName = !empty($friend->getLastName()) ? $cryptFriend->decryptByPublicKey($friend->getLastName()) : '';
 ?>
 
 <link href="/css/fg-emoji-picker.css" rel="stylesheet" type="text/css"/>
@@ -49,7 +49,7 @@ $this->friendLastName = !empty($friend->lastName) ? $cryptFriend->decryptByPubli
     $(function () {
         let messageWrapper = $("#chat-conversation .simplebar-content-wrapper"),
             messageList = $("#users-conversation"),
-            friend = <?= json_encode($friend->id) ?>,
+            friend = <?= json_encode($friend->getId()) ?>,
             timerMessages = getMessages(friend);
 
         messageWrapper && (messageWrapper.scrollTop(messageList.height()));

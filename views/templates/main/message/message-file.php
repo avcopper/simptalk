@@ -31,7 +31,7 @@ $size = $fileSize > 1000000 ?
             <div class="flex-grow-1 overflow-hidden">
                 <div class="text-start">
                     <h5 class="font-size-14 mb-1">
-                        <?= $user->id === $message->messageFromUserId ?
+                        <?= $user->getId() === $message->getMessageFromUserId() ?
                             str_replace("\r\n", '<br>', $crypt->decryptByPublicKey($message->getFileName())) :
                             str_replace("\r\n", '<br>', $cryptFriend->decryptByPublicKey($message->getFileName())) ?>
                     </h5>

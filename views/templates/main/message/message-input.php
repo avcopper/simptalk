@@ -1,5 +1,3 @@
-
-
 <div class="position-relative">
     <div class="chat-input-section p-3">
         <form id="chat-form" enctype="multipart/form-data">
