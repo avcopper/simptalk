@@ -40,6 +40,8 @@ class Route
      */
     public static function start()
     {
+        if (!empty(ROUTE[0]) && in_array(ROUTE[0], ['Js', 'Css'])) return;
+
         $routes  = ROUTE;// массив роутов
         $controller = 'Controllers';
         $results = [];
@@ -100,11 +102,13 @@ class Route
                 $class = $routeInfo['class'];
                 $method = $routeInfo['method'];
 
-                $controller = new $class;
+                $cntrllr = new $class;
 
-                if (!empty($params[0]) && !empty($params[1])) $controller->action($method, mb_strtolower($params[0]), mb_strtolower($params[1]));
-                elseif (!empty($params[0])) $controller->action($method, mb_strtolower($params[0]));
-                else $controller->action($method);
+                if (!empty($params[0]) && !empty($params[1])) $cntrllr->action($method, mb_strtolower($params[0]), mb_strtolower($params[1]));
+                elseif (!empty($params[0])) $cntrllr->action($method, mb_strtolower($params[0]));
+                else $cntrllr->action($method);
+
+                die;
             }
         }
 
