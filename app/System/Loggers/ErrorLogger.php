@@ -13,6 +13,7 @@ class ErrorLogger extends Logger
 
     protected function __construct()
     {
-        $this->resource = fopen(CONFIG['log']['error'], 'a');
+        parent::__construct();
+        $this->resource = fopen($this->directory . CONFIG['log']['error'], 'a');
     }
 }

@@ -13,6 +13,7 @@ class AccessLogger extends Logger
 
     protected function __construct()
     {
-        $this->resource = fopen(CONFIG['log']['access'], 'a');
+        parent::__construct();
+        $this->resource = fopen($this->directory . CONFIG['log']['access'], 'a');
     }
 }

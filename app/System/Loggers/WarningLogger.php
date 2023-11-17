@@ -13,6 +13,7 @@ class WarningLogger extends Logger
 
     protected function __construct()
     {
-        $this->resource = fopen(CONFIG['log']['warning'], 'a');
+        parent::__construct();
+        $this->resource = fopen($this->directory . CONFIG['log']['warning'], 'a');
     }
 }
