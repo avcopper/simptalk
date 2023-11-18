@@ -7,6 +7,7 @@ use DateInterval;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Entity\UserSession;
+use ReflectionException;
 use Exceptions\DbException;
 use Exceptions\UserException;
 use \Models\User as ModelUser;
@@ -131,6 +132,7 @@ class Auth
      * Вход по паролю (!+)
      * @param bool $remember - запоминать ли пользователя
      * @throws DbException
+     * @throws ReflectionException
      */
     public function login(bool $remember = false)
     {
@@ -141,8 +143,8 @@ class Auth
             ModelUserSession::clearFailedAttempts($this->user->getLogin());
             AccessLogger::getInstance()->info("Пользователь {$this->userSession->login} залогинен. UserId: {$this->userSession->userId}.");
 
-            $_SESSION['user'] = ModelUser::getById($this->user->getId());
-            //$_SESSION['user'] = (new ModelUser())->init($this->user)->toArray();
+            //$_SESSION['user'] = ModelUser::getById($this->user->getId());
+            $_SESSION['user'] = (new ModelUser())->init($this->user)->toArray();
             $_SESSION['token'] = $this->token;
             if ($remember) setcookie('token', $this->token, time() + ModelUserSession::LIFE_TIME, '/', DOMAIN, 0);
 
