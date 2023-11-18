@@ -4,6 +4,8 @@ namespace Models;
 use System\Db;
 use Traits\Magic;
 use Entity\Entity;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Model
@@ -16,36 +18,56 @@ abstract class Model
 
     use Magic;
 
+    /**
+     * Инициализиурет model из entity
+     * @param Entity|null $data - объект entity
+     * @return $this|null
+     * @throws ReflectionException
+     */
     public function init(?Entity $data)
     {
         if (empty($data)) return null;
 
         $fields = $data->getFields();
+        $class = new ReflectionClass($data);
 
         foreach ($fields as $key => $field) {
             if (!property_exists($this, $key)) continue;
 
             $prop = $field['field'];
 
+            $property = $class->getProperty($prop);
+            $property->setAccessible(true);
+
             switch ($field['type']) {
                 case 'int':
-                    $this->$key = (int) $data->$prop;
+                    $this->$key = (int) $property->getValue($data);
+                    //$this->$key = (int) $data->$prop;
                     break;
                 case 'float':
-                    $this->$key = (float) $data->$prop;
+                    $this->$key = (float) $property->getValue($data);
+                    //$this->$key = (float) $data->$prop;
                     break;
                 case 'string':
-                    $this->$key = (string) $data->$prop;
+                    $this->$key = (string) $property->getValue($data);
+                    //$this->$key = (string) $data->$prop;
                     break;
                 case 'bool':
-                    $this->$key = !empty($data->$prop) ? (bool) $data->$prop : null;
+                    $value = $property->getValue($data);
+                    $this->$key = !empty($value) ? (bool) $value : null;
+                    //$this->$key = !empty($data->$prop) ? (bool) $data->$prop : null;
                     break;
                 case 'datetime':
+                    $value = $property->getValue($data);
                     $this->$key =
-                        !empty($data->$prop) ?
-                            ($data->$prop instanceof \DateTime ?
-                                $data->$prop->format('Y-m-d H:i:s') :
-                                (is_string($data->$prop) ? $data->$prop : null)) :
+                        //!empty($data->$prop) ?
+                        !empty($value) ?
+                            //($data->$prop instanceof \DateTime ?
+                            ($value instanceof \DateTime ?
+                                //$data->$prop->format('Y-m-d H:i:s') :
+                                $value->format('Y-m-d H:i:s') :
+                                //(is_string($data->$prop) ? $data->$prop : null)) :
+                                (is_string($value) ? $value : null)) :
                             null;
                     break;
                 default:

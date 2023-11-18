@@ -4,6 +4,7 @@ namespace Models;
 use DateTime;
 use System\Db;
 use System\Auth;
+use ReflectionException;
 use Exceptions\DbException;
 use Exceptions\UserException;
 use Entity\User as EntityUser;
@@ -182,6 +183,7 @@ class User extends Model
     /**
      * Авторизация (!+)
      * @throws UserException|DbException
+     * @throws ReflectionException
      */
     public static function authorize($login, $password, $remember)
     {
