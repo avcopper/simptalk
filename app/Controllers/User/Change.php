@@ -10,6 +10,7 @@ class Change extends Index
 
     protected function actionDefault()
     {
-        $this->view->display('user/change');
+        $this->setTemplate('simple');
+        $this->view->display('change');
     }
 }
