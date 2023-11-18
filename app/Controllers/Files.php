@@ -13,11 +13,11 @@ use Exceptions\ForbiddenException;
  * Class Download
  * @package Controllers
  */
-class Files extends Controller
+class Files extends Index
 {
     protected function before()
     {
-        $this->checkAuthorization();
+        parent::before();
     }
 
     /**

@@ -4,11 +4,11 @@ namespace Controllers;
 use Entity\Friend;
 use System\Request;
 
-class Search extends Controller
+class Search extends Index
 {
     protected function before()
     {
-        $this->checkAuthorization();
+        parent::before();
     }
 
     /**

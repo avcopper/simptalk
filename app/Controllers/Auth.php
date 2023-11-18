@@ -3,6 +3,7 @@ namespace Controllers;
 
 use Models\User;
 use System\Request;
+use ReflectionException;
 use Exceptions\DbException;
 use Exceptions\UserException;
 use Models\User as ModelUser;
@@ -34,6 +35,7 @@ class Auth extends Controller
     /**
      * Авторизация пользователя
      * @throws UserException|DbException
+     * @throws ReflectionException
      */
     protected function actionLogin()
     {

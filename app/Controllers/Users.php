@@ -11,10 +11,11 @@ use Models\User as ModelUser;
  * Class Users
  * @package Controllers
  */
-class Users extends Controller
+class Users extends Index
 {
     protected function before()
     {
+        parent::before();
     }
 
     protected function actionChange()

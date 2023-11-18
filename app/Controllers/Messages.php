@@ -14,11 +14,11 @@ use \Models\Message as ModelMessage;
  * Class Messages
  * @package Controllers
  */
-class Messages extends Controller
+class Messages extends Index
 {
     protected function before()
     {
-        $this->checkAuthorization();
+        parent::before();
     }
 
     /**
