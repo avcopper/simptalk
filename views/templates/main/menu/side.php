@@ -8,15 +8,15 @@
                 </a>
             </li>
 
-            <li class="nav-item" title="Contacts">
-                <a href="/" id="contacts-nav" class="nav-link">
+            <li class="nav-item" title="Friends">
+                <a href="/friends/" id="contacts-nav" class="nav-link">
                     <i class='bx bxs-user-detail'></i>
-                    <i class="nav-link-label">Contacts</i>
+                    <i class="nav-link-label">Friends</i>
                 </a>
             </li>
 
-            <li class="nav-item" title="Bookmark">
-                <a href="/" id="bookmark-nav" class="nav-link">
+            <li class="nav-item" title="Bookmarks">
+                <a href="/bookmarks/" id="bookmark-nav" class="nav-link">
                     <i class='bx bx-bookmarks'></i>
                     <i class="nav-link-label">Bookmarks</i>
                 </a>

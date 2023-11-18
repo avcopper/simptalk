@@ -24,7 +24,7 @@
     </div>
 
     <div class="header-item header-logo">
-        <a href="">Mesigo</a>
+        <a href="/">Mesigo</a>
     </div>
 
     <div class="header-item ms-auto" role="presentation">
@@ -39,15 +39,15 @@
         </a>
 
         <div class="dropdown-menu">
-            <a href="/" class="dropdown-item d-flex align-items-center justify-content-between">
+            <a href="/user/profile/" class="dropdown-item d-flex align-items-center justify-content-between">
                 Profile <i class="bx bx-user-circle text-muted ms-1"></i>
             </a>
 
-            <a href="/" class="dropdown-item d-flex align-items-center justify-content-between">
+            <a href="/user/settings/" class="dropdown-item d-flex align-items-center justify-content-between">
                 Settings <i class="bx bx-cog text-muted ms-1"></i>
             </a>
 
-            <a href="/" class="dropdown-item d-flex align-items-center justify-content-between">
+            <a href="/user/change/" class="dropdown-item d-flex align-items-center justify-content-between">
                 Change Password <i class="bx bx-lock-open text-muted ms-1"></i>
             </a>
 
