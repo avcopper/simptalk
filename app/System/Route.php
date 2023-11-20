@@ -101,12 +101,13 @@ class Route
             if (!empty($routeInfo['class']) && !empty($routeInfo['method'])) {
                 $class = $routeInfo['class'];
                 $method = $routeInfo['method'];
+                $params = $routeInfo['params'];
 
-                $cntrllr = new $class;
+                $controller = new $class;
 
-                if (!empty($params[0]) && !empty($params[1])) $cntrllr->action($method, mb_strtolower($params[0]), mb_strtolower($params[1]));
-                elseif (!empty($params[0])) $cntrllr->action($method, mb_strtolower($params[0]));
-                else $cntrllr->action($method);
+                if (!empty($params[0]) && !empty($params[1])) $controller->action($method, mb_strtolower($params[0]), mb_strtolower($params[1]));
+                elseif (!empty($params[0])) $controller->action($method, mb_strtolower($params[0]));
+                else $controller->action($method);
 
                 die;
             }
