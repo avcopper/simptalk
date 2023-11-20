@@ -103,6 +103,39 @@ class User extends Model
     }
 
     /**
+     * Возвращает пользователя по логину (!+)
+     */
+    public static function searchByLogin(string $login, ?array $params = [])
+    {
+        $params += ['active' => true, 'object' => false];
+        $prefix = self::$db_prefix;
+        $table = self::$db_table;
+
+        $db = Db::getInstance();
+        $notSelf = !empty($params['not_user_id']) && is_numeric($params['not_user_id']) ? 'AND u.id <> :id' : '';
+        $active = !empty($params['active']) ? 'AND u.active IS NOT NULL AND u.blocked IS NULL AND ub.expire IS NULL AND ug.active IS NOT NULL' : '';
+
+        $db->params = ['login' => $login];
+        if (!empty($params['not_user_id'])) $db->params['id'] = $params['not_user_id'];
+
+        $db->sql = "
+            SELECT 
+                u.id, u.active, u.blocked, u.locked, u.need_request, ub.expire, u.group_id, ug.name group_name, 
+                u.login, u.password, u.pin, u.e_pin, u.email, u.show_email, u.phone, u.show_phone, 
+                u.name,  u.second_name, u.last_name, u.gender_id, ugn.name gender, u.personal_data_agreement, u.mailing, 
+                u.mailing_type_id, tt.name mailing_type, u.timezone, u.created, u.updated 
+            FROM {$prefix}{$table} u 
+            LEFT JOIN {$prefix}mesigo.user_groups ug ON u.group_id = ug.id 
+            LEFT JOIN {$prefix}mesigo.user_genders ugn ON u.gender_id = ugn.id 
+            LEFT JOIN {$prefix}mesigo.text_types tt ON u.mailing_type_id = tt.id 
+            LEFT JOIN {$prefix}mesigo.user_blocks ub ON u.id = ub.user_id AND ub.expire > NOW() 
+            WHERE u.login LIKE CONCAT(:login, '', '%') {$notSelf} {$active}";
+
+        $data = $db->query(!empty($params['object']) ? static::class : null);
+        return !empty($data) ? array_shift($data) : null;
+    }
+
+    /**
      * Возвращает пользователя по токену (!+)
      */
     public static function getByToken(?string $token, ?array $params = [])
