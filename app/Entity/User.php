@@ -61,18 +61,18 @@ class User extends Entity
     public function init(?array $data)
     {
         parent::init($data);
-        $this->publicKey = self::getUserPublicKey($this->id);
-        $this->privateKey = self::getUserPrivateKey($this->id);
+        $this->publicKey = self::loadPublicKey($this->id);
+        if (!($this instanceof Friend)) $this->privateKey = self::loadPrivateKey($this->id);
         return $this;
     }
 
-    public static function getUserPublicKey($user_id)
+    public static function loadPublicKey($user_id)
     {
         $publicKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR . 'public.pem';
         return (is_file($publicKeyFile) && filesize($publicKeyFile) > 0) ? file_get_contents($publicKeyFile) : null;
     }
 
-    public static function getUserPrivateKey($user_id)
+    public static function loadPrivateKey($user_id)
     {
         $privateKeyFile = DIR_CERTIFICATES . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR . 'private.pem';
         return (is_file($privateKeyFile) && filesize($privateKeyFile) > 0) ? file_get_contents($privateKeyFile) : null;
