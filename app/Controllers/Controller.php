@@ -19,7 +19,7 @@ abstract class Controller
     protected View $view;  // объект view
     protected ?User $user; // текущий пользователь
     protected ?Crypt $crypt; // объект шифрования
-    protected ?Model $model;
+    protected ?Model $model = null;
 
     /**
      * Controller constructor

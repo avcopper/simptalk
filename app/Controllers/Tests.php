@@ -6,10 +6,11 @@ use System\Crypt;
 use Models\User as ModelUser;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Tests extends Controller
+class Tests extends Index
 {
     protected function before()
     {
+        parent::before();
     }
 
     protected function actionDefault()
